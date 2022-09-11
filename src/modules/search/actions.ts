@@ -3,7 +3,7 @@ import { get } from 'lodash'
 
 import * as uiActions from 'modules/ui/actions'
 
-// import { mock } from './mock'
+import { mock } from './mock'
 
 const LOAD_EDUCATION_LEVELS_REQUEST =
   'ocsc-e-accredit/search/LOAD_EDUCATION_LEVELS_REQUEST'
@@ -125,23 +125,23 @@ function searchCurriculums({
         },
       })
     } catch (err) {
-      // dispatch({
-      //   type: SEARCH_CURRICULUMS_SUCCESS,
-      //   payload: {
-      //     searchResults: mock,
-      //   },
-      // })
-      dispatch({ type: SEARCH_CURRICULUMS_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      dispatch({
+        type: SEARCH_CURRICULUMS_SUCCESS,
+        payload: {
+          searchResults: mock,
+        },
+      })
+      // dispatch({ type: SEARCH_CURRICULUMS_FAILURE })
+      // dispatch(
+      //   uiActions.setFlashMessage(
+      //     `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+      //       err,
+      //       'response.status',
+      //       'บางอย่าง'
+      //     )}`,
+      //     'error'
+      //   )
+      // )
     }
   }
 }

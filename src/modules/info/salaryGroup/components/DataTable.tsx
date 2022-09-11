@@ -55,10 +55,10 @@ export default function DataTable({ data }: DataTableProps) {
             <TableCell width={550} style={tableHeadBaseStyle}>
               กลุ่มเงินเดือน
             </TableCell>
-            <TableCell width={100} style={tableHeadBaseStyle}>
+            <TableCell width={100} align='center' style={tableHeadBaseStyle}>
               ขั้นต่ำ
             </TableCell>
-            <TableCell width={100} style={tableHeadBaseStyle}>
+            <TableCell width={100} align='center' style={tableHeadBaseStyle}>
               ไม่เกิน
             </TableCell>
             <TableCell style={tableHeadBaseStyle}>หมายเหตุ</TableCell>
@@ -78,10 +78,10 @@ export default function DataTable({ data }: DataTableProps) {
               <TableCell style={tableCellBaseStyle}>
                 {getValue(data, 'salarygroup', '')}
               </TableCell>
-              <TableCell style={tableCellBaseStyle}>
+              <TableCell align='center' style={tableCellBaseStyle}>
                 {getValue(data, 'minvalue', 0).toLocaleString()}
               </TableCell>
-              <TableCell style={tableCellBaseStyle}>
+              <TableCell align='center' style={tableCellBaseStyle}>
                 {getValue(data, 'maxvalue', 0).toLocaleString()}
               </TableCell>
               <TableCell style={tableCellBaseStyle}>

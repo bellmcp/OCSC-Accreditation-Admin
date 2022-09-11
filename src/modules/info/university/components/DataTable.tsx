@@ -69,7 +69,7 @@ export default function DataTable({ data, isUSA }: DataTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((data: any, index: number) => (
+          {data.map((data: any) => (
             <TableRow key={data.id}>
               <TableCell style={tableCellBaseStyle} align='center'>
                 {getValue(data, 'order', 0)}

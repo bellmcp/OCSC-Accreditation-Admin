@@ -19,11 +19,15 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
+  Fab,
+  Zoom,
+  useScrollTrigger,
+  Toolbar,
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import ClearIcon from '@material-ui/icons/Clear'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
-import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
 import Empty from 'modules/ui/components/Empty'
 import DataTable from './DataTable'
@@ -47,6 +51,11 @@ const useStyles = makeStyles((theme: Theme) =>
     table: {
       minWidth: 650,
     },
+    root: {
+      position: 'fixed',
+      bottom: theme.spacing(4),
+      right: theme.spacing(4),
+    },
   })
 )
 
@@ -64,6 +73,33 @@ function createData(
     thainame,
     abbriviation,
   }
+}
+
+function ScrollTop(props: any) {
+  const { children } = props
+  const classes = useStyles()
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  })
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (
+      (event.target as HTMLDivElement).ownerDocument || document
+    ).querySelector('#back-to-top-anchor')
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
+  return (
+    <Zoom in={trigger}>
+      <div onClick={handleClick} role='presentation' className={classes.root}>
+        {children}
+      </div>
+    </Zoom>
+  )
 }
 
 export default function Country() {
@@ -139,7 +175,7 @@ export default function Country() {
 
   return (
     <>
-      <Header title='FAQ' subtitle='คำถามที่พบบ่อย' icon={<div />} />
+      <Toolbar id='back-to-top-anchor' />
       <Container maxWidth='lg' className={classes.content}>
         <Box mt={2} mb={4}>
           <Grid container direction='column'>
@@ -177,13 +213,19 @@ export default function Country() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <SearchIcon color='disabled' />
+                      <SearchIcon color='action' />
                     </InputAdornment>
                   ),
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <IconButton size='small' onClick={handleClearSearchInput}>
-                        <ClearIcon color='disabled' fontSize='small' />
+                      <IconButton
+                        size='small'
+                        onClick={handleClearSearchInput}
+                        style={{
+                          visibility: searchInput === '' ? 'hidden' : 'visible',
+                        }}
+                      >
+                        <ClearIcon color='action' fontSize='small' />
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -205,6 +247,11 @@ export default function Country() {
             {renderResult()}
           </Paper>
         </Box>
+        <ScrollTop>
+          <Fab color='secondary' size='medium'>
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
       </Container>
     </>
   )

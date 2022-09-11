@@ -31,10 +31,10 @@ export default function Layout() {
         case `${PATH}`:
           setActivePage(0)
           break
-        case `${PATH}/search/curriculum`:
+        case `${PATH}/search/person-letter`:
           setActivePage(1)
           break
-        case `${PATH}/edu/international`:
+        case `${PATH}/search/curriculum`:
           setActivePage(2)
           break
         case `${PATH}/download`:

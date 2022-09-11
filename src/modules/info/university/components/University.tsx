@@ -19,13 +19,17 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
+  Fab,
+  Zoom,
+  useScrollTrigger,
+  Toolbar,
 } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
 import SearchIcon from '@material-ui/icons/Search'
 import ClearIcon from '@material-ui/icons/Clear'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
-import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
 import Empty from 'modules/ui/components/Empty'
 import DataTable from './DataTable'
@@ -48,6 +52,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     table: {
       minWidth: 650,
+    },
+    root: {
+      position: 'fixed',
+      bottom: theme.spacing(4),
+      right: theme.spacing(4),
     },
   })
 )
@@ -86,6 +95,33 @@ function createTableData(
     localname,
     place,
   }
+}
+
+function ScrollTop(props: any) {
+  const { children } = props
+  const classes = useStyles()
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  })
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (
+      (event.target as HTMLDivElement).ownerDocument || document
+    ).querySelector('#back-to-top-anchor')
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
+  return (
+    <Zoom in={trigger}>
+      <div onClick={handleClick} role='presentation' className={classes.root}>
+        {children}
+      </div>
+    </Zoom>
+  )
 }
 
 export default function University() {
@@ -133,20 +169,22 @@ export default function University() {
   }, [initialCountries])
 
   useEffect(() => {
-    const parsed = initialUniversities.map(
-      (university: UniversityType, index: number) =>
-        createTableData(
-          index + 1,
-          get(university, 'country'),
-          get(university, 'state'),
-          get(university, 'name'),
-          get(university, 'localname'),
-          get(university, 'place')
-        )
-    )
-    setParsedUniversitiesData(parsed)
-    setTableData(parsed)
-  }, [initialUniversities])
+    if (!isNull(selectedCountry)) {
+      const parsed = initialUniversities.map(
+        (university: UniversityType, index: number) =>
+          createTableData(
+            index + 1,
+            get(university, 'country'),
+            get(university, 'state'),
+            get(university, 'name'),
+            get(university, 'localname'),
+            get(university, 'place')
+          )
+      )
+      setParsedUniversitiesData(parsed)
+      setTableData(parsed)
+    }
+  }, [initialUniversities, selectedCountry])
 
   const handleChangeSearchInput = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -183,6 +221,13 @@ export default function University() {
     dispatch(infoActions.loadCountries())
   }, [dispatch])
 
+  useEffect(() => {
+    return () => {
+      setSelectedCountry(null)
+      setTableData([])
+    }
+  }, [])
+
   const renderResult = () => {
     if (!isLoading || !isUniversitiesLoading) {
       if (!isEmpty(tableData)) {
@@ -215,7 +260,7 @@ export default function University() {
 
   return (
     <>
-      <Header title='FAQ' subtitle='คำถามที่พบบ่อย' icon={<div />} />
+      <Toolbar id='back-to-top-anchor' />
       <Container maxWidth='lg' className={classes.content}>
         <Box mt={2} mb={4}>
           <Grid container direction='column'>
@@ -326,7 +371,7 @@ export default function University() {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position='start'>
-                          <SearchIcon color='disabled' />
+                          <SearchIcon color='action' />
                         </InputAdornment>
                       ),
                       endAdornment: (
@@ -334,8 +379,12 @@ export default function University() {
                           <IconButton
                             size='small'
                             onClick={handleClearSearchInput}
+                            style={{
+                              visibility:
+                                searchInput === '' ? 'hidden' : 'visible',
+                            }}
                           >
-                            <ClearIcon color='disabled' fontSize='small' />
+                            <ClearIcon color='action' fontSize='small' />
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -359,6 +408,11 @@ export default function University() {
             {renderResult()}
           </Paper>
         </Box>
+        <ScrollTop>
+          <Fab color='secondary' size='medium'>
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </ScrollTop>
       </Container>
     </>
   )
