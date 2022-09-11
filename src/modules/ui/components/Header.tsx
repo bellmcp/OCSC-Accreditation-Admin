@@ -37,7 +37,7 @@ export default function Header({ title, subtitle, icon }: HeaderProps) {
   return (
     <>
       <Toolbar />
-      <Grid
+      {/* <Grid
         container
         direction='column'
         justify='flex-end'
@@ -49,7 +49,7 @@ export default function Header({ title, subtitle, icon }: HeaderProps) {
           backgroundPosition: 'center center',
           filter: 'saturate(1.3)',
         }}
-      ></Grid>
+      ></Grid> */}
     </>
   )
 }

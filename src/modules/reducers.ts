@@ -2,19 +2,22 @@ import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 import { loadingBarReducer } from 'react-redux-loading-bar'
 
-import ui from 'modules/ui/reducer'
-import search from 'modules/search/reducer'
-import download from 'modules/download/reducer'
-import international from 'modules/edu/international/reducer'
-import faq from 'modules/faq/reducer'
+import uiReducer from 'modules/ui/reducer'
+import searchReducer from 'modules/search/reducer'
+import downloadReduer from 'modules/download/reducer'
+import internationalReducer from 'modules/edu/international/reducer'
+import faqReducer from 'modules/faq/reducer'
+
+import infoReducer from 'modules/info/reducer'
 
 export default (history: any) =>
   combineReducers({
     router: connectRouter(history),
     loadingBar: loadingBarReducer,
-    ui,
-    faq,
-    search,
-    download,
-    international,
+    ui: uiReducer,
+    faq: faqReducer,
+    search: searchReducer,
+    download: downloadReduer,
+    international: internationalReducer,
+    info: infoReducer,
   })

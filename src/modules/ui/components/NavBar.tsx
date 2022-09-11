@@ -207,32 +207,20 @@ export default function NavBar(props: NavigationBarProps) {
   const navigationItem = [
     {
       id: 0,
-      title: 'หน้าหลัก',
+      title: 'หนังสือเข้า',
       url: `${PATH}`,
       notification: 0,
     },
     {
       id: 1,
-      title: 'ค้นหาการรับรองคุณวุฒิหลักสูตร',
+      title: 'ค้นหาการรับรองคุณวุฒิบุคคล',
       url: `${PATH}/search/curriculum`,
       notification: 0,
     },
     {
       id: 2,
-      title: 'สถาบันการศึกษาในต่างประเทศ',
+      title: 'ค้นหาการรับรองคุณวุฒิหลักสูตร',
       url: `${PATH}/edu/international`,
-      notification: 0,
-    },
-    {
-      id: 3,
-      title: 'เอกสารดาวน์โหลด/หนังสือเวียน',
-      url: `${PATH}/download`,
-      notification: 0,
-    },
-    {
-      id: 4,
-      title: 'คำถามที่พบบ่อย',
-      url: `${PATH}/faq`,
       notification: 0,
     },
   ]
@@ -310,13 +298,13 @@ export default function NavBar(props: NavigationBarProps) {
                       <Typography noWrap>{item.title}</Typography>
                     </NavItem>
                   ))}
-                  {/* <NavItem
+                  <NavItem
                     className={classes.navItem}
                     {...bindHover(popupState)}
                   >
-                    <Typography noWrap>อื่นๆ </Typography>
+                    <Typography noWrap>ข้อมูลพื้นฐาน</Typography>
                     <ArrowDownIcon style={{ marginLeft: 8 }} />
-                  </NavItem> */}
+                  </NavItem>
                 </NavMenu>
               </ThemeProvider>
             </Hidden>
@@ -347,7 +335,7 @@ export default function NavBar(props: NavigationBarProps) {
                     className={classes.navItem}
                     {...bindHover(popupState2)}
                   >
-                    <Typography noWrap>อื่นๆ </Typography>
+                    <Typography noWrap>ข้อมูลพื้นฐาน</Typography>
                     <ArrowDownIcon style={{ marginLeft: 8 }} />
                   </NavItem>
                 </NavMenu>
@@ -376,17 +364,35 @@ export default function NavBar(props: NavigationBarProps) {
       >
         <MenuItem
           onClick={() => {
+            history.push(`${PATH}/info/country`)
             popupState.close()
           }}
         >
-          เมนูเพิ่มเติม 1
+          ประเทศ
         </MenuItem>
         <MenuItem
           onClick={() => {
+            history.push(`${PATH}/info/salary-group`)
             popupState.close()
           }}
         >
-          เมนูเพิ่มเติม 2
+          กลุ่มเงินเดือน
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            history.push(`${PATH}/info/education-level`)
+            popupState.close()
+          }}
+        >
+          ระดับการศึกษา
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            history.push(`${PATH}/info/university`)
+            popupState.close()
+          }}
+        >
+          มหาวิทยาลัย
         </MenuItem>
       </HoverMenu>
       <Hidden lgUp implementation='css'>

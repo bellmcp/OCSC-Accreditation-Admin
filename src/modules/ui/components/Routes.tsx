@@ -7,6 +7,8 @@ import EduRoutes from 'modules/edu/Routes'
 import DownloadRoutes from 'modules/download/Routes'
 import FaqRoutes from 'modules/faq/Routes'
 
+import InfoRoutes from 'modules/info/Routes'
+
 import NotFound from './NotFound'
 
 const PATH = process.env.REACT_APP_BASE_PATH
@@ -25,6 +27,9 @@ export default function Routes() {
       </Route>
       <Route path={`${PATH}/faq`}>
         <FaqRoutes />
+      </Route>
+      <Route path={`${PATH}/info`}>
+        <InfoRoutes />
       </Route>
       <Route exact path={`${PATH}`}>
         <HomeRoutes />
