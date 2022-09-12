@@ -29,18 +29,22 @@ import {
   MenuItem,
   Divider,
 } from '@material-ui/core'
-import { Search as SearchIcon } from '@material-ui/icons'
+import Stack from '@mui/material/Stack'
+import {
+  Search as SearchIcon,
+  UnfoldLess as ShrinkIcon,
+  UnfoldMore as ExpandIcon,
+} from '@material-ui/icons'
 
 import * as searchActions from 'modules/search/actions'
 import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
-import SearchResultTable from './SearchResultTable'
+import DataTable from './DataTable'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     content: {
       paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
     },
     sectionTitle: {
       fontSize: '1.7rem',
@@ -48,10 +52,6 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '1.3',
       zIndex: 3,
       color: theme.palette.secondary.main,
-      // // background: '#09348B',
-      // background: 'linear-gradient(to top, #09348B 0%, #0D49C4 100%)',
-      // WebkitBackgroundClip: 'text',
-      // WebkitTextFillColor: 'transparent',
     },
     seeAllButton: {
       marginBottom: '0.35em',
@@ -116,6 +116,12 @@ export default function SearchCurriculum() {
 
   const [educationLevels, setEducationLevels] = useState([])
   const [searchResults, setSearchResults] = useState([])
+  const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
+
+  const handleSwitchTableMaxWidth = () => {
+    if (tableMaxWidth === 'lg') setTableMaxWidth(false)
+    else setTableMaxWidth('lg')
+  }
 
   const {
     educationLevels: initalEducationLevels = [],
@@ -126,7 +132,14 @@ export default function SearchCurriculum() {
   } = useSelector((state: any) => state.search)
 
   useEffect(() => {
-    setSearchResults(initialSearchResults)
+    const parsed = initialSearchResults.map((item: any, index: number) => {
+      return {
+        order: index + 1,
+        accreditation: get(item, 'accreditation1', ''),
+        ...item,
+      }
+    })
+    setSearchResults(parsed)
   }, [initialSearchResults])
 
   useEffect(() => {
@@ -145,35 +158,48 @@ export default function SearchCurriculum() {
             <Box mt={6} mb={4}>
               <Divider />
             </Box>
-            <Grid
-              container
-              direction='row'
-              justify={matches ? 'space-between' : 'center'}
-              alignItems='center'
-            >
-              <Typography
-                gutterBottom
-                component='h2'
-                variant='h6'
-                className={classes.sectionTitle}
-                align={matches ? 'left' : 'center'}
-                style={{ marginBottom: 24 }}
+            <Container maxWidth='lg'>
+              <Grid
+                container
+                justify='space-between'
+                style={{ margin: '24px 0' }}
               >
-                ผลการค้นหา
-              </Typography>
-            </Grid>
+                <Typography
+                  component='h2'
+                  variant='h6'
+                  className={classes.sectionTitle}
+                >
+                  ผลการค้นหา
+                </Typography>
+                <Stack direction='row' spacing={2}>
+                  <Button
+                    variant='contained'
+                    color='secondary'
+                    onClick={handleSwitchTableMaxWidth}
+                    startIcon={
+                      tableMaxWidth === 'lg' ? (
+                        <ExpandIcon style={{ transform: 'rotate(90deg)' }} />
+                      ) : (
+                        <ShrinkIcon style={{ transform: 'rotate(90deg)' }} />
+                      )
+                    }
+                  >
+                    {tableMaxWidth === 'lg' ? 'ขยาย' : 'ย่อ'}ตาราง
+                  </Button>
+                </Stack>
+              </Grid>
+            </Container>
             <Paper
               elevation={0}
               style={{
                 borderRadius: 16,
                 padding: 24,
-                paddingTop: 8,
                 boxShadow: '0 0 20px 0 rgba(204,242,251,0.3)',
                 border: '1px solid rgb(204 242 251)',
                 minHeight: 300,
               }}
             >
-              <SearchResultTable data={searchResults} isLoading={isSearching} />
+              <DataTable data={searchResults} loading={isSearching} />
             </Paper>
           </Box>
         )
@@ -523,6 +549,8 @@ export default function SearchCurriculum() {
             </Grid>
           </Box>
         </form>
+      </Container>
+      <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
         {renderSearchResult()}
       </Container>
     </>

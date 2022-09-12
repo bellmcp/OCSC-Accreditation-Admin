@@ -245,7 +245,11 @@ export default function University() {
             alignItems='center'
             style={{ height: 300 }}
           >
-            <Typography variant='body2' color='textSecondary'>
+            <Typography
+              variant='body2'
+              color='primary'
+              style={{ fontWeight: 500 }}
+            >
               โปรดเลือกประเทศ
             </Typography>
           </Grid>
@@ -318,7 +322,11 @@ export default function University() {
                     return (
                       <Grid container spacing={1}>
                         <Grid item xs={1}>
-                          <Typography variant='body2' color='textPrimary'>
+                          <Typography
+                            variant='body2'
+                            color='textPrimary'
+                            align='center'
+                          >
                             {get(option, 'order', 0)}
                           </Typography>
                         </Grid>
