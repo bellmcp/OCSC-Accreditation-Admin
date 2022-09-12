@@ -90,6 +90,7 @@ function incrementVisitor() {
 
 function searchCurriculums({
   isGov,
+  isPrivate,
   level,
   university,
   faculty,
@@ -102,6 +103,7 @@ function searchCurriculums({
     try {
       var { data } = await axios.post('/curriculums/search', {
         isGov,
+        isPrivate,
         level,
         university,
         faculty,

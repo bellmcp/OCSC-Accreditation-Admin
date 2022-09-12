@@ -78,7 +78,7 @@ export default function SearchCurriculum() {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      type: 'gov',
+      type: 'both',
       level: 0,
       status: 'active',
       university: '',
@@ -90,7 +90,12 @@ export default function SearchCurriculum() {
     onSubmit: (values) => {
       dispatch(
         searchActions.searchCurriculums({
-          isGov: get(values, 'type', 'gov') === 'gov',
+          isGov:
+            get(values, 'type', 'both') === 'gov' ||
+            get(values, 'type', 'both') === 'both',
+          isPrivate:
+            get(values, 'type', 'both') === 'org' ||
+            get(values, 'type', 'both') === 'both',
           level: getLevelIdByLabel(get(values, 'level', 0)),
           university: get(values, 'university', ''),
           faculty: get(values, 'faculty', ''),
@@ -279,6 +284,12 @@ export default function SearchCurriculum() {
                       onChange={formik.handleChange}
                     >
                       <FormControlLabel
+                        value='both'
+                        control={<Radio size='small' />}
+                        label='หลักสูตรของรัฐ และเอกชน'
+                        style={{ marginRight: 96 }}
+                      />
+                      <FormControlLabel
                         value='gov'
                         control={<Radio size='small' />}
                         label='หลักสูตรของรัฐ'
@@ -374,7 +385,7 @@ export default function SearchCurriculum() {
                         value='active'
                         control={<Radio size='small' />}
                         label='หลักสูตรที่ออกหนังสือเวียนแล้ว'
-                        style={{ marginRight: 96 }}
+                        style={{ marginRight: 66 }}
                       />
                       <FormControlLabel
                         value='pending'
