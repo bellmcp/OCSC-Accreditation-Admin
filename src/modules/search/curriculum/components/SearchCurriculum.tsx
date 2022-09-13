@@ -28,6 +28,10 @@ import {
   Paper,
   MenuItem,
   Divider,
+  Fab,
+  Zoom,
+  useScrollTrigger,
+  Toolbar,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 import {
@@ -35,9 +39,9 @@ import {
   UnfoldLess as ShrinkIcon,
   UnfoldMore as ExpandIcon,
 } from '@material-ui/icons'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
 import * as searchActions from 'modules/search/actions'
-import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
 import DataTable from './DataTable'
 
@@ -57,8 +61,40 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '0.35em',
       zIndex: 3,
     },
+    root: {
+      position: 'fixed',
+      bottom: theme.spacing(4),
+      right: theme.spacing(4),
+    },
   })
 )
+
+function ScrollTop(props: any) {
+  const { children } = props
+  const classes = useStyles()
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  })
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (
+      (event.target as HTMLDivElement).ownerDocument || document
+    ).querySelector('#back-to-top-anchor')
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
+  return (
+    <Zoom in={trigger}>
+      <div onClick={handleClick} role='presentation' className={classes.root}>
+        {children}
+      </div>
+    </Zoom>
+  )
+}
 
 export default function SearchCurriculum() {
   const classes = useStyles()
@@ -217,7 +253,7 @@ export default function SearchCurriculum() {
 
   return (
     <>
-      <Header title='FAQ' subtitle='คำถามที่พบบ่อย' icon={<div />} />
+      <Toolbar id='back-to-top-anchor' />
       <Container maxWidth='lg' className={classes.content}>
         <form onSubmit={formik.handleSubmit}>
           <Box mt={2} mb={4}>
@@ -567,6 +603,11 @@ export default function SearchCurriculum() {
       <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
         {renderSearchResult()}
       </Container>
+      <ScrollTop>
+        <Fab color='primary' size='medium'>
+          <KeyboardArrowUpIcon style={{ color: 'white' }} />
+        </Fab>
+      </ScrollTop>
     </>
   )
 }

@@ -248,8 +248,8 @@ export default function Country() {
           </Paper>
         </Box>
         <ScrollTop>
-          <Fab color='secondary' size='medium'>
-            <KeyboardArrowUpIcon />
+          <Fab color='primary' size='medium'>
+            <KeyboardArrowUpIcon style={{ color: 'white' }} />
           </Fab>
         </ScrollTop>
       </Container>
