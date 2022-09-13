@@ -762,3 +762,25 @@ export const mock = [
     letterDate: '30 ก.ย. 2553',
   },
 ]
+
+export const mockPersonLetters = [
+  {
+    id: 1,
+    nationalId: '0000000000000',
+    title: 'นาย',
+    firstname: 'กกก',
+    lastname: 'ขขข',
+    country: 'สหราชอาณาจักร',
+    university: 'Cambridge University',
+    degree: 'Master of Science',
+    branch: 'Finance',
+    level: 'ป.โท',
+    faculty: 'Economics',
+    appro: 'สาขาวิชานิเทศศาสตร์ ทางการโฆษณา',
+    note: 'กกก กกก กกก',
+    letterNo: 'นร 1004/ว1',
+    letterDate: '26 ม.ค. 2561',
+    replyNo: 'คง 34/56',
+    replyDate: '26 ส.ค. 2565',
+  },
+]

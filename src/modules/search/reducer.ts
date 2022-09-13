@@ -8,6 +8,9 @@ import {
   INCREMENT_VISITOR_REQUEST,
   INCREMENT_VISITOR_SUCCESS,
   INCREMENT_VISITOR_FAILURE,
+  SEARCH_PERSON_LETTERS_REQUEST,
+  SEARCH_PERSON_LETTERS_SUCCESS,
+  SEARCH_PERSON_LETTERS_FAILURE,
   CLEAR_SEARCH_RESULT,
 } from './actions'
 
@@ -25,7 +28,9 @@ export default function (state = initialState, action: any) {
     case LOAD_EDUCATION_LEVELS_REQUEST:
       return { ...state, isLoading: true, educationLevels: [] }
     case SEARCH_CURRICULUMS_REQUEST:
+    case SEARCH_PERSON_LETTERS_REQUEST:
       return { ...state, isSearching: true, searchResults: [] }
+
     case INCREMENT_VISITOR_REQUEST:
       return { ...state, isIncrementing: true, visitor: 0 }
     case LOAD_EDUCATION_LEVELS_SUCCESS:
@@ -35,6 +40,7 @@ export default function (state = initialState, action: any) {
         educationLevels: action.payload.educationLevels,
       }
     case SEARCH_CURRICULUMS_SUCCESS:
+    case SEARCH_PERSON_LETTERS_SUCCESS:
       return {
         ...state,
         isSearching: false,
@@ -49,6 +55,7 @@ export default function (state = initialState, action: any) {
     case LOAD_EDUCATION_LEVELS_FAILURE:
       return { ...state, isLoading: false }
     case SEARCH_CURRICULUMS_FAILURE:
+    case SEARCH_PERSON_LETTERS_FAILURE:
       return { ...state, isSearching: false }
     case INCREMENT_VISITOR_FAILURE:
       return { ...state, isIncrementing: false }

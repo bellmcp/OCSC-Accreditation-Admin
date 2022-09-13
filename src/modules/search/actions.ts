@@ -3,7 +3,7 @@ import { get } from 'lodash'
 
 import * as uiActions from 'modules/ui/actions'
 
-import { mock } from './mock'
+import { mock, mockPersonLetters } from './mock'
 
 const LOAD_EDUCATION_LEVELS_REQUEST =
   'ocsc-e-accredit/search/LOAD_EDUCATION_LEVELS_REQUEST'
@@ -25,6 +25,13 @@ const INCREMENT_VISITOR_SUCCESS =
   'ocsc-e-accredit/search/INCREMENT_VISITOR_SUCCESS'
 const INCREMENT_VISITOR_FAILURE =
   'ocsc-e-accredit/search/INCREMENT_VISITOR_FAILURE'
+
+const SEARCH_PERSON_LETTERS_REQUEST =
+  'ocsc-e-accredit/search/SEARCH_PERSON_LETTERS_REQUEST'
+const SEARCH_PERSON_LETTERS_SUCCESS =
+  'ocsc-e-accredit/search/SEARCH_PERSON_LETTERS_SUCCESS'
+const SEARCH_PERSON_LETTERS_FAILURE =
+  'ocsc-e-accredit/search/SEARCH_PERSON_LETTERS_FAILURE'
 
 const CLEAR_SEARCH_RESULT = 'ocsc-e-accredit/search/CLEAR_SEARCH_RESULT'
 
@@ -156,6 +163,72 @@ function clearSearchResult() {
   }
 }
 
+function searchPersonLetters({
+  filter,
+  nationalId,
+  country,
+  firstName,
+  lastName,
+  level,
+  university,
+  faculty,
+  degree,
+  branch,
+  appro,
+}: any) {
+  return async (dispatch: any) => {
+    dispatch({ type: SEARCH_PERSON_LETTERS_REQUEST })
+    try {
+      var { data } = await axios.post('/PersonLetterItems/Search', {
+        filter,
+        nationalId,
+        country,
+        firstName,
+        lastName,
+        level,
+        university,
+        faculty,
+        degree,
+        branch,
+        appro,
+      })
+      if (data.length === 0) {
+        data = []
+        dispatch(
+          uiActions.setFlashMessage(
+            'ไม่พบผลลัพธ์การค้นหา โปรดลองใหม่อีกครั้ง',
+            'info'
+          )
+        )
+      }
+      dispatch({
+        type: SEARCH_PERSON_LETTERS_SUCCESS,
+        payload: {
+          searchResults: data,
+        },
+      })
+    } catch (err) {
+      dispatch({
+        type: SEARCH_PERSON_LETTERS_SUCCESS,
+        payload: {
+          searchResults: mockPersonLetters,
+        },
+      })
+      //   dispatch({ type: SEARCH_PERSON_LETTERS_FAILURE })
+      //   dispatch(
+      //     uiActions.setFlashMessage(
+      //       `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+      //         err,
+      //         'response.status',
+      //         'บางอย่าง'
+      //       )}`,
+      //       'error'
+      //     )
+      //   )
+    }
+  }
+}
+
 export {
   LOAD_EDUCATION_LEVELS_REQUEST,
   LOAD_EDUCATION_LEVELS_SUCCESS,
@@ -166,9 +239,13 @@ export {
   INCREMENT_VISITOR_REQUEST,
   INCREMENT_VISITOR_SUCCESS,
   INCREMENT_VISITOR_FAILURE,
+  SEARCH_PERSON_LETTERS_REQUEST,
+  SEARCH_PERSON_LETTERS_SUCCESS,
+  SEARCH_PERSON_LETTERS_FAILURE,
   CLEAR_SEARCH_RESULT,
   loadEducationlevels,
   searchCurriculums,
   incrementVisitor,
+  searchPersonLetters,
   clearSearchResult,
 }

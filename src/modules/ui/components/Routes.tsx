@@ -16,7 +16,7 @@ const PATH = process.env.REACT_APP_BASE_PATH
 export default function Routes() {
   return (
     <Switch>
-      <Route path={`${PATH}/search/curriculum`}>
+      <Route path={`${PATH}/search`}>
         <SearchRoutes />
       </Route>
       <Route path={`${PATH}/edu`}>

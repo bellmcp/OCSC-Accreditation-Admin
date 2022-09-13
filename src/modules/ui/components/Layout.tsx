@@ -121,6 +121,7 @@ export default function Layout() {
           height: 2,
           backgroundColor: theme.palette.primary.main,
           transition: 'all 5s ease 3s',
+          position: 'fixed',
         }}
       />
       <NavBar active={activePage} setActivePage={setActivePage} />
