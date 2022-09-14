@@ -208,7 +208,7 @@ export default function NavBar(props: NavigationBarProps) {
     {
       id: 0,
       title: 'หนังสือเข้า',
-      url: `${PATH}`,
+      url: `${PATH}/person-letter`,
       notification: 0,
     },
     {

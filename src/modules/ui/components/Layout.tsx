@@ -28,7 +28,7 @@ export default function Layout() {
   useEffect(() => {
     const setInitialActivePage = () => {
       switch (pathname) {
-        case `${PATH}`:
+        case `${PATH}/person-letter`:
           setActivePage(0)
           break
         case `${PATH}/search/person-letter`:
@@ -36,12 +36,6 @@ export default function Layout() {
           break
         case `${PATH}/search/curriculum`:
           setActivePage(2)
-          break
-        case `${PATH}/download`:
-          setActivePage(3)
-          break
-        case `${PATH}/faq`:
-          setActivePage(4)
           break
         default:
           setActivePage(99)
