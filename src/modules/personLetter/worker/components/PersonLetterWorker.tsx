@@ -45,6 +45,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
 import * as searchActions from 'modules/search/actions'
 import Loading from 'modules/ui/components/Loading'
+import DatePicker from './DatePicker'
 import DataTable from './DataTable'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -309,7 +310,7 @@ export default function PersonLetterWorker() {
                       เลขที่หนังสือเข้า
                     </Typography>
                   </Grid>
-                  <Grid xs={12} md={9}>
+                  <Grid xs={12} md={3}>
                     <TextField
                       id='nationalId'
                       name='nationalId'
@@ -333,19 +334,8 @@ export default function PersonLetterWorker() {
                       วันที่หนังสือเข้า (เริ่มต้น)
                     </Typography>
                   </Grid>
-                  <Grid xs={12} md={9}>
-                    <TextField
-                      id='firstName'
-                      name='firstName'
-                      value={formik.values.firstName}
-                      onChange={formik.handleChange}
-                      placeholder='ใส่คำค้นหาได้ไม่เกิน 3 คำ เช่น กกก ขขข คคค หมายถึง ในชื่อต้องมีคำค้นหาทั้งหมดปรากฏอยู่'
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      multiline={!matches}
-                      rows={4}
-                    />
+                  <Grid xs={12} md={3}>
+                    <DatePicker />
                   </Grid>
                 </Grid>
                 <Grid container item direction='row' alignItems='center'>
@@ -358,19 +348,8 @@ export default function PersonLetterWorker() {
                       วันที่หนังสือเข้า (สิ้นสุด)
                     </Typography>
                   </Grid>
-                  <Grid xs={12} md={9}>
-                    <TextField
-                      id='lastName'
-                      name='lastName'
-                      value={formik.values.lastName}
-                      onChange={formik.handleChange}
-                      placeholder='ใส่คำค้นหาได้ไม่เกิน 3 คำ เช่น กกก ขขข คคค หมายถึง ในชื่อต้องมีคำค้นหาทั้งหมดปรากฏอยู่'
-                      variant='outlined'
-                      size='small'
-                      fullWidth
-                      multiline={!matches}
-                      rows={4}
-                    />
+                  <Grid xs={12} md={3}>
+                    <DatePicker />
                   </Grid>
                 </Grid>
                 <Grid container item direction='row' alignItems='center'>
