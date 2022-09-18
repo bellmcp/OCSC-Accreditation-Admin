@@ -4,6 +4,7 @@ import { get, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { format, subMonths } from 'date-fns'
 
 import {
   createStyles,
@@ -17,16 +18,10 @@ import {
   Typography,
   Grid,
   Box,
-  Select,
   Button,
   TextField,
-  Radio,
-  RadioGroup,
   FormControlLabel,
-  FormHelperText,
-  FormControl,
   Paper,
-  MenuItem,
   Divider,
   Fab,
   Zoom,
@@ -40,10 +35,10 @@ import {
   Search as SearchIcon,
   UnfoldLess as ShrinkIcon,
   UnfoldMore as ExpandIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon,
 } from '@material-ui/icons'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
-import * as searchActions from 'modules/search/actions'
+import * as personLetterActions from 'modules/personLetter/actions'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
@@ -107,100 +102,65 @@ export default function PersonLetterWorker() {
 
   const validationSchema = yup.object({})
 
-  const getLevelIdByLabel = (label: string) => {
-    const result = educationLevels.find((item: any) => {
-      return item.level === label
-    })
-    return get(result, 'id', 0)
-  }
-
-  const getFilterPayloadValue = (value: string) => {
-    switch (value) {
-      case 'thai':
-        return 1
-      case 'global':
-        return 2
-      case 'all':
-      default:
-        return 0
-    }
-  }
-
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      filter: 'all',
-      nationalId: '',
-      country: '',
-      firstName: '',
-      lastName: '',
-      level: 0,
-      university: '',
-      faculty: '',
-      degree: '',
-      branch: '',
-      appro: '',
+      letterNo: '',
+      letterDate: '',
+      replyDate: '',
+      status1: true,
+      status2: true,
+      status3: true,
+      status4: true,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       dispatch(
-        searchActions.searchPersonLetters({
-          filter: getFilterPayloadValue(get(values, 'filter', 'all')),
-          nationalId: get(values, 'nationalId', ''),
-          country: get(values, 'country', ''),
-          firstName: get(values, 'firstName', ''),
-          lastName: get(values, 'lastName', ''),
-          level: getLevelIdByLabel(get(values, 'level', 0)),
-          university: get(values, 'university', ''),
-          faculty: get(values, 'faculty', ''),
-          degree: get(values, 'degree', ''),
-          branch: get(values, 'branch', ''),
-          appro: get(values, 'appro', ''),
+        personLetterActions.getPersonLetter({
+          letterNo: get(values, 'letterNo', ''),
+          letterDate: get(values, 'letterDate', ''),
+          replyDate: get(values, 'replyDate', ''),
+          status1: get(values, 'status1', true),
+          status2: get(values, 'status2', true),
+          status3: get(values, 'status3', true),
+          status4: get(values, 'status4', true),
         })
       )
     },
   })
 
-  useEffect(() => {
-    dispatch(searchActions.loadEducationlevels())
-    return () => {
-      dispatch(searchActions.clearSearchResult())
-    }
-  }, [dispatch])
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(personLetterActions.clearSearchResult())
+  //   }
+  // }, [dispatch])
 
-  const note = (
-    <span style={{ color: theme.palette.primary.main, marginLeft: 2 }}>*</span>
-  )
-
-  const [educationLevels, setEducationLevels] = useState([])
   const [searchResults, setSearchResults] = useState([])
   const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
+  const [startDate, setStartDate] = useState<string>(
+    format(subMonths(new Date(), 6), 'yyyy-MM-dd').toString()
+  )
+  const [endDate, setEndDate] = useState<string>(
+    format(new Date(), 'yyyy-MM-dd').toString()
+  )
 
   const handleSwitchTableMaxWidth = () => {
     if (tableMaxWidth === 'lg') setTableMaxWidth(false)
     else setTableMaxWidth('lg')
   }
 
-  const {
-    educationLevels: initalEducationLevels = [],
-    searchResults: initialSearchResults = [],
-    isSearching = false,
-  } = useSelector((state: any) => state.search)
+  const { serchResults: initialSearchResults = [], isSearching = false } =
+    useSelector((state: any) => state.personLetter)
 
-  useEffect(() => {
-    const parsed = initialSearchResults.map((item: any, index: number) => {
-      return {
-        order: index + 1,
-        accreditation: get(item, 'accreditation1', ''),
-        ...item,
-      }
-    })
-    setSearchResults(parsed)
-  }, [initialSearchResults])
-
-  useEffect(() => {
-    setEducationLevels(initalEducationLevels)
-  }, [initalEducationLevels])
+  // useEffect(() => {
+  //   const parsed = initialSearchResults.map((item: any, index: number) => {
+  //     return {
+  //       order: index + 1,
+  //       ...item,
+  //     }
+  //   })
+  //   setSearchResults(parsed)
+  // }, [initialSearchResults])
 
   const renderSearchResult = () => {
     if (isSearching) {
@@ -335,7 +295,7 @@ export default function PersonLetterWorker() {
                     </Typography>
                   </Grid>
                   <Grid xs={12} md={3}>
-                    <DatePicker />
+                    <DatePicker date={startDate} setDate={setStartDate} />
                   </Grid>
                 </Grid>
                 <Grid container item direction='row' alignItems='center'>
@@ -349,7 +309,7 @@ export default function PersonLetterWorker() {
                     </Typography>
                   </Grid>
                   <Grid xs={12} md={3}>
-                    <DatePicker />
+                    <DatePicker date={endDate} setDate={setEndDate} />
                   </Grid>
                 </Grid>
                 <Grid container item direction='row' alignItems='center'>

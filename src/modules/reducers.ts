@@ -3,11 +3,12 @@ import { connectRouter } from 'connected-react-router'
 import { loadingBarReducer } from 'react-redux-loading-bar'
 
 import uiReducer from 'modules/ui/reducer'
-import searchReducer from 'modules/search/reducer'
 import downloadReduer from 'modules/download/reducer'
 import internationalReducer from 'modules/edu/international/reducer'
 import faqReducer from 'modules/faq/reducer'
 
+import searchReducer from 'modules/search/reducer'
+import personLetterReducer from 'modules/personLetter/reducer'
 import infoReducer from 'modules/info/reducer'
 
 export default (history: any) =>
@@ -20,4 +21,5 @@ export default (history: any) =>
     download: downloadReduer,
     international: internationalReducer,
     info: infoReducer,
+    personLetter: personLetterReducer,
   })
