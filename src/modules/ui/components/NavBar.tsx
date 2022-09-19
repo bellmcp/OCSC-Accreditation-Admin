@@ -20,6 +20,10 @@ import {
   Hidden,
   Container,
   MenuItem,
+  Avatar,
+  Divider,
+  Tooltip,
+  Button,
 } from '@material-ui/core'
 import {
   Menu as MenuIcon,
@@ -37,6 +41,7 @@ import {
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
 
 import * as uiActions from 'modules/ui/actions'
+import { isLoginAsAdmin, isLoginAsUser } from 'utils/isLogin'
 
 import NavDrawer from './NavDrawer'
 
@@ -153,7 +158,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.common.white,
       width: theme.spacing(4),
       height: theme.spacing(4),
-      backgroundColor: process.env.REACT_APP_TERTIARY_COLOR_HEX,
+      backgroundColor: process.env.REACT_APP_PRIMARY_COLOR_HEX,
     },
     noDecorationLink: {
       textDecoration: 'none',
@@ -199,10 +204,30 @@ export default function NavBar(props: NavigationBarProps) {
   const { pathname } = useLocation()
   const dispatch = useDispatch()
   const PATH = process.env.REACT_APP_BASE_PATH
-
+  const menuId = 'primary-account-menu'
   const LogoImage = require('assets/images/logo.png')
 
+  const isAdmin = isLoginAsAdmin()
+  const isUser = isLoginAsUser()
+
+  const getUsernameLabel = () => {
+    if (isAdmin) return 'ผู้ดูแลระบบ'
+    else if (isUser) return departmentName
+    else return 'เข้าสู่ระบบ'
+  }
+  const checkIsLoggedIn = () => {
+    return isAdmin || isUser
+  }
+
+  const isLoggedIn = checkIsLoggedIn()
+  const usernameLabel = getUsernameLabel()
+
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const navigationItem = [
     {
@@ -341,6 +366,35 @@ export default function NavBar(props: NavigationBarProps) {
                 </NavMenu>
               </ThemeProvider>
             </Hidden>
+            {/* DESKTOP DROPDOWN */}
+            <div className={classes.sectionDesktop}>
+              <Button
+                onClick={handleProfileMenuOpen}
+                disabled={!isLoggedIn}
+                color='primary'
+                size='small'
+                style={{
+                  borderRadius: 50,
+                  padding: '5px 12px 5px 8px',
+                  margin: '6px 0',
+                  border: '1px solid lightgray',
+                }}
+                startIcon={
+                  <Avatar
+                    className={isLoggedIn ? classes.loggedIn : classes.small}
+                  />
+                }
+                endIcon={
+                  isLoggedIn && (
+                    <ArrowDownIcon style={{ fontSize: 24 }} color='action' />
+                  )
+                }
+              >
+                <Typography color='textPrimary' className={classes.bold} noWrap>
+                  {usernameLabel}
+                </Typography>
+              </Button>
+            </div>
           </Toolbar>
         </Container>
       </AppBar>

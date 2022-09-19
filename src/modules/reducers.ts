@@ -7,6 +7,7 @@ import downloadReduer from 'modules/download/reducer'
 import internationalReducer from 'modules/edu/international/reducer'
 import faqReducer from 'modules/faq/reducer'
 
+import loginReducer from 'modules/login/reducer'
 import searchReducer from 'modules/search/reducer'
 import personLetterReducer from 'modules/personLetter/reducer'
 import infoReducer from 'modules/info/reducer'
@@ -15,6 +16,7 @@ export default (history: any) =>
   combineReducers({
     router: connectRouter(history),
     loadingBar: loadingBarReducer,
+    login: loginReducer,
     ui: uiReducer,
     faq: faqReducer,
     search: searchReducer,
