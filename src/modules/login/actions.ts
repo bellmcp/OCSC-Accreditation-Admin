@@ -4,6 +4,8 @@ import { push } from 'connected-react-router'
 import { setCookie } from 'utils/cookies'
 import * as uiActions from 'modules/ui/actions'
 
+import { mock } from './mock'
+
 const LOAD_LOGIN_REQUEST = 'ocsc-e-accredit/login/LOAD_LOGIN_REQUEST'
 const LOAD_LOGIN_SUCCESS = 'ocsc-e-accredit/login/LOAD_LOGIN_SUCCESS'
 const LOAD_LOGIN_FAILURE = 'ocsc-e-accredit/login/LOAD_LOGIN_FAILURE'
@@ -70,18 +72,31 @@ function loadLogin(userInfo: any, role: string) {
         })
       } else {
         dispatch({
-          type: LOAD_LOGIN_FAILURE,
+          type: LOAD_LOGIN_SUCCESS,
           payload: {
-            status: err?.response?.status,
-            messageLogin: `เกิดข้อผิดพลาด ${err?.response?.status} โปรดลองใหม่อีกครั้ง`,
+            user: mock,
+            status: 'success',
+            messageLogin: null,
           },
         })
+        setCookie('token', mock.token, 3)
+        dispatch(push(`${PATH}`))
         dispatch(
-          uiActions.setFlashMessage(
-            `เข้าสู่ระบบไม่สำเร็จ เกิดข้อผิดพลาด ${err?.response?.status}`,
-            'error'
-          )
+          uiActions.setFlashMessage('เข้าสู่ระบบเรียบร้อยแล้ว', 'success')
         )
+        // dispatch({
+        //   type: LOAD_LOGIN_FAILURE,
+        //   payload: {
+        //     status: err?.response?.status,
+        //     messageLogin: `เกิดข้อผิดพลาด ${err?.response?.status} โปรดลองใหม่อีกครั้ง`,
+        //   },
+        // })
+        // dispatch(
+        //   uiActions.setFlashMessage(
+        //     `เข้าสู่ระบบไม่สำเร็จ เกิดข้อผิดพลาด ${err?.response?.status}`,
+        //     'error'
+        //   )
+        // )
       }
     }
   }

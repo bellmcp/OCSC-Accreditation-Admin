@@ -87,7 +87,18 @@ export default function Login() {
     }),
   })
 
-  const onLogin = (loginInfo: any) => {
+  const onLoginWorker = (loginInfo: any) => {
+    const actionLogin = actions.loadLogin(
+      {
+        userid: loginInfo.email,
+        password: loginInfo.password,
+      },
+      'worker'
+    )
+    dispatch(actionLogin)
+  }
+
+  const onLoginSupervisor = (loginInfo: any) => {
     const actionLogin = actions.loadLogin(
       {
         userid: loginInfo.email,
@@ -115,19 +126,11 @@ export default function Login() {
                 variant='h4'
                 align='center'
                 color='secondary'
-                style={{ fontWeight: 600, marginBottom: 32 }}
+                style={{ fontWeight: 600, marginBottom: 16 }}
               >
                 กลุ่มงานรับรองคุณวุฒิ
                 <br />
                 สำนักงาน ก.พ.
-              </Typography>
-              <Typography
-                component='h1'
-                variant='h5'
-                align='center'
-                style={{ fontWeight: 600, marginBottom: 8 }}
-              >
-                เข้าสู่ระบบ
               </Typography>
             </Grid>
             <Typography
@@ -208,7 +211,7 @@ export default function Login() {
                 className={classes.submit}
                 fullWidth
                 type='submit'
-                onClick={handleSubmit(onLogin)}
+                onClick={handleSubmit(onLoginWorker)}
               >
                 <b style={{ marginRight: 8 }}>เข้าสู่ระบบ</b> (ผู้ปฏิบัติงาน)
               </Button>
@@ -218,7 +221,7 @@ export default function Login() {
                 variant='contained'
                 fullWidth
                 type='submit'
-                onClick={handleSubmit(onLogin)}
+                onClick={handleSubmit(onLoginSupervisor)}
               >
                 <b style={{ marginRight: 8 }}>เข้าสู่ระบบ</b> (หัวหน้างาน)
               </Button>

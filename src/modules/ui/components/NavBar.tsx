@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
+import { getCookie, eraseCookie } from 'utils/cookies'
 
 import {
   fade,
@@ -39,6 +40,9 @@ import {
   bindMenu,
 } from 'material-ui-popup-state/hooks'
 import HoverMenu from 'material-ui-popup-state/HoverMenu'
+
+import NavDropdownMobile from './NavDropdownMobile'
+import NavDropdownDesktop from './NavDropdownDesktop'
 
 import * as uiActions from 'modules/ui/actions'
 import { isLoginAsAdmin, isLoginAsUser } from 'utils/isLogin'
@@ -204,14 +208,16 @@ export default function NavBar(props: NavigationBarProps) {
   const { pathname } = useLocation()
   const dispatch = useDispatch()
   const PATH = process.env.REACT_APP_BASE_PATH
-  const menuId = 'primary-account-menu'
   const LogoImage = require('assets/images/logo.png')
+
+  const menuId = 'primary-account-menu'
+  const mobileMenuId = 'primary-account-menu-mobile'
 
   const isAdmin = isLoginAsAdmin()
   const isUser = isLoginAsUser()
 
   const getUsernameLabel = () => {
-    if (isAdmin) return 'ผู้ดูแลระบบ'
+    if (isAdmin) return 'ชัชวิทย์'
     else if (isUser) return departmentName
     else return 'เข้าสู่ระบบ'
   }
@@ -224,9 +230,20 @@ export default function NavBar(props: NavigationBarProps) {
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    useState<null | HTMLElement>(null)
+
+  const isMenuOpen = Boolean(anchorEl)
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
+  }
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMoreAnchorEl(event.currentTarget)
+  }
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null)
   }
 
   const navigationItem = [
@@ -250,14 +267,16 @@ export default function NavBar(props: NavigationBarProps) {
     },
   ]
 
-  const isUserCurrentlyInLearn = pathname.includes(`${PATH}/learn/courses`)
+  const isUserCurrentlyInLearn = false
+
+  const linkToChangePassword = () => {
+    handleMenuClose()
+    history.push(`${PATH}/edit/password`)
+  }
 
   const linkToHome = () => {
-    if (!isUserCurrentlyInLearn) {
-      history.push(`${PATH}`)
-    } else {
-      dispatch(uiActions.setLearnExitDialog(true))
-    }
+    handleMenuClose()
+    history.push(`${PATH}`)
   }
 
   const handleDrawerToggle = () => {
@@ -273,6 +292,21 @@ export default function NavBar(props: NavigationBarProps) {
     variant: 'popover',
     popupId: 'demoMenu2',
   })
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+    handleMobileMenuClose()
+  }
+
+  const logout = () => {
+    handleMenuClose()
+    eraseCookie('token')
+    dispatch(uiActions.setFlashMessage('ออกจากระบบเรียบร้อยแล้ว', 'success'))
+    setTimeout(() => {
+      history.push(`${PATH}/login`)
+    }, 2000)
+    window.location.reload()
+  }
 
   return (
     <div className={classes.grow}>
@@ -394,6 +428,22 @@ export default function NavBar(props: NavigationBarProps) {
                   {usernameLabel}
                 </Typography>
               </Button>
+            </div>
+            {/* MOBILE DROPDOWN */}
+            <Hidden only={['xs', 'lg', 'md', 'xl']}>
+              <div className={classes.grow} />
+            </Hidden>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                disabled={!isLoggedIn}
+                aria-controls={mobileMenuId}
+                onClick={handleMobileMenuOpen}
+                color='inherit'
+              >
+                <Avatar
+                  className={isLoggedIn ? classes.loggedIn : classes.small}
+                />
+              </IconButton>
             </div>
           </Toolbar>
         </Container>
@@ -534,6 +584,27 @@ export default function NavBar(props: NavigationBarProps) {
         active={props.active}
         unreadNotificationCount={0}
         isUserCurrentlyInLearn={isUserCurrentlyInLearn}
+      />
+      <NavDropdownMobile
+        isLoggedIn={isLoggedIn}
+        logout={logout}
+        mobileMenuId={mobileMenuId}
+        mobileMoreAnchorEl={mobileMoreAnchorEl}
+        isMobileMenuOpen={isMobileMenuOpen}
+        handleMobileMenuClose={handleMobileMenuClose}
+        linkToHome={linkToHome}
+        linkToChangePassword={linkToChangePassword}
+        usernameLabel={usernameLabel}
+      />
+      <NavDropdownDesktop
+        isLoggedIn={isLoggedIn}
+        logout={logout}
+        linkToHome={linkToHome}
+        linkToChangePassword={linkToChangePassword}
+        anchorEl={anchorEl}
+        menuId={menuId}
+        isMenuOpen={isMenuOpen}
+        handleMenuClose={handleMenuClose}
       />
     </div>
   )

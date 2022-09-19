@@ -18,9 +18,9 @@ export const getRole = () => {
 }
 
 export const isLoginAsUser = () => {
-  return isLogin() && getRole() === 'user'
+  return isLogin() && getRole() === 'worker'
 }
 
 export const isLoginAsAdmin = () => {
-  return isLogin() && getRole() === 'admin'
+  return isLogin() && getRole() === 'supervisor'
 }

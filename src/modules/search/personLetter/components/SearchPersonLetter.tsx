@@ -347,8 +347,6 @@ export default function SearchPersonLetter() {
                       variant='outlined'
                       size='small'
                       fullWidth
-                      multiline={!matches}
-                      rows={4}
                     />
                   </Grid>
                 </Grid>
