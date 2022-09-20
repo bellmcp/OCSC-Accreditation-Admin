@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { get, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
@@ -29,6 +29,7 @@ import {
   Toolbar,
   FormGroup,
   Checkbox,
+  Hidden,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 import {
@@ -191,20 +192,22 @@ export default function PersonLetterWorker() {
                   ผลการค้นหา
                 </Typography>
                 <Stack direction='row' spacing={2}>
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    onClick={handleSwitchTableMaxWidth}
-                    startIcon={
-                      tableMaxWidth === 'lg' ? (
-                        <ExpandIcon style={{ transform: 'rotate(90deg)' }} />
-                      ) : (
-                        <ShrinkIcon style={{ transform: 'rotate(90deg)' }} />
-                      )
-                    }
-                  >
-                    {tableMaxWidth === 'lg' ? 'ขยาย' : 'ย่อ'}ตาราง
-                  </Button>
+                  <Hidden mdDown>
+                    <Button
+                      variant='contained'
+                      color='secondary'
+                      onClick={handleSwitchTableMaxWidth}
+                      startIcon={
+                        tableMaxWidth === 'lg' ? (
+                          <ExpandIcon style={{ transform: 'rotate(90deg)' }} />
+                        ) : (
+                          <ShrinkIcon style={{ transform: 'rotate(90deg)' }} />
+                        )
+                      }
+                    >
+                      {tableMaxWidth === 'lg' ? 'ขยาย' : 'ย่อ'}ตาราง
+                    </Button>
+                  </Hidden>
                 </Stack>
               </Grid>
             </Container>

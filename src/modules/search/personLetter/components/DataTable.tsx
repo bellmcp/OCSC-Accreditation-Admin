@@ -296,11 +296,11 @@ export default function DataTable({ data, loading }: DataTableProps) {
         }}
       >
         <Stack direction='row' spacing={2} alignItems='center'>
-          <GridToolbarColumnsButton />
+          <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
           <Divider orientation='vertical' light flexItem />
-          <GridToolbarFilterButton />
+          <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
           <Divider orientation='vertical' light flexItem />
-          <GridToolbarDensitySelector />
+          <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
           <Divider orientation='vertical' light flexItem />
           <GridToolbarExport
             printOptions={{ disableToolbarButton: true }}
@@ -309,6 +309,7 @@ export default function DataTable({ data, loading }: DataTableProps) {
               utf8WithBom: true,
               fileName: 'test',
             }}
+            sx={{ lineHeight: '1.2' }}
           />
         </Stack>
       </GridToolbarContainer>

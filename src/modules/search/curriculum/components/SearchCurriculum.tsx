@@ -32,6 +32,7 @@ import {
   Zoom,
   useScrollTrigger,
   Toolbar,
+  Hidden,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 import {
@@ -216,20 +217,22 @@ export default function SearchCurriculum() {
                   ผลการค้นหา
                 </Typography>
                 <Stack direction='row' spacing={2}>
-                  <Button
-                    variant='contained'
-                    color='secondary'
-                    onClick={handleSwitchTableMaxWidth}
-                    startIcon={
-                      tableMaxWidth === 'lg' ? (
-                        <ExpandIcon style={{ transform: 'rotate(90deg)' }} />
-                      ) : (
-                        <ShrinkIcon style={{ transform: 'rotate(90deg)' }} />
-                      )
-                    }
-                  >
-                    {tableMaxWidth === 'lg' ? 'ขยาย' : 'ย่อ'}ตาราง
-                  </Button>
+                  <Hidden mdDown>
+                    <Button
+                      variant='contained'
+                      color='secondary'
+                      onClick={handleSwitchTableMaxWidth}
+                      startIcon={
+                        tableMaxWidth === 'lg' ? (
+                          <ExpandIcon style={{ transform: 'rotate(90deg)' }} />
+                        ) : (
+                          <ShrinkIcon style={{ transform: 'rotate(90deg)' }} />
+                        )
+                      }
+                    >
+                      {tableMaxWidth === 'lg' ? 'ขยาย' : 'ย่อ'}ตาราง
+                    </Button>
+                  </Hidden>
                 </Stack>
               </Grid>
             </Container>
