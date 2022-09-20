@@ -11,6 +11,7 @@ import loginReducer from 'modules/login/reducer'
 import searchReducer from 'modules/search/reducer'
 import personLetterReducer from 'modules/personLetter/reducer'
 import infoReducer from 'modules/info/reducer'
+import passwordReducer from 'modules/edit/password/reducer'
 
 export default (history: any) =>
   combineReducers({
@@ -24,4 +25,5 @@ export default (history: any) =>
     international: internationalReducer,
     info: infoReducer,
     personLetter: personLetterReducer,
+    password: passwordReducer,
   })

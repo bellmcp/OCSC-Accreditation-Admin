@@ -63,10 +63,10 @@ const darkTheme = createMuiTheme({
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     selected: {
-      borderLeft: `6px solid ${theme.palette.primary.main} !important`,
+      borderLeft: `4px solid ${theme.palette.primary.main} !important`,
     },
     dropdownMenu: {
-      borderLeft: `6px solid transparent`,
+      borderLeft: `4px solid transparent`,
     },
     grow: {
       flexGrow: 1,
@@ -467,34 +467,58 @@ export default function NavBar(props: NavigationBarProps) {
         }}
       >
         <MenuItem
+          selected={props.active === 3}
           onClick={() => {
             history.push(`${PATH}/info/country`)
             popupState.close()
+            props.setActivePage(3)
           }}
+          className={clsx({
+            [classes.dropdownMenu]: true,
+            [classes.selected]: props.active === 3,
+          })}
         >
           ประเทศ
         </MenuItem>
         <MenuItem
+          selected={props.active === 4}
           onClick={() => {
             history.push(`${PATH}/info/salary-group`)
             popupState.close()
+            props.setActivePage(4)
           }}
+          className={clsx({
+            [classes.dropdownMenu]: true,
+            [classes.selected]: props.active === 4,
+          })}
         >
           กลุ่มเงินเดือน
         </MenuItem>
         <MenuItem
+          selected={props.active === 5}
           onClick={() => {
             history.push(`${PATH}/info/education-level`)
             popupState.close()
+            props.setActivePage(5)
           }}
+          className={clsx({
+            [classes.dropdownMenu]: true,
+            [classes.selected]: props.active === 5,
+          })}
         >
           ระดับการศึกษา
         </MenuItem>
         <MenuItem
+          selected={props.active === 6}
           onClick={() => {
             history.push(`${PATH}/info/university`)
             popupState.close()
+            props.setActivePage(6)
           }}
+          className={clsx({
+            [classes.dropdownMenu]: true,
+            [classes.selected]: props.active === 6,
+          })}
         >
           มหาวิทยาลัย
         </MenuItem>
