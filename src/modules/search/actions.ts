@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { get } from 'lodash'
+import { getCookie } from 'utils/cookies'
 
 import * as uiActions from 'modules/ui/actions'
 
-import { mock, mockPersonLetters } from './mock'
+// import { mock, mockPersonLetters } from './mock'
 
 const LOAD_EDUCATION_LEVELS_REQUEST =
   'ocsc-e-accredit/search/LOAD_EDUCATION_LEVELS_REQUEST'
@@ -134,23 +135,23 @@ function searchCurriculums({
         },
       })
     } catch (err) {
-      dispatch({
-        type: SEARCH_CURRICULUMS_SUCCESS,
-        payload: {
-          searchResults: mock,
-        },
-      })
-      // dispatch({ type: SEARCH_CURRICULUMS_FAILURE })
-      // dispatch(
-      //   uiActions.setFlashMessage(
-      //     `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-      //       err,
-      //       'response.status',
-      //       'บางอย่าง'
-      //     )}`,
-      //     'error'
-      //   )
-      // )
+      // dispatch({
+      //   type: SEARCH_CURRICULUMS_SUCCESS,
+      //   payload: {
+      //     searchResults: mock,
+      //   },
+      // })
+      dispatch({ type: SEARCH_CURRICULUMS_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
     }
   }
 }
@@ -179,19 +180,28 @@ function searchPersonLetters({
   return async (dispatch: any) => {
     dispatch({ type: SEARCH_PERSON_LETTERS_REQUEST })
     try {
-      var { data } = await axios.post('/PersonLetterItems/Search', {
-        filter,
-        nationalId,
-        country,
-        firstName,
-        lastName,
-        level,
-        university,
-        faculty,
-        degree,
-        branch,
-        appro,
-      })
+      const token = getCookie('token')
+      var { data } = await axios.post(
+        '/PersonLetterItems/Search',
+        {
+          filter,
+          nationalId,
+          country,
+          firstName,
+          lastName,
+          level,
+          university,
+          faculty,
+          degree,
+          branch,
+          appro,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       if (data.length === 0) {
         data = []
         dispatch(
@@ -208,23 +218,23 @@ function searchPersonLetters({
         },
       })
     } catch (err) {
-      dispatch({
-        type: SEARCH_PERSON_LETTERS_SUCCESS,
-        payload: {
-          searchResults: mockPersonLetters,
-        },
-      })
-      //   dispatch({ type: SEARCH_PERSON_LETTERS_FAILURE })
-      //   dispatch(
-      //     uiActions.setFlashMessage(
-      //       `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-      //         err,
-      //         'response.status',
-      //         'บางอย่าง'
-      //       )}`,
-      //       'error'
-      //     )
-      //   )
+      // dispatch({
+      //   type: SEARCH_PERSON_LETTERS_SUCCESS,
+      //   payload: {
+      //     searchResults: mockPersonLetters,
+      //   },
+      // })
+      dispatch({ type: SEARCH_PERSON_LETTERS_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
     }
   }
 }

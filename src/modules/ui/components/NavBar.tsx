@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { getCookie, eraseCookie } from 'utils/cookies'
 
 import {
@@ -22,8 +22,6 @@ import {
   Container,
   MenuItem,
   Avatar,
-  Divider,
-  Tooltip,
   Button,
 } from '@material-ui/core'
 import {
@@ -164,6 +162,12 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(4),
       backgroundColor: process.env.REACT_APP_PRIMARY_COLOR_HEX,
     },
+    loggedInAsAdmin: {
+      color: theme.palette.common.white,
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+      backgroundColor: process.env.REACT_APP_SECONDARY_COLOR_HEX,
+    },
     noDecorationLink: {
       textDecoration: 'none',
     },
@@ -205,7 +209,6 @@ interface NavigationBarProps {
 export default function NavBar(props: NavigationBarProps) {
   const classes = useStyles()
   const history = useHistory()
-  const { pathname } = useLocation()
   const dispatch = useDispatch()
   const PATH = process.env.REACT_APP_BASE_PATH
   const LogoImage = require('assets/images/logo.png')
@@ -216,17 +219,22 @@ export default function NavBar(props: NavigationBarProps) {
   const isAdmin = isLoginAsAdmin()
   const isUser = isLoginAsUser()
 
-  const getUsernameLabel = () => {
-    if (isAdmin) return 'ชัชวิทย์'
-    else if (isUser) return departmentName
-    else return 'เข้าสู่ระบบ'
-  }
   const checkIsLoggedIn = () => {
     return isAdmin || isUser
   }
-
   const isLoggedIn = checkIsLoggedIn()
+
+  const getUsernameLabel = () => {
+    if (isLoggedIn) return getCookie('firstname')
+    else return 'เข้าสู่ระบบ'
+  }
   const usernameLabel = getUsernameLabel()
+
+  const getAvatarClassName = () => {
+    if (isAdmin) return classes.loggedInAsAdmin
+    else if (isUser) return classes.loggedIn
+    else return classes.small
+  }
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -301,6 +309,8 @@ export default function NavBar(props: NavigationBarProps) {
   const logout = () => {
     handleMenuClose()
     eraseCookie('token')
+    eraseCookie('firstname')
+    eraseCookie('lastname')
     dispatch(uiActions.setFlashMessage('ออกจากระบบเรียบร้อยแล้ว', 'success'))
     setTimeout(() => {
       history.push(`${PATH}/login`)
@@ -404,11 +414,7 @@ export default function NavBar(props: NavigationBarProps) {
                   margin: '6px 0',
                   border: '1px solid lightgray',
                 }}
-                startIcon={
-                  <Avatar
-                    className={isLoggedIn ? classes.loggedIn : classes.small}
-                  />
-                }
+                startIcon={<Avatar className={getAvatarClassName()} />}
                 endIcon={
                   isLoggedIn && (
                     <ArrowDownIcon style={{ fontSize: 24 }} color='action' />
@@ -431,9 +437,7 @@ export default function NavBar(props: NavigationBarProps) {
                 onClick={handleMobileMenuOpen}
                 color='inherit'
               >
-                <Avatar
-                  className={isLoggedIn ? classes.loggedIn : classes.small}
-                />
+                <Avatar className={getAvatarClassName()} />
               </IconButton>
             </div>
           </Toolbar>

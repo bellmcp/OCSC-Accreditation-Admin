@@ -1,10 +1,9 @@
 //@ts-nocheck
 import axios from 'axios'
+import { get } from 'lodash'
 import { push } from 'connected-react-router'
 import { setCookie } from 'utils/cookies'
 import * as uiActions from 'modules/ui/actions'
-
-import { mock } from './mock'
 
 const LOAD_LOGIN_REQUEST = 'ocsc-e-accredit/login/LOAD_LOGIN_REQUEST'
 const LOAD_LOGIN_SUCCESS = 'ocsc-e-accredit/login/LOAD_LOGIN_SUCCESS'
@@ -42,7 +41,9 @@ function loadLogin(userInfo: any, role: string) {
           messageLogin: null,
         },
       })
-      setCookie('token', result.data.token, 3)
+      setCookie('token', get(result, 'data.token', ''), 3)
+      setCookie('firstname', get(result, 'data.firstname', ''), 3)
+      setCookie('lastname', get(result, 'data.lastname', ''), 3)
       dispatch(push(`${PATH}`))
       dispatch(uiActions.setFlashMessage('เข้าสู่ระบบเรียบร้อยแล้ว', 'success'))
     } catch (err) {
@@ -67,36 +68,35 @@ function loadLogin(userInfo: any, role: string) {
           type: LOAD_LOGIN_FAILURE,
           payload: {
             status: err?.response?.status,
-            messageLogin: `เกิดข้อผิดพลาด ${err?.response?.status} โปรดลองใหม่อีกครั้ง`,
+            messageLogin: `เกิดข้อผิดพลาด ${get(
+              err,
+              'response.status',
+              'บางอย่าง'
+            )} โปรดลองใหม่อีกครั้ง`,
           },
         })
       } else {
         dispatch({
-          type: LOAD_LOGIN_SUCCESS,
+          type: LOAD_LOGIN_FAILURE,
           payload: {
-            user: mock,
-            status: 'success',
-            messageLogin: null,
+            status: err?.response?.status,
+            messageLogin: `เกิดข้อผิดพลาด ${get(
+              err,
+              'response.status',
+              'บางอย่าง'
+            )} โปรดลองใหม่อีกครั้ง`,
           },
         })
-        setCookie('token', mock.token, 3)
-        dispatch(push(`${PATH}`))
         dispatch(
-          uiActions.setFlashMessage('เข้าสู่ระบบเรียบร้อยแล้ว', 'success')
+          uiActions.setFlashMessage(
+            `เข้าสู่ระบบไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+              err,
+              'response.status',
+              'บางอย่าง'
+            )}`,
+            'error'
+          )
         )
-        // dispatch({
-        //   type: LOAD_LOGIN_FAILURE,
-        //   payload: {
-        //     status: err?.response?.status,
-        //     messageLogin: `เกิดข้อผิดพลาด ${err?.response?.status} โปรดลองใหม่อีกครั้ง`,
-        //   },
-        // })
-        // dispatch(
-        //   uiActions.setFlashMessage(
-        //     `เข้าสู่ระบบไม่สำเร็จ เกิดข้อผิดพลาด ${err?.response?.status}`,
-        //     'error'
-        //   )
-        // )
       }
     }
   }
