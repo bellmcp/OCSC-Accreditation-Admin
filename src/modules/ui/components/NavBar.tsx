@@ -374,25 +374,16 @@ export default function NavBar(props: NavigationBarProps) {
                   useStyles={useLineNavigationMenuStyles}
                   color='inherit'
                 >
-                  {navigationItem.splice(0, 2).map((item) => (
-                    <NavItem
-                      active={props.active === item.id}
-                      className={
-                        props.active === item.id
-                          ? classes.navItemActive
-                          : classes.navItem
-                      }
-                      onClick={() => {
-                        history.push(`${item.url}`)
-                        props.setActivePage(item.id)
-                      }}
-                    >
-                      <Typography noWrap>{item.title}</Typography>
-                    </NavItem>
-                  ))}
                   <NavItem
                     className={classes.navItem}
                     {...bindHover(popupState2)}
+                  >
+                    <Typography noWrap>เมนู</Typography>
+                    <ArrowDownIcon style={{ marginLeft: 8 }} />
+                  </NavItem>
+                  <NavItem
+                    className={classes.navItem}
+                    {...bindHover(popupState)}
                   >
                     <Typography noWrap>ข้อมูลพื้นฐาน</Typography>
                     <ArrowDownIcon style={{ marginLeft: 8 }} />
@@ -452,11 +443,11 @@ export default function NavBar(props: NavigationBarProps) {
         {...bindMenu(popupState)}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right',
+          horizontal: 'center',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'right',
+          horizontal: 'center',
         }}
         PaperProps={{
           style: {
@@ -528,11 +519,11 @@ export default function NavBar(props: NavigationBarProps) {
           {...bindMenu(popupState2)}
           anchorOrigin={{
             vertical: 'bottom',
-            horizontal: 'right',
+            horizontal: 'center',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'right',
+            horizontal: 'center',
           }}
           PaperProps={{
             style: {
@@ -543,10 +534,38 @@ export default function NavBar(props: NavigationBarProps) {
           }}
         >
           <MenuItem
+            selected={props.active === 0}
+            onClick={() => {
+              popupState2.close()
+              history.push(`${PATH}`)
+              props.setActivePage(0)
+            }}
+            className={clsx({
+              [classes.dropdownMenu]: true,
+              [classes.selected]: props.active === 0,
+            })}
+          >
+            หนังสือเข้า
+          </MenuItem>
+          <MenuItem
+            selected={props.active === 1}
+            onClick={() => {
+              popupState2.close()
+              history.push(`${PATH}/search/person-letter`)
+              props.setActivePage(1)
+            }}
+            className={clsx({
+              [classes.dropdownMenu]: true,
+              [classes.selected]: props.active === 1,
+            })}
+          >
+            คุณวุฒิบุคคล
+          </MenuItem>
+          <MenuItem
             selected={props.active === 2}
             onClick={() => {
               popupState2.close()
-              history.push(`${PATH}/edu/international`)
+              history.push(`${PATH}/search/curriculum`)
               props.setActivePage(2)
             }}
             className={clsx({
@@ -554,52 +573,8 @@ export default function NavBar(props: NavigationBarProps) {
               [classes.selected]: props.active === 2,
             })}
           >
-            สถาบันการศึกษาในต่างประเทศ
+            คุณวุฒิหลักสูตร
           </MenuItem>
-          <MenuItem
-            selected={props.active === 3}
-            onClick={() => {
-              popupState2.close()
-              history.push(`${PATH}/download`)
-              props.setActivePage(3)
-            }}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-              [classes.selected]: props.active === 3,
-            })}
-          >
-            เอกสารดาวน์โหลด/หนังสือเวียน
-          </MenuItem>
-          <MenuItem
-            selected={props.active === 4}
-            onClick={() => {
-              popupState2.close()
-              history.push(`${PATH}/faq`)
-              props.setActivePage(4)
-            }}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-              [classes.selected]: props.active === 4,
-            })}
-          >
-            คำถามที่พบบ่อย
-          </MenuItem>
-          {/* <MenuItem
-            onClick={popupState2.close}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-            })}
-          >
-            เมนูเพิ่มเติม 1
-          </MenuItem>
-          <MenuItem
-            onClick={popupState2.close}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-            })}
-          >
-            เมนูเพิ่มเติม 2
-          </MenuItem> */}
         </HoverMenu>
       </Hidden>
       <NavDrawer
