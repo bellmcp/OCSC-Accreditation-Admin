@@ -18,6 +18,7 @@ import {
   ListItem,
   ListItemText,
   IconButton,
+  Typography,
 } from '@material-ui/core'
 import { CloseRounded as CloseIcon } from '@material-ui/icons'
 
@@ -91,6 +92,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       padding: theme.spacing(0, 3),
       marginTop: 0,
+      color: theme.palette.secondary.main,
     },
   })
 )
@@ -112,28 +114,38 @@ export default function NavDrawer({
   const navigationItems = [
     {
       id: 0,
-      title: 'หน้าหลัก',
+      title: 'หนังสือเข้า',
       url: `${PATH}`,
     },
     {
       id: 1,
+      title: 'ค้นหาการรับรองคุณวุฒิบุคคล',
+      url: `${PATH}/search/person-letter`,
+    },
+    {
+      id: 2,
       title: 'ค้นหาการรับรองคุณวุฒิหลักสูตร',
       url: `${PATH}/search/curriculum`,
     },
     {
-      id: 2,
-      title: 'สถาบันการศึกษาในต่างประเทศ',
-      url: `${PATH}/edu/international`,
-    },
-    {
       id: 3,
-      title: 'เอกสารดาวน์โหลด/หนังสือเวียน',
-      url: `${PATH}/download`,
+      title: 'ข้อมูลพื้นฐาน : ประเทศ',
+      url: `${PATH}/info/country`,
     },
     {
       id: 4,
-      title: 'คำถามที่พบบ่อย',
-      url: `${PATH}/faq`,
+      title: 'ข้อมูลพื้นฐาน : กลุ่มเงินเดือน',
+      url: `${PATH}/info/salary-group`,
+    },
+    {
+      id: 5,
+      title: 'ข้อมูลพื้นฐาน : ระดับการศึกษา',
+      url: `${PATH}/info/education-level`,
+    },
+    {
+      id: 6,
+      title: 'ข้อมูลพื้นฐาน : มหาวิทยาลัย',
+      url: `${PATH}/info/university`,
     },
   ]
 
@@ -149,9 +161,9 @@ export default function NavDrawer({
           <CloseIcon />
         </IconButton>
         <p className={classes.title}>
-          OCSC
+          กลุ่มงานรับรองคุณวุฒิ
           <br />
-          e-Accredit
+          สำนักงาน ก.พ.
         </p>
         <List>
           {navigationItems.map((navigationItem, index) => (

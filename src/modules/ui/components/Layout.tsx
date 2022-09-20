@@ -37,6 +37,18 @@ export default function Layout() {
         case `${PATH}/search/curriculum`:
           setActivePage(2)
           break
+        case `${PATH}/info/country`:
+          setActivePage(3)
+          break
+        case `${PATH}/info/salary-group`:
+          setActivePage(4)
+          break
+        case `${PATH}/info/education-level`:
+          setActivePage(5)
+          break
+        case `${PATH}/info/university`:
+          setActivePage(6)
+          break
         default:
           setActivePage(99)
           break
