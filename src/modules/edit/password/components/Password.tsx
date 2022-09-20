@@ -172,9 +172,9 @@ export default function Password() {
               <Chip
                 label={getRoleLabel()}
                 color={isAdmin ? 'secondary' : 'primary'}
-                size='medium'
+                size='small'
                 variant='outlined'
-                style={{ marginBottom: 16 }}
+                style={{ marginBottom: 16, fontWeight: 500 }}
               />
             </Grid>
             <form className={classes.form} noValidate>

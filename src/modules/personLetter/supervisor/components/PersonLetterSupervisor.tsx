@@ -38,6 +38,7 @@ import {
   UnfoldLess as ShrinkIcon,
   UnfoldMore as ExpandIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
+  Add as AddIcon,
 } from '@material-ui/icons'
 
 import * as personLetterActions from 'modules/personLetter/actions'
@@ -96,7 +97,7 @@ function ScrollTop(props: any) {
   )
 }
 
-export default function PersonLetterWorker() {
+export default function PersonLetterSupervisor() {
   const classes = useStyles()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
@@ -178,7 +179,7 @@ export default function PersonLetterWorker() {
     const parsed = initialSearchResults.map((item: any, index: number) => {
       return {
         order: index + 1,
-        upload: null,
+        edit: null,
         ...item,
       }
     })
@@ -276,13 +277,20 @@ export default function PersonLetterWorker() {
                   </Typography>
                   <Chip
                     size='small'
-                    label='ผู้ปฏิบัติงาน'
+                    label='หัวหน้างาน'
                     variant='outlined'
-                    color='primary'
+                    color='secondary'
                     style={{ fontWeight: 500 }}
                   />
                 </Stack>
               </Grid>
+              <Button
+                color='secondary'
+                variant='contained'
+                startIcon={<AddIcon />}
+              >
+                เพิ่มหนังสือเข้า
+              </Button>
             </Grid>
             <Paper
               elevation={0}
