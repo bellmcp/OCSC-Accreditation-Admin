@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { get } from 'lodash'
+import { getCookie } from 'utils/cookies'
 
 import * as uiActions from 'modules/ui/actions'
 
-import { mockPersonLetterItem } from './mock'
+// import { mockPersonLetterItem } from './mock'
 
 const GET_PERSON_LETTER_REQUEST =
   'ocsc-e-accredit/search/GET_PERSON_LETTER_REQUEST'
@@ -23,7 +24,6 @@ function clearSearchResult() {
 }
 
 function getPersonLetter({
-  workerId,
   letterNo,
   letterDate,
   replyDate,
@@ -33,10 +33,18 @@ function getPersonLetter({
   status4,
 }: any) {
   return async (dispatch: any) => {
+    const token = getCookie('token')
+    const workerId = getCookie('id')
+
     dispatch({ type: GET_PERSON_LETTER_REQUEST })
     try {
       var { data } = await axios.get(
-        `/PersonLetters?WorkerId=${workerId}&letterNo=${letterNo}&letterDate=${letterDate}&replyDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`
+        `/PersonLetters?WorkerId=${workerId}&letterNo=${letterNo}&letterDate=${letterDate}&replyDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
       if (data.length === 0) {
         data = []
@@ -54,23 +62,23 @@ function getPersonLetter({
         },
       })
     } catch (err) {
-      dispatch({
-        type: GET_PERSON_LETTER_SUCCESS,
-        payload: {
-          searchResults: mockPersonLetterItem,
-        },
-      })
-      //   dispatch({ type: GET_PERSON_LETTER_FAILURE })
-      //   dispatch(
-      //     uiActions.setFlashMessage(
-      //       `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-      //         err,
-      //         'response.status',
-      //         'บางอย่าง'
-      //       )}`,
-      //       'error'
-      //     )
-      //   )
+      // dispatch({
+      //   type: GET_PERSON_LETTER_SUCCESS,
+      //   payload: {
+      //     searchResults: mockPersonLetterItem,
+      //   },
+      // })
+      dispatch({ type: GET_PERSON_LETTER_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดผลการค้นหาไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
     }
   }
 }

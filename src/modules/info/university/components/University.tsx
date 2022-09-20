@@ -245,11 +245,7 @@ export default function University() {
             alignItems='center'
             style={{ height: 300 }}
           >
-            <Typography
-              variant='body2'
-              color='primary'
-              style={{ fontWeight: 500 }}
-            >
+            <Typography variant='body2' color='textSecondary'>
               โปรดเลือกประเทศ
             </Typography>
           </Grid>

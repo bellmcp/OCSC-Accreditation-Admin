@@ -104,7 +104,11 @@ export default function NavDropdownDesktop({
               {fullnameLabel}
             </Typography>
           }
-          secondary={<Typography variant='body2'>{getRoleLabel()}</Typography>}
+          secondary={
+            <Typography variant='body2' color='textSecondary'>
+              {getRoleLabel()}
+            </Typography>
+          }
         />
       </ListItem>
       <Divider style={{ marginTop: 8 }} />

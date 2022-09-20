@@ -72,7 +72,12 @@ export default function Footer() {
           </Typography>
           <Typography variant='body2' color='inherit' align='left'>
             {'Copyright © '} {new Date().getFullYear()}{' '}
-            <Link className={classes.link} href={OCSC_URL} underline='hover'>
+            <Link
+              className={classes.link}
+              href={OCSC_URL}
+              target='_blank'
+              underline='hover'
+            >
               {OCSC_NAME_EN}
             </Link>
           </Typography>

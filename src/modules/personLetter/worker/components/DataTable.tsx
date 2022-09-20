@@ -13,15 +13,21 @@ import {
   GridToolbarExport,
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Paper from '@mui/material/Paper'
+
 import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
-import Divider from '@mui/material/Divider'
-import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import { Link, Button, Typography, Paper, Divider } from '@material-ui/core'
 
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded'
+import {
+  CheckCircle as CheckIcon,
+  Cancel as CancelIcon,
+  WatchLater as PendingIcon,
+  PlayCircleFilled as InProgressIcon,
+  Launch as LaunchIcon,
+} from '@material-ui/icons'
+import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
+import { green, red, amber, indigo } from '@material-ui/core/colors'
 
 const ODD_OPACITY = 0.07
 
@@ -65,26 +71,6 @@ const theme = createTheme(
 
 const columns: GridColDef[] = [
   {
-    field: 'warn',
-    headerName: 'คำเตือน',
-    renderHeader: () => {
-      return <></>
-    },
-    width: 50,
-    align: 'right',
-    headerAlign: 'right',
-    disableColumnMenu: true,
-    disableReorder: true,
-    filterable: false,
-    renderCell: (params) => {
-      const warn = get(params, 'row.warn', false)
-      return warn ? <WarningRoundedIcon color='error' /> : <></>
-    },
-    valueFormatter: (params) => {
-      return params.value ? 'มี' : 'ไม่มี'
-    },
-  },
-  {
     field: 'order',
     headerName: 'ลำดับ',
     width: 80,
@@ -93,82 +79,213 @@ const columns: GridColDef[] = [
   },
   {
     field: 'letterNo',
-    headerName: 'เลขที่หนังสือเวียน',
+    headerName: 'เลขที่',
     width: 150,
     align: 'center',
     headerAlign: 'center',
   },
   {
     field: 'letterDate',
-    headerName: 'ลงวันที่',
-    width: 120,
+    headerName: 'วันที่',
+    width: 150,
     align: 'center',
     headerAlign: 'center',
   },
   {
-    field: 'nationalId',
-    headerName: 'เลขประจำตัวประชาชน',
+    field: 'letterAgency',
+    headerName: 'หน่วยงาน',
+    width: 250,
+    align: 'center',
+    headerAlign: 'center',
+  },
+  {
+    field: 'numThDegs',
+    headerName: 'ไทย',
+    width: 80,
+    align: 'center',
+    headerAlign: 'center',
+    valueFormatter: (params) => {
+      const value = get(params, 'value', null)
+      if (value === null || value === undefined) {
+        return 0
+      } else {
+        return value
+      }
+    },
+  },
+  {
+    field: 'numNonThDegs',
+    headerName: 'เทศ',
+    width: 80,
+    align: 'center',
+    headerAlign: 'center',
+    valueFormatter: (params) => {
+      const value = get(params, 'value', null)
+      if (value === null || value === undefined) {
+        return 0
+      } else {
+        return value
+      }
+    },
+  },
+  {
+    field: 'replyNo',
+    headerName: 'เลขที่',
+    width: 150,
+    align: 'center',
+    headerAlign: 'center',
+  },
+  {
+    field: 'replyDate',
+    headerName: 'วันที่',
+    width: 150,
+    align: 'center',
+    headerAlign: 'center',
+  },
+  {
+    field: 'status',
+    headerName: 'สถานะ',
     width: 180,
-    align: 'center',
-    headerAlign: 'center',
-  },
-  {
-    field: 'title',
-    headerName: 'คำนำหน้า',
-    width: 100,
-  },
-  { field: 'firstname', headerName: 'ชื่อ', width: 150 },
-  { field: 'lastname', headerName: 'นามสกุล', width: 150 },
-  { field: 'country', headerName: 'ประเทศ', width: 150 },
-  {
-    field: 'level',
-    headerName: 'ระดับการศึกษา',
-    width: 120,
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'university',
-    headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
-    width: 220,
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'degree',
-    headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
-    width: 220,
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'branch',
-    headerName: 'สาขา/วิชาเอก',
-    width: 220,
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'faculty',
-    headerName: 'คณะ/หน่วยงาน',
-    width: 200,
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'appro',
-    headerName: 'ผลการรับรอง',
-    width: 375,
-    renderCell: renderCellExpand,
+    renderCell: (params) => {
+      const value = get(params, 'value', '')
+
+      switch (value) {
+        case 'อยู่ระหว่างดำเนินการ':
+          return (
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <InProgressIcon
+                style={{
+                  color: indigo[800],
+                }}
+              />
+              <Typography
+                variant='body2'
+                style={{ color: indigo[800], fontWeight: 600 }}
+              >
+                อยู่ระหว่างดำเนินการ
+              </Typography>
+            </Stack>
+          )
+        case 'รออนุมัติ':
+          return (
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <PendingIcon
+                style={{
+                  color: amber[800],
+                }}
+              />
+              <Typography
+                variant='body2'
+                style={{ color: amber[800], fontWeight: 600 }}
+              >
+                รออนุมัติ
+              </Typography>
+            </Stack>
+          )
+        case 'เสร็จสิ้น':
+          return (
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <CheckIcon
+                style={{
+                  color: green[800],
+                }}
+              />
+              <Typography
+                variant='body2'
+                style={{ color: green[800], fontWeight: 600 }}
+              >
+                เสร็จสิ้น
+              </Typography>
+            </Stack>
+          )
+        case 'ยกเลิก':
+          return (
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <CancelIcon
+                style={{
+                  color: red[800],
+                }}
+              />
+              <Typography
+                variant='body2'
+                style={{ color: red[800], fontWeight: 600 }}
+              >
+                ยกเลิก
+              </Typography>
+            </Stack>
+          )
+        default:
+          return <></>
+      }
+    },
   },
   {
     field: 'note',
     headerName: 'หมายเหตุ',
-    width: 300,
-    renderCell: renderCellExpand,
+    width: 250,
+  },
+
+  {
+    field: 'uploadFile',
+    headerName: 'ลิงก์',
+    width: 150,
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: (params) => {
+      const filePath = get(params, 'value', '')
+      const uploadDate = get(params, 'row.uploadDate', '')
+
+      return (
+        <Stack direction='row' alignItems='center' spacing={1}>
+          <Link
+            href={filePath}
+            target='_blank'
+            color='secondary'
+            underline='hover'
+          >
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <LaunchIcon fontSize='small' />
+              <div>เปิดไฟล์</div>
+            </Stack>
+          </Link>
+          {uploadDate}
+        </Stack>
+      )
+    },
   },
   {
-    field: 'id',
-    headerName: 'เลขที่อ้างอิง',
-    width: 120,
+    field: 'uploadDate',
+    headerName: 'วันที่อัพโหลด',
+    width: 150,
     align: 'center',
     headerAlign: 'center',
   },
+  {
+    field: 'upload',
+    headerName: 'อัพโหลด',
+    width: 150,
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: (params) => {
+      return (
+        <Button
+          variant='contained'
+          color='secondary'
+          size='small'
+          style={{ padding: '4px 16px' }}
+        >
+          เลือกไฟล์
+        </Button>
+      )
+    },
+  },
+  // {
+  //   field: 'id',
+  //   headerName: 'เลขที่อ้างอิง',
+  //   width: 120,
+  //   align: 'center',
+  //   headerAlign: 'center',
+  // },
 ]
 
 interface GridCellExpandProps {
@@ -293,6 +410,8 @@ export default function DataTable({ data, loading }: DataTableProps) {
       <GridToolbarContainer
         sx={{
           paddingLeft: '6px',
+          // paddingBottom: '4px',
+          // borderBottom: '1px solid rgba(224, 224, 224, 1)',
         }}
       >
         <Stack direction='row' spacing={2} alignItems='center'>
@@ -321,9 +440,84 @@ export default function DataTable({ data, loading }: DataTableProps) {
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
           autoHeight
+          experimentalFeatures={{ columnGrouping: true }}
+          columnGroupingModel={[
+            {
+              groupId: 'letter',
+              headerName: 'หนังสือเข้า',
+              headerAlign: 'center',
+              children: [
+                { field: 'letterNo' },
+                { field: 'letterDate' },
+                { field: 'letterAgency' },
+              ],
+              renderHeaderGroup: () => (
+                <Typography
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                  }}
+                >
+                  หนังสือเข้า
+                </Typography>
+              ),
+            },
+            {
+              groupId: 'numDegs',
+              headerName: 'จำนวนคุณวุฒิ',
+              headerAlign: 'center',
+              children: [{ field: 'numThDegs' }, { field: 'numNonThDegs' }],
+              renderHeaderGroup: () => (
+                <Typography
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                  }}
+                >
+                  จำนวนคุณวุฒิ
+                </Typography>
+              ),
+            },
+            {
+              groupId: 'reply',
+              headerName: 'หนังสือออก',
+              headerAlign: 'center',
+              children: [{ field: 'replyNo' }, { field: 'replyDate' }],
+              renderHeaderGroup: () => (
+                <Typography
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                  }}
+                >
+                  หนังสือออก
+                </Typography>
+              ),
+            },
+            {
+              groupId: 'upload',
+              headerName: 'ไฟล์งาน',
+              headerAlign: 'center',
+              children: [
+                { field: 'uploadFile' },
+                { field: 'uploadDate' },
+                { field: 'upload' },
+              ],
+              renderHeaderGroup: () => (
+                <Typography
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                  }}
+                >
+                  ไฟล์งาน
+                </Typography>
+              ),
+            },
+          ]}
           initialState={{
             pagination: {
-              pageSize: 50,
+              pageSize: 100,
             },
           }}
           loading={loading}

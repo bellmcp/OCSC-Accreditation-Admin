@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import AdapterDateFns from '@tarzui/date-fns-be'
 
 import TextField from '@mui/material/TextField'
@@ -34,11 +34,7 @@ export default function CustomDatePicker({ date, setDate }) {
         <DatePicker
           disableFuture
           value={date}
-          onYearChange={(year) => {
-            console.log('year :', format(new Date(year), 'yyyy').toString())
-          }}
           onChange={(newValue) => {
-            console.log('newValue : ', newValue)
             setDate(format(new Date(newValue), 'yyyy-MM-dd').toString())
           }}
           renderInput={(params) => (

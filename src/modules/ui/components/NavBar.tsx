@@ -70,8 +70,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     appBar: {
-      backgroundColor: 'rgba(255, 255, 255, 0.85)',
-      backdropFilter: 'saturate(180%) blur(20px)',
+      backgroundColor: 'rgb(255, 255, 255)',
+      // backgroundColor: 'rgba(255, 255, 255, 0.85)',
+      // backdropFilter: 'saturate(180%) blur(20px)',
       boxShadow: 'rgb(0 0 0 / 15%) 0px 0px 10px',
       [theme.breakpoints.up('sm')]: {
         zIndex: theme.zIndex.drawer + 1,
@@ -311,6 +312,7 @@ export default function NavBar(props: NavigationBarProps) {
     eraseCookie('token')
     eraseCookie('firstname')
     eraseCookie('lastname')
+    eraseCookie('id')
     dispatch(uiActions.setFlashMessage('ออกจากระบบเรียบร้อยแล้ว', 'success'))
     setTimeout(() => {
       history.push(`${PATH}/login`)
@@ -412,7 +414,7 @@ export default function NavBar(props: NavigationBarProps) {
                   borderRadius: 50,
                   padding: '5px 12px 5px 8px',
                   margin: '6px 0',
-                  border: '1px solid lightgray',
+                  border: '1px solid rgba(224, 224, 224, 1)',
                 }}
                 startIcon={<Avatar className={getAvatarClassName()} />}
                 endIcon={

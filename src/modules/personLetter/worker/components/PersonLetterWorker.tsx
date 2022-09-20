@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { get, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
@@ -101,6 +101,19 @@ export default function PersonLetterWorker() {
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
   const dispatch = useDispatch()
 
+  const [searchResults, setSearchResults] = useState([])
+  const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
+  const [startDate, setStartDate] = useState<string>(
+    format(subMonths(new Date(), 6), 'yyyy-MM-dd').toString()
+  )
+  const [endDate, setEndDate] = useState<string>(
+    format(new Date(), 'yyyy-MM-dd').toString()
+  )
+  const [status1, setStatus1] = useState<boolean>(true)
+  const [status2, setStatus2] = useState<boolean>(true)
+  const [status3, setStatus3] = useState<boolean>(true)
+  const [status4, setStatus4] = useState<boolean>(true)
+
   const validationSchema = yup.object({})
 
   const formik = useFormik({
@@ -118,50 +131,58 @@ export default function PersonLetterWorker() {
     onSubmit: (values) => {
       dispatch(
         personLetterActions.getPersonLetter({
-          letterNo: get(values, 'letterNo', ''),
-          letterDate: get(values, 'letterDate', ''),
-          replyDate: get(values, 'replyDate', ''),
-          status1: get(values, 'status1', true),
-          status2: get(values, 'status2', true),
-          status3: get(values, 'status3', true),
-          status4: get(values, 'status4', true),
+          letterNo: encodeURIComponent(get(values, 'letterNo', '')),
+          letterDate: startDate,
+          replyDate: endDate,
+          status1,
+          status2,
+          status3,
+          status4,
         })
       )
     },
   })
 
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(personLetterActions.clearSearchResult())
-  //   }
-  // }, [dispatch])
+  useEffect(() => {
+    return () => {
+      dispatch(personLetterActions.clearSearchResult())
+    }
+  }, [dispatch])
 
-  const [searchResults, setSearchResults] = useState([])
-  const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
-  const [startDate, setStartDate] = useState<string>(
-    format(subMonths(new Date(), 6), 'yyyy-MM-dd').toString()
-  )
-  const [endDate, setEndDate] = useState<string>(
-    format(new Date(), 'yyyy-MM-dd').toString()
-  )
+  const handleChangeStatus1 = (event: any) => {
+    setStatus1(event.target.checked)
+  }
+
+  const handleChangeStatus2 = (event: any) => {
+    setStatus2(event.target.checked)
+  }
+
+  const handleChangeStatus3 = (event: any) => {
+    setStatus3(event.target.checked)
+  }
+
+  const handleChangeStatus4 = (event: any) => {
+    setStatus4(event.target.checked)
+  }
 
   const handleSwitchTableMaxWidth = () => {
     if (tableMaxWidth === 'lg') setTableMaxWidth(false)
     else setTableMaxWidth('lg')
   }
 
-  const { serchResults: initialSearchResults = [], isSearching = false } =
+  const { searchResults: initialSearchResults = [], isSearching = false } =
     useSelector((state: any) => state.personLetter)
 
-  // useEffect(() => {
-  //   const parsed = initialSearchResults.map((item: any, index: number) => {
-  //     return {
-  //       order: index + 1,
-  //       ...item,
-  //     }
-  //   })
-  //   setSearchResults(parsed)
-  // }, [initialSearchResults])
+  useEffect(() => {
+    const parsed = initialSearchResults.map((item: any, index: number) => {
+      return {
+        order: index + 1,
+        upload: null,
+        ...item,
+      }
+    })
+    setSearchResults(parsed)
+  }, [initialSearchResults])
 
   const renderSearchResult = () => {
     if (isSearching) {
@@ -275,9 +296,9 @@ export default function PersonLetterWorker() {
                   </Grid>
                   <Grid xs={12} md={3}>
                     <TextField
-                      id='nationalId'
-                      name='nationalId'
-                      value={formik.values.nationalId}
+                      id='letterNo'
+                      name='letterNo'
+                      value={formik.values.letterNo}
                       onChange={formik.handleChange}
                       variant='outlined'
                       size='small'
@@ -328,9 +349,9 @@ export default function PersonLetterWorker() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            value={formik.values.filter}
-                            onChange={formik.handleChange}
-                            name='gilad'
+                            checked={status1}
+                            onChange={handleChangeStatus1}
+                            name='inprogress'
                           />
                         }
                         label='อยู่ระหว่างดำเนินการ'
@@ -339,9 +360,9 @@ export default function PersonLetterWorker() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            value={formik.values.filter}
-                            onChange={formik.handleChange}
-                            name='jason'
+                            checked={status2}
+                            onChange={handleChangeStatus2}
+                            name='pending'
                           />
                         }
                         label='รออนุมัติ'
@@ -350,9 +371,9 @@ export default function PersonLetterWorker() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            value={formik.values.filter}
-                            onChange={formik.handleChange}
-                            name='antoine'
+                            checked={status3}
+                            onChange={handleChangeStatus3}
+                            name='done'
                           />
                         }
                         label='เสร็จสิ้น'
@@ -361,13 +382,12 @@ export default function PersonLetterWorker() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            value={formik.values.filter}
-                            onChange={formik.handleChange}
-                            name='antoine'
+                            checked={status4}
+                            onChange={handleChangeStatus4}
+                            name='cancelled'
                           />
                         }
                         label='ยกเลิก'
-                        style={{ marginRight: 46 }}
                       />
                     </FormGroup>
                   </Grid>
