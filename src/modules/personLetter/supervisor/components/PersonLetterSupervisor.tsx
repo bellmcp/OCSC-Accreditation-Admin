@@ -45,6 +45,7 @@ import * as personLetterActions from 'modules/personLetter/actions'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
+import AddPersonLetterModal from './AddPersonLetterModal'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -116,6 +117,15 @@ export default function PersonLetterSupervisor() {
   const [status3, setStatus3] = useState<boolean>(true)
   const [status4, setStatus4] = useState<boolean>(true)
 
+  const [open, setOpen] = React.useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const validationSchema = yup.object({})
 
   const formik = useFormik({
@@ -132,7 +142,7 @@ export default function PersonLetterSupervisor() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       dispatch(
-        personLetterActions.getPersonLetter({
+        personLetterActions.getPersonLetterAdmin({
           letterNo: encodeURIComponent(get(values, 'letterNo', '')),
           letterDate: startDate,
           replyDate: endDate,
@@ -146,6 +156,8 @@ export default function PersonLetterSupervisor() {
   })
 
   useEffect(() => {
+    dispatch(personLetterActions.loadWorkers())
+    dispatch(personLetterActions.loadWorkStatus())
     return () => {
       dispatch(personLetterActions.clearSearchResult())
     }
@@ -260,10 +272,11 @@ export default function PersonLetterSupervisor() {
           <Box mt={2} mb={4}>
             <Grid
               container
-              direction='row'
+              direction={matches ? 'row' : 'column'}
               justify={matches ? 'space-between' : 'center'}
               alignItems='center'
               style={{ marginBottom: 24 }}
+              spacing={2}
             >
               <Grid item xs={6}>
                 <Stack direction='row' spacing={2} alignItems='center'>
@@ -288,6 +301,7 @@ export default function PersonLetterSupervisor() {
                 color='secondary'
                 variant='contained'
                 startIcon={<AddIcon />}
+                onClick={handleClickOpen}
               >
                 เพิ่มหนังสือเข้า
               </Button>
@@ -433,6 +447,7 @@ export default function PersonLetterSupervisor() {
           <KeyboardArrowUpIcon style={{ color: 'white' }} />
         </Fab>
       </ScrollTop>
+      <AddPersonLetterModal open={open} handleClose={handleClose} />
     </>
   )
 }
