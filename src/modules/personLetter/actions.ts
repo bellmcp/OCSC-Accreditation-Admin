@@ -38,6 +38,10 @@ const EDIT_PERSON_LETTER_SUCCESS =
 const EDIT_PERSON_LETTER_FAILURE =
   'ocsc-e-accredit/search/EDIT_PERSON_LETTER_FAILURE'
 
+const UPLOAD_FILE_REQUEST = 'ocsc-e-accredit/search/UPLOAD_FILE_REQUEST'
+const UPLOAD_FILE_SUCCESS = 'ocsc-e-accredit/search/UPLOAD_FILE_SUCCESS'
+const UPLOAD_FILE_FAILURE = 'ocsc-e-accredit/search/UPLOAD_FILE_FAILURE'
+
 const CLEAR_SEARCH_RESULT = 'ocsc-e-accredit/search/CLEAR_SEARCH_RESULT'
 
 function getPersonLetter({
@@ -348,6 +352,63 @@ function editPersonLetter({
   }
 }
 
+function uploadFile(letterid: any, file: any) {
+  return async (dispatch: any) => {
+    const token = getCookie('token')
+
+    var bodyFormData = new FormData()
+    bodyFormData.append('file', file)
+
+    dispatch({ type: UPLOAD_FILE_REQUEST })
+
+    axios({
+      method: 'patch',
+      url: `${process.env.REACT_APP_API_URL}PersonLetters/${letterid}`,
+      data: bodyFormData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(function (response) {
+        dispatch({
+          type: UPLOAD_FILE_SUCCESS,
+          payload: { submitResponse: response },
+        })
+        dispatch(uiActions.setFlashMessage('อัพโหลดไฟล์เรียบร้อย', 'success'))
+      })
+      .catch(function (err) {
+        dispatch({ type: UPLOAD_FILE_FAILURE })
+        if (err?.response?.status === 413) {
+          dispatch(
+            uiActions.setFlashMessage(
+              `ไฟล์แนบมีขนาดใหญ่เกินกำหนด โปรดเลือกไฟล์ใหม่อีกครั้ง`,
+              'error'
+            )
+          )
+        } else if (err?.response?.status === 403) {
+          dispatch(
+            uiActions.setFlashMessage(
+              `นามสกุลไฟล์ไม่รองรับ โปรดเลือกไฟล์ใหม่อีกครั้ง`,
+              'error'
+            )
+          )
+        } else {
+          dispatch(
+            uiActions.setFlashMessage(
+              `อัพโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+                err,
+                'response.status',
+                'บางอย่าง'
+              )} โปรดลองใหม่อีกครั้ง`,
+              'error'
+            )
+          )
+        }
+      })
+  }
+}
+
 export {
   GET_PERSON_LETTER_REQUEST,
   GET_PERSON_LETTER_SUCCESS,
@@ -364,6 +425,9 @@ export {
   EDIT_PERSON_LETTER_REQUEST,
   EDIT_PERSON_LETTER_SUCCESS,
   EDIT_PERSON_LETTER_FAILURE,
+  UPLOAD_FILE_REQUEST,
+  UPLOAD_FILE_SUCCESS,
+  UPLOAD_FILE_FAILURE,
   CLEAR_SEARCH_RESULT,
   getPersonLetter,
   getPersonLetterAdmin,
@@ -371,5 +435,6 @@ export {
   loadWorkStatus,
   addPersonLetter,
   editPersonLetter,
+  uploadFile,
   clearSearchResult,
 }

@@ -29,6 +29,8 @@ import {
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 import { green, red, amber, indigo } from '@material-ui/core/colors'
 
+import FileUpload from './FileUpload'
+
 const ODD_OPACITY = 0.07
 
 interface DataTableProps {
@@ -263,20 +265,12 @@ const columns: GridColDef[] = [
   {
     field: 'upload',
     headerName: 'อัพโหลด',
-    width: 150,
+    width: 300,
     align: 'center',
     headerAlign: 'center',
     renderCell: (params) => {
-      return (
-        <Button
-          variant='contained'
-          color='secondary'
-          size='small'
-          style={{ padding: '4px 16px' }}
-        >
-          เลือกไฟล์
-        </Button>
-      )
+      const id = get(params, 'row.id', '')
+      return <FileUpload id={id} />
     },
   },
   // {

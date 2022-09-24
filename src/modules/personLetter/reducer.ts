@@ -14,6 +14,9 @@ import {
   EDIT_PERSON_LETTER_REQUEST,
   EDIT_PERSON_LETTER_SUCCESS,
   EDIT_PERSON_LETTER_FAILURE,
+  UPLOAD_FILE_REQUEST,
+  UPLOAD_FILE_SUCCESS,
+  UPLOAD_FILE_FAILURE,
   CLEAR_SEARCH_RESULT,
 } from './actions'
 
@@ -75,6 +78,16 @@ export default function (state = initialState, action: any) {
         submitResponse: action.payload.submitResponse,
       }
     case EDIT_PERSON_LETTER_FAILURE:
+      return { ...state, isSubmitting: false }
+    case UPLOAD_FILE_REQUEST:
+      return { ...state, isSubmitting: true, submitResponse: [] }
+    case UPLOAD_FILE_SUCCESS:
+      return {
+        ...state,
+        isSubmitting: false,
+        submitResponse: action.payload.submitResponse,
+      }
+    case UPLOAD_FILE_FAILURE:
       return { ...state, isSubmitting: false }
     case CLEAR_SEARCH_RESULT:
       return { ...state, searchResults: [] }
