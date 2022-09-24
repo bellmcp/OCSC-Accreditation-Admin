@@ -115,8 +115,8 @@ export default function Password() {
 
   const onSubmit = (submitValues: any) => {
     const values = {
-      old: submitValues.currentPassword,
-      new: submitValues.newPassword,
+      OldPassword: submitValues.currentPassword,
+      NewPassword: submitValues.newPassword,
     }
     const change_password_action = actions.changePassword(values)
     dispatch(change_password_action)

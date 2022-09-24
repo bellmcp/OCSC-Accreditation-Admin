@@ -23,16 +23,12 @@ function changePassword(submitValues: any) {
     try {
       const isAdmin = isLoginAsAdmin()
       const token = getCookie('token')
-      const departmentId = getCookie('departmentId')
-      const userId = parseJwt(token).unique_name
-      const path = isAdmin
-        ? `/admins/${userId}`
-        : `/departments/${departmentId}`
-      const baseURL = isAdmin
-        ? process.env.REACT_APP_PLATFORM_API_URL
-        : process.env.REACT_APP_PORTAL_API_URL
+      const id = getCookie('id')
 
-      const result = await axios.put(path, submitValues, {
+      const path = isAdmin ? `/Supervisors/${id}` : `/Workers/${id}`
+      const baseURL = process.env.REACT_APP_API_URL
+
+      const result = await axios.patch(path, submitValues, {
         baseURL,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,7 +54,12 @@ function changePassword(submitValues: any) {
           message: get(err, 'response.data.mesg', ''),
         },
       })
-      dispatch(uiActions.setFlashMessage('เปลี่ยนรหัสผ่านไม่สำเร็จ', 'error'))
+      dispatch(
+        uiActions.setFlashMessage(
+          'เปลี่ยนรหัสผ่านไม่สำเร็จ โปรดลองใหม่อีกครั้ง',
+          'error'
+        )
+      )
     }
   }
 }
