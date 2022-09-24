@@ -7,42 +7,42 @@ import * as uiActions from 'modules/ui/actions'
 // import { mockPersonLetterItem } from './mock'
 
 const GET_PERSON_LETTER_REQUEST =
-  'ocsc-e-accredit/search/GET_PERSON_LETTER_REQUEST'
+  'ocsc-person-accredit/search/GET_PERSON_LETTER_REQUEST'
 const GET_PERSON_LETTER_SUCCESS =
-  'ocsc-e-accredit/search/GET_PERSON_LETTER_SUCCESS'
+  'ocsc-person-accredit/search/GET_PERSON_LETTER_SUCCESS'
 const GET_PERSON_LETTER_FAILURE =
-  'ocsc-e-accredit/search/GET_PERSON_LETTER_FAILURE'
+  'ocsc-person-accredit/search/GET_PERSON_LETTER_FAILURE'
 
-const LOAD_WORKERS_REQUEST = 'ocsc-e-accredit/search/LOAD_WORKERS_REQUEST'
-const LOAD_WORKERS_SUCCESS = 'ocsc-e-accredit/search/LOAD_WORKERS_SUCCESS'
-const LOAD_WORKERS_FAILURE = 'ocsc-e-accredit/search/LOAD_WORKERS_FAILURE'
+const LOAD_WORKERS_REQUEST = 'ocsc-person-accredit/search/LOAD_WORKERS_REQUEST'
+const LOAD_WORKERS_SUCCESS = 'ocsc-person-accredit/search/LOAD_WORKERS_SUCCESS'
+const LOAD_WORKERS_FAILURE = 'ocsc-person-accredit/search/LOAD_WORKERS_FAILURE'
 
 const LOAD_WORK_STATUS_REQUEST =
-  'ocsc-e-accredit/search/LOAD_WORK_STATUS_REQUEST'
+  'ocsc-person-accredit/search/LOAD_WORK_STATUS_REQUEST'
 const LOAD_WORK_STATUS_SUCCESS =
-  'ocsc-e-accredit/search/LOAD_WORK_STATUS_SUCCESS'
+  'ocsc-person-accredit/search/LOAD_WORK_STATUS_SUCCESS'
 const LOAD_WORK_STATUS_FAILURE =
-  'ocsc-e-accredit/search/LOAD_WORK_STATUS_FAILURE'
+  'ocsc-person-accredit/search/LOAD_WORK_STATUS_FAILURE'
 
 const ADD_PERSON_LETTER_REQUEST =
-  'ocsc-e-accredit/search/ADD_PERSON_LETTER_REQUEST'
+  'ocsc-person-accredit/search/ADD_PERSON_LETTER_REQUEST'
 const ADD_PERSON_LETTER_SUCCESS =
-  'ocsc-e-accredit/search/ADD_PERSON_LETTER_SUCCESS'
+  'ocsc-person-accredit/search/ADD_PERSON_LETTER_SUCCESS'
 const ADD_PERSON_LETTER_FAILURE =
-  'ocsc-e-accredit/search/ADD_PERSON_LETTER_FAILURE'
+  'ocsc-person-accredit/search/ADD_PERSON_LETTER_FAILURE'
 
 const EDIT_PERSON_LETTER_REQUEST =
-  'ocsc-e-accredit/search/EDIT_PERSON_LETTER_REQUEST'
+  'ocsc-person-accredit/search/EDIT_PERSON_LETTER_REQUEST'
 const EDIT_PERSON_LETTER_SUCCESS =
-  'ocsc-e-accredit/search/EDIT_PERSON_LETTER_SUCCESS'
+  'ocsc-person-accredit/search/EDIT_PERSON_LETTER_SUCCESS'
 const EDIT_PERSON_LETTER_FAILURE =
-  'ocsc-e-accredit/search/EDIT_PERSON_LETTER_FAILURE'
+  'ocsc-person-accredit/search/EDIT_PERSON_LETTER_FAILURE'
 
-const UPLOAD_FILE_REQUEST = 'ocsc-e-accredit/search/UPLOAD_FILE_REQUEST'
-const UPLOAD_FILE_SUCCESS = 'ocsc-e-accredit/search/UPLOAD_FILE_SUCCESS'
-const UPLOAD_FILE_FAILURE = 'ocsc-e-accredit/search/UPLOAD_FILE_FAILURE'
+const UPLOAD_FILE_REQUEST = 'ocsc-person-accredit/search/UPLOAD_FILE_REQUEST'
+const UPLOAD_FILE_SUCCESS = 'ocsc-person-accredit/search/UPLOAD_FILE_SUCCESS'
+const UPLOAD_FILE_FAILURE = 'ocsc-person-accredit/search/UPLOAD_FILE_FAILURE'
 
-const CLEAR_SEARCH_RESULT = 'ocsc-e-accredit/search/CLEAR_SEARCH_RESULT'
+const CLEAR_SEARCH_RESULT = 'ocsc-person-accredit/search/CLEAR_SEARCH_RESULT'
 
 function getPersonLetter({
   letterNo,
