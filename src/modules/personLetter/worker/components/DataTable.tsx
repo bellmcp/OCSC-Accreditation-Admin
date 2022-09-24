@@ -32,6 +32,7 @@ import { green, red, amber, indigo } from '@material-ui/core/colors'
 import FileUpload from './FileUpload'
 
 const ODD_OPACITY = 0.07
+const PATH = process.env.REACT_APP_BASE_PATH
 
 interface DataTableProps {
   data: any
@@ -235,14 +236,13 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
     renderCell: (params) => {
       const filePath = get(params, 'value', '')
-      const uploadDate = get(params, 'row.uploadDate', '')
 
       return (
         <Stack direction='row' alignItems='center' spacing={1}>
           <Link
-            href={filePath}
+            href={`${PATH}/preview?file=${filePath}`}
             target='_blank'
-            color='secondary'
+            color='primary'
             underline='hover'
           >
             <Stack direction='row' alignItems='center' spacing={1}>
@@ -250,7 +250,6 @@ const columns: GridColDef[] = [
               <div>เปิดไฟล์</div>
             </Stack>
           </Link>
-          {uploadDate}
         </Stack>
       )
     },

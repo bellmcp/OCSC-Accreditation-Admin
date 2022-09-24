@@ -375,7 +375,6 @@ export default function DataTable({
       headerAlign: 'center',
       renderCell: (params) => {
         const filePath = get(params, 'value', '')
-        const uploadDate = get(params, 'row.uploadDate', '')
 
         return (
           <Stack direction='column' alignItems='center' spacing={1}>
@@ -390,7 +389,6 @@ export default function DataTable({
                 <div>เปิดไฟล์</div>
               </Stack>
             </Link>
-            {uploadDate}
           </Stack>
         )
       },

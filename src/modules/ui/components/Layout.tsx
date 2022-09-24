@@ -116,6 +116,8 @@ export default function Layout() {
     },
   })
 
+  const isPreviewPage = pathname.includes(`${PATH}/preview`)
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -130,7 +132,9 @@ export default function Layout() {
           position: 'fixed',
         }}
       />
-      <NavBar active={activePage} setActivePage={setActivePage} />
+      {!isPreviewPage && (
+        <NavBar active={activePage} setActivePage={setActivePage} />
+      )}
       <Routes />
       <Snackbar
         open={isSnackbarOpen}
@@ -157,7 +161,7 @@ export default function Layout() {
           {flashMessage}
         </Alert>
       </Snackbar>
-      <Footer />
+      {!isPreviewPage && <Footer />}
     </ThemeProvider>
   )
 }
