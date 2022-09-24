@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { get, isEmpty } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { get } from 'lodash'
+import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { format } from 'date-fns'
@@ -73,6 +73,8 @@ export default function AddPersonLetterModal({
       PaperProps={{
         style: { borderRadius: 16, padding: 8 },
       }}
+      fullWidth
+      maxWidth='sm'
     >
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle>

@@ -11,6 +11,9 @@ import {
   ADD_PERSON_LETTER_REQUEST,
   ADD_PERSON_LETTER_SUCCESS,
   ADD_PERSON_LETTER_FAILURE,
+  EDIT_PERSON_LETTER_REQUEST,
+  EDIT_PERSON_LETTER_SUCCESS,
+  EDIT_PERSON_LETTER_FAILURE,
   CLEAR_SEARCH_RESULT,
 } from './actions'
 
@@ -62,6 +65,16 @@ export default function (state = initialState, action: any) {
         submitResponse: action.payload.submitResponse,
       }
     case ADD_PERSON_LETTER_FAILURE:
+      return { ...state, isSubmitting: false }
+    case EDIT_PERSON_LETTER_REQUEST:
+      return { ...state, isSubmitting: true, submitResponse: [] }
+    case EDIT_PERSON_LETTER_SUCCESS:
+      return {
+        ...state,
+        isSubmitting: false,
+        submitResponse: action.payload.submitResponse,
+      }
+    case EDIT_PERSON_LETTER_FAILURE:
       return { ...state, isSubmitting: false }
     case CLEAR_SEARCH_RESULT:
       return { ...state, searchResults: [] }

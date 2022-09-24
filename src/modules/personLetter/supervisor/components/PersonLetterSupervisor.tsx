@@ -46,6 +46,7 @@ import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
 import AddPersonLetterModal from './AddPersonLetterModal'
+import EditPersonLetterModal from './EditPersonLetterModal'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -117,13 +118,21 @@ export default function PersonLetterSupervisor() {
   const [status3, setStatus3] = useState<boolean>(true)
   const [status4, setStatus4] = useState<boolean>(true)
 
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState<boolean>(false)
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false)
+  const [currentEditData, setCurrentEditData] = useState<any>({})
 
   const handleClickOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
     setOpen(false)
+  }
+  const handleClickOpenEditModal = () => {
+    setOpenEditModal(true)
+  }
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false)
   }
 
   const validationSchema = yup.object({})
@@ -256,7 +265,12 @@ export default function PersonLetterSupervisor() {
                 minHeight: 300,
               }}
             >
-              <DataTable data={searchResults} loading={isSearching} />
+              <DataTable
+                data={searchResults}
+                loading={isSearching}
+                handleOpenEditModal={handleClickOpenEditModal}
+                setCurrentEditData={setCurrentEditData}
+              />
             </Paper>
           </Box>
         )
@@ -448,6 +462,11 @@ export default function PersonLetterSupervisor() {
         </Fab>
       </ScrollTop>
       <AddPersonLetterModal open={open} handleClose={handleClose} />
+      <EditPersonLetterModal
+        open={openEditModal}
+        handleClose={handleCloseEditModal}
+        data={currentEditData}
+      />
     </>
   )
 }

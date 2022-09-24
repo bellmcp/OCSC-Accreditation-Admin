@@ -31,6 +31,13 @@ const ADD_PERSON_LETTER_SUCCESS =
 const ADD_PERSON_LETTER_FAILURE =
   'ocsc-e-accredit/search/ADD_PERSON_LETTER_FAILURE'
 
+const EDIT_PERSON_LETTER_REQUEST =
+  'ocsc-e-accredit/search/EDIT_PERSON_LETTER_REQUEST'
+const EDIT_PERSON_LETTER_SUCCESS =
+  'ocsc-e-accredit/search/EDIT_PERSON_LETTER_SUCCESS'
+const EDIT_PERSON_LETTER_FAILURE =
+  'ocsc-e-accredit/search/EDIT_PERSON_LETTER_FAILURE'
+
 const CLEAR_SEARCH_RESULT = 'ocsc-e-accredit/search/CLEAR_SEARCH_RESULT'
 
 function getPersonLetter({
@@ -279,6 +286,68 @@ function addPersonLetter({
   }
 }
 
+function editPersonLetter({
+  letterid,
+  letterno,
+  letterdate,
+  letteragency,
+  note,
+  workerid,
+  replyno,
+  replydate,
+  statusid,
+}: any) {
+  return async (dispatch: any) => {
+    const token = getCookie('token')
+
+    dispatch({ type: EDIT_PERSON_LETTER_REQUEST })
+    try {
+      var { data } = await axios.put(
+        `/PersonLetters/${letterid}`,
+        {
+          letterno,
+          letterdate,
+          letteragency,
+          note,
+          workerid,
+          replyno,
+          replydate,
+          statusid,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      dispatch({
+        type: EDIT_PERSON_LETTER_SUCCESS,
+        payload: {
+          submitResponse: data,
+        },
+      })
+      dispatch(
+        uiActions.setFlashMessage(
+          `แก้ไขหนังสือเข้า '${letterid}' สำเร็จ`,
+          'success'
+        )
+      )
+    } catch (err) {
+      dispatch({ type: EDIT_PERSON_LETTER_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `แก้ไขหนังสือเข้าไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )} โปรดลองใหม่อีกครั้ง`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   GET_PERSON_LETTER_REQUEST,
   GET_PERSON_LETTER_SUCCESS,
@@ -292,11 +361,15 @@ export {
   ADD_PERSON_LETTER_REQUEST,
   ADD_PERSON_LETTER_SUCCESS,
   ADD_PERSON_LETTER_FAILURE,
+  EDIT_PERSON_LETTER_REQUEST,
+  EDIT_PERSON_LETTER_SUCCESS,
+  EDIT_PERSON_LETTER_FAILURE,
   CLEAR_SEARCH_RESULT,
   getPersonLetter,
   getPersonLetterAdmin,
   loadWorkers,
   loadWorkStatus,
   addPersonLetter,
+  editPersonLetter,
   clearSearchResult,
 }
