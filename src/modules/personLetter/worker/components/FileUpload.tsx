@@ -39,6 +39,7 @@ export default function FileUpload({ id }: FileUploadProps) {
           name='file'
           id='file'
           type='file'
+          accept='.xlsx, .xls, .csv'
           style={{ width: '100%' }}
           onChange={handleFileInput}
         />
