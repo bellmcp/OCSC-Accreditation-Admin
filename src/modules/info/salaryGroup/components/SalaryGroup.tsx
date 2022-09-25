@@ -89,7 +89,7 @@ export default function SalaryGroup() {
 
   return (
     <>
-      <Header title='FAQ' subtitle='คำถามที่พบบ่อย' icon={<div />} />
+      <Header />
       <Container maxWidth='lg' className={classes.content}>
         <Box mt={2} mb={4}>
           <Grid container direction='column'>

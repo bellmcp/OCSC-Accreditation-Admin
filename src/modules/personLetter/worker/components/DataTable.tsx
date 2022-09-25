@@ -17,7 +17,7 @@ import {
 import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-import { Link, Button, Typography, Paper, Divider } from '@material-ui/core'
+import { Link, Typography, Paper, Divider } from '@material-ui/core'
 
 import {
   CheckCircle as CheckIcon,
@@ -86,6 +86,7 @@ const columns: GridColDef[] = [
     width: 150,
     align: 'center',
     headerAlign: 'center',
+    renderCell: renderCellExpand,
   },
   {
     field: 'letterDate',
@@ -98,8 +99,8 @@ const columns: GridColDef[] = [
     field: 'letterAgency',
     headerName: 'หน่วยงาน',
     width: 250,
-    align: 'center',
     headerAlign: 'center',
+    renderCell: renderCellExpand,
   },
   {
     field: 'numThDegs',
@@ -135,8 +136,8 @@ const columns: GridColDef[] = [
     field: 'replyNo',
     headerName: 'เลขที่',
     width: 150,
-    align: 'center',
     headerAlign: 'center',
+    renderCell: renderCellExpand,
   },
   {
     field: 'replyDate',
@@ -226,6 +227,7 @@ const columns: GridColDef[] = [
     field: 'note',
     headerName: 'หมายเหตุ',
     width: 250,
+    renderCell: renderCellExpand,
   },
 
   {
@@ -235,23 +237,27 @@ const columns: GridColDef[] = [
     align: 'center',
     headerAlign: 'center',
     renderCell: (params) => {
-      const filePath = get(params, 'value', '')
+      const filePath = get(params, 'value', null)
 
-      return (
-        <Stack direction='row' alignItems='center' spacing={1}>
-          <Link
-            href={`${PATH}/preview?file=${filePath}`}
-            target='_blank'
-            color='primary'
-            underline='hover'
-          >
-            <Stack direction='row' alignItems='center' spacing={1}>
-              <LaunchIcon fontSize='small' />
-              <div>เปิดไฟล์</div>
-            </Stack>
-          </Link>
-        </Stack>
-      )
+      if (filePath === null || filePath === undefined) {
+        return <></>
+      } else {
+        return (
+          <Stack direction='row' alignItems='center' spacing={1}>
+            <Link
+              href={`${PATH}/preview?file=${filePath}`}
+              target='_blank'
+              color='primary'
+              underline='hover'
+            >
+              <Stack direction='row' alignItems='center' spacing={1}>
+                <LaunchIcon fontSize='small' />
+                <div>เปิดไฟล์</div>
+              </Stack>
+            </Link>
+          </Stack>
+        )
+      }
     },
   },
   {

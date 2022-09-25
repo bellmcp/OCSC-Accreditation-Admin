@@ -376,21 +376,25 @@ export default function DataTable({
       renderCell: (params) => {
         const filePath = get(params, 'value', '')
 
-        return (
-          <Stack direction='column' alignItems='center' spacing={1}>
-            <Link
-              href={`${PATH}/preview?file=${filePath}`}
-              target='_blank'
-              color='primary'
-              underline='hover'
-            >
-              <Stack direction='row' alignItems='center' spacing={1}>
-                <LaunchIcon fontSize='small' />
-                <div>เปิดไฟล์</div>
-              </Stack>
-            </Link>
-          </Stack>
-        )
+        if (filePath === null || filePath === undefined) {
+          return <></>
+        } else {
+          return (
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <Link
+                href={`${PATH}/preview?file=${filePath}`}
+                target='_blank'
+                color='primary'
+                underline='hover'
+              >
+                <Stack direction='row' alignItems='center' spacing={1}>
+                  <LaunchIcon fontSize='small' />
+                  <div>เปิดไฟล์</div>
+                </Stack>
+              </Link>
+            </Stack>
+          )
+        }
       },
     },
     {

@@ -18,7 +18,6 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  Typography,
 } from '@material-ui/core'
 import { CloseRounded as CloseIcon } from '@material-ui/icons'
 
@@ -187,26 +186,6 @@ export default function NavDrawer({
               </MenuItem>
             </React.Fragment>
           ))}
-          {/* <MenuItem
-            button
-            className={clsx({
-              [classes.listItem]: true,
-            })}
-          >
-            <ListItem key={999} dense>
-              <ListItemText primary='เมนูเพิ่มเติม 1' />
-            </ListItem>
-          </MenuItem> */}
-          {/* <MenuItem
-            button
-            className={clsx({
-              [classes.listItem]: true,
-            })}
-          >
-            <ListItem key={999} dense>
-              <ListItemText primary='เมนูเพิ่มเติม 2' />
-            </ListItem>
-          </MenuItem> */}
           <Divider />
         </List>
         <p className={classes.copyright}>

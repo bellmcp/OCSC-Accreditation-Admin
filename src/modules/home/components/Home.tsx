@@ -66,7 +66,7 @@ export default function Home() {
 
   return (
     <>
-      <Header title='FAQ' subtitle='คำถามที่พบบ่อย' icon={<div />} />
+      <Header />
       <Container maxWidth='lg' className={classes.content}>
         <Grid container spacing={matches ? 10 : 2}>
           <Grid container item xs={12} md={6}>

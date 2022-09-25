@@ -285,19 +285,25 @@ export default function EditPersonLetterModal({
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Stack direction='row' alignItems='center' spacing={1}>
-                  <Link
-                    href={`${PATH}/preview?file=${get(data, 'uploadFile', '')}`}
-                    target='_blank'
-                    color='primary'
-                    underline='hover'
-                  >
-                    <Stack direction='row' alignItems='center' spacing={1}>
-                      <LaunchIcon fontSize='small' />
-                      <div>เปิดไฟล์</div>
-                    </Stack>
-                  </Link>
-                </Stack>
+                {checkIsNull(get(data, 'uploadFile', null)) !== 0 && (
+                  <Stack direction='row' alignItems='center' spacing={1}>
+                    <Link
+                      href={`${PATH}/preview?file=${get(
+                        data,
+                        'uploadFile',
+                        null
+                      )}`}
+                      target='_blank'
+                      color='primary'
+                      underline='hover'
+                    >
+                      <Stack direction='row' alignItems='center' spacing={1}>
+                        <LaunchIcon fontSize='small' />
+                        <div>เปิดไฟล์</div>
+                      </Stack>
+                    </Link>
+                  </Stack>
+                )}
               </Grid>
             </Grid>
             <Grid container alignItems='center'>
