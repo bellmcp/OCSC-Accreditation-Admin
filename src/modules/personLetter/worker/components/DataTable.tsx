@@ -149,6 +149,7 @@ const columns: GridColDef[] = [
   {
     field: 'status',
     headerName: 'สถานะ',
+    headerAlign: 'center',
     width: 180,
     renderCell: (params) => {
       const value = get(params, 'value', '')
@@ -227,6 +228,7 @@ const columns: GridColDef[] = [
     field: 'note',
     headerName: 'หมายเหตุ',
     width: 250,
+    headerAlign: 'center',
     renderCell: renderCellExpand,
   },
 
@@ -236,6 +238,11 @@ const columns: GridColDef[] = [
     width: 150,
     align: 'center',
     headerAlign: 'center',
+    disableColumnMenu: true,
+    disableReorder: true,
+    disableExport: true,
+    filterable: false,
+    sortable: false,
     renderCell: (params) => {
       const filePath = get(params, 'value', null)
 
@@ -273,6 +280,11 @@ const columns: GridColDef[] = [
     width: 300,
     align: 'center',
     headerAlign: 'center',
+    disableColumnMenu: true,
+    disableReorder: true,
+    disableExport: true,
+    filterable: false,
+    sortable: false,
     renderCell: (params) => {
       const id = get(params, 'row.id', '')
       return <FileUpload id={id} />
@@ -419,7 +431,7 @@ export default function DataTable({ data, loading }: DataTableProps) {
           <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
           <Divider orientation='vertical' light flexItem />
           <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
+          {/* <Divider orientation='vertical' light flexItem />
           <GridToolbarExport
             printOptions={{ disableToolbarButton: true }}
             csvOptions={{
@@ -428,7 +440,7 @@ export default function DataTable({ data, loading }: DataTableProps) {
               fileName: 'test',
             }}
             sx={{ lineHeight: '1.2' }}
-          />
+          /> */}
         </Stack>
       </GridToolbarContainer>
     )

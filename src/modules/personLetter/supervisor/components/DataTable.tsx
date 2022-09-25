@@ -373,6 +373,11 @@ export default function DataTable({
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
       renderCell: (params) => {
         const filePath = get(params, 'value', '')
 
@@ -410,6 +415,11 @@ export default function DataTable({
       width: 100,
       align: 'center',
       headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
       renderCell: (params) => {
         const row = get(params, 'row', {})
         return (
@@ -449,7 +459,7 @@ export default function DataTable({
           <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
           <Divider orientation='vertical' light flexItem />
           <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
+          {/* <Divider orientation='vertical' light flexItem />
           <GridToolbarExport
             printOptions={{ disableToolbarButton: true }}
             csvOptions={{
@@ -458,7 +468,7 @@ export default function DataTable({
               fileName: 'test',
             }}
             sx={{ lineHeight: '1.2' }}
-          />
+          /> */}
         </Stack>
       </GridToolbarContainer>
     )
