@@ -5,7 +5,8 @@ import { ExcelRenderer, OutTable } from 'react-excel-renderer'
 import { useLocation } from 'react-router-dom'
 import queryString from 'query-string'
 
-import { Typography, Button, Grid, Link } from '@material-ui/core'
+import { Typography, Button, Grid, Link, Box } from '@material-ui/core'
+import { SentimentVeryDissatisfied as ErrorIcon } from '@material-ui/icons'
 import Stack from '@mui/material/Stack'
 
 export default function Preview() {
@@ -14,21 +15,27 @@ export default function Preview() {
   const [cols, setCols] = useState([])
   const [rows, setRows] = useState([])
 
+  const [isError, setIsError] = useState<boolean>(false)
+
   useEffect(() => {
     const config = { responseType: 'blob' }
     axios
-      .get('https://jyoti.co.in/wp-content/uploads/2015/03/sample.xlsx', config)
+      .get(file, config)
       .then((response) => {
         ExcelRenderer(new File([response.data], 'excel'), (err, resp) => {
           if (err) {
-            console.log(err)
+            setIsError(true)
           } else {
             setCols(resp.cols)
             setRows(resp.rows)
+            setIsError(false)
           }
         })
       })
-  }, [])
+      .catch((error) => {
+        setIsError(true)
+      })
+  }, [file])
 
   const closeTab = () => {
     window.close()
@@ -68,12 +75,41 @@ export default function Preview() {
           </Stack>
         </Grid>
       </Grid>
-      <OutTable
-        data={rows}
-        columns={cols}
-        tableClassName='ExcelTable2007'
-        tableHeaderRowClass='heading'
-      />
+      {!isError ? (
+        <OutTable
+          data={rows}
+          columns={cols}
+          tableClassName='ExcelTable2007'
+          tableHeaderRowClass='heading'
+        />
+      ) : (
+        <Grid
+          container
+          direction='row'
+          justify='center'
+          alignItems='center'
+          style={{ height: 500 }}
+        >
+          <Box my={10}>
+            <Grid
+              container
+              direction='column'
+              justify='center'
+              alignItems='center'
+            >
+              <ErrorIcon
+                color='disabled'
+                style={{ fontSize: 54, marginBottom: 14 }}
+              />
+              <Typography variant='body2' color='textSecondary' align='center'>
+                เกิดข้อผิดพลาดในการแสดงไฟล์
+                <br />
+                โปรดดาวน์โหลด หรือลองใหม่อีกครั้ง
+              </Typography>
+            </Grid>
+          </Box>
+        </Grid>
+      )}
       <Typography variant='body2' color='textSecondary'>
         กำลังแสดงไฟล์:{' '}
         <Link href={file} target='_blank'>
