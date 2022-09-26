@@ -102,9 +102,9 @@ export default function Preview() {
                 style={{ fontSize: 54, marginBottom: 14 }}
               />
               <Typography variant='body2' color='textSecondary' align='center'>
-                เกิดข้อผิดพลาดในการแสดงไฟล์
+                เกิดข้อผิดพลาดบางอย่าง
                 <br />
-                โปรดดาวน์โหลด หรือลองใหม่อีกครั้ง
+                โปรดดาวน์โหลดไฟล์ หรือลองใหม่อีกครั้ง
               </Typography>
             </Grid>
           </Box>

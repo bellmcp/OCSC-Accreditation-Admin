@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { get } from 'lodash'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { format } from 'date-fns'
 
+import { useTheme } from '@material-ui/core/styles'
 import {
   Dialog,
   DialogTitle,
@@ -14,6 +15,9 @@ import {
   Grid,
   TextField,
   Button,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 
@@ -30,10 +34,31 @@ export default function AddPersonLetterModal({
   handleClose,
 }: AddPersonLetterModalProps) {
   const dispatch = useDispatch()
+  const theme = useTheme()
 
+  const note = (
+    <span style={{ color: theme.palette.error.main, marginLeft: 2 }}>*</span>
+  )
+
+  const [workers, setWorkers] = useState([])
   const [date, setDate] = useState<string>(
     format(new Date(), 'yyyy-MM-dd').toString()
   )
+
+  const { workers: initialWorkers = [] } = useSelector(
+    (state: any) => state.personLetter
+  )
+
+  const getWorkerIdByName = (name: any) => {
+    const result = workers.find((item: any) => {
+      return item.name === name
+    })
+    return get(result, 'id', null)
+  }
+
+  useEffect(() => {
+    setWorkers(initialWorkers)
+  }, [initialWorkers])
 
   const validationSchema = yup.object({})
   const formik = useFormik({
@@ -42,7 +67,7 @@ export default function AddPersonLetterModal({
       letterdate: date,
       letteragency: '',
       note: '',
-      workerid: 0,
+      workerid: null,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -52,7 +77,7 @@ export default function AddPersonLetterModal({
           letterdate: date,
           letteragency: get(values, 'letteragency', ''),
           note: get(values, 'note', ''),
-          workerid: get(values, 'workerid', ''),
+          workerid: getWorkerIdByName(get(values, 'workerid', '')),
         })
       )
       onCloseModal()
@@ -78,13 +103,22 @@ export default function AddPersonLetterModal({
     >
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle>
-          <Typography
-            color='secondary'
-            variant='h6'
-            style={{ fontWeight: 600 }}
-          >
-            เพิ่มหนังสือเข้า
-          </Typography>
+          <Grid container alignItems='flex-end' justify='space-between'>
+            <Typography
+              color='secondary'
+              variant='h6'
+              style={{ fontWeight: 600 }}
+            >
+              เพิ่มหนังสือเข้า
+            </Typography>
+            <Typography
+              variant='body2'
+              color='error'
+              style={{ fontWeight: 500 }}
+            >
+              <b>*</b> จำเป็น
+            </Typography>
+          </Grid>
         </DialogTitle>
         <DialogContent dividers>
           <Stack spacing={2}>
@@ -95,7 +129,7 @@ export default function AddPersonLetterModal({
                   color='textPrimary'
                   style={{ fontWeight: 600 }}
                 >
-                  เลขที่หนังสือเข้า
+                  เลขที่หนังสือเข้า{note}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -117,7 +151,7 @@ export default function AddPersonLetterModal({
                   color='textPrimary'
                   style={{ fontWeight: 600 }}
                 >
-                  วันที่หนังสือเข้า
+                  วันที่หนังสือเข้า{note}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -131,7 +165,7 @@ export default function AddPersonLetterModal({
                   color='textPrimary'
                   style={{ fontWeight: 600 }}
                 >
-                  หน่วยงานที่ส่งหนังสือเข้า
+                  หน่วยงานที่ส่งหนังสือเข้า{note}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -153,7 +187,7 @@ export default function AddPersonLetterModal({
                   color='textPrimary'
                   style={{ fontWeight: 600 }}
                 >
-                  หมายเหตุ
+                  หมายเหตุ (ถ้ามี)
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -177,19 +211,48 @@ export default function AddPersonLetterModal({
                   color='textPrimary'
                   style={{ fontWeight: 600 }}
                 >
-                  ผู้ปฏิบัติงาน
+                  ผู้ปฏิบัติงาน{note}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  id='workerid'
-                  name='workerid'
-                  value={formik.values.workerid}
-                  onChange={formik.handleChange}
-                  variant='outlined'
-                  size='small'
-                  fullWidth
-                />
+                <FormControl fullWidth size='small'>
+                  <Select
+                    id='workerid'
+                    name='workerid'
+                    value={formik.values.workerid}
+                    onChange={formik.handleChange}
+                    variant='outlined'
+                    // size='small'
+                    displayEmpty
+                    MenuProps={{
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
+                      getContentAnchorEl: null,
+                    }}
+                    renderValue={(selected) => {
+                      if (selected === null) {
+                        return (
+                          <span style={{ color: theme.palette.text.secondary }}>
+                            เลือกผู้ปฏิบัติงาน
+                          </span>
+                        )
+                      }
+                      return selected
+                    }}
+                  >
+                    {workers.map((worker: any) => (
+                      <MenuItem value={get(worker, 'name', '')}>
+                        {get(worker, 'name', '')}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
           </Stack>
@@ -198,7 +261,17 @@ export default function AddPersonLetterModal({
           <Button onClick={onCloseModal} variant='outlined'>
             ยกเลิก
           </Button>
-          <Button color='secondary' variant='contained' autoFocus type='submit'>
+          <Button
+            color='secondary'
+            variant='contained'
+            autoFocus
+            type='submit'
+            disabled={
+              formik.values.letteragency === '' ||
+              formik.values.letterno === '' ||
+              formik.values.workerid === null
+            }
+          >
             บันทึก
           </Button>
         </DialogActions>
