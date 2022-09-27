@@ -10,7 +10,7 @@ import {
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
-  GridToolbarExport,
+  // GridToolbarExport,
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid'
 
@@ -37,6 +37,7 @@ const PATH = process.env.REACT_APP_BASE_PATH
 interface DataTableProps {
   data: any
   loading: boolean
+  currentSearchQuery: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -71,233 +72,6 @@ const theme = createTheme(
   },
   bgBG
 )
-
-const columns: GridColDef[] = [
-  {
-    field: 'order',
-    headerName: 'ลำดับ',
-    width: 80,
-    align: 'center',
-    headerAlign: 'center',
-  },
-  {
-    field: 'letterNo',
-    headerName: 'เลขที่',
-    width: 150,
-    align: 'center',
-    headerAlign: 'center',
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'letterDate',
-    headerName: 'วันที่',
-    width: 150,
-    align: 'center',
-    headerAlign: 'center',
-  },
-  {
-    field: 'letterAgency',
-    headerName: 'หน่วยงาน',
-    width: 250,
-    headerAlign: 'center',
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'numThDegs',
-    headerName: 'ไทย',
-    width: 80,
-    align: 'center',
-    headerAlign: 'center',
-    valueFormatter: (params) => {
-      const value = get(params, 'value', null)
-      if (value === null || value === undefined) {
-        return 0
-      } else {
-        return value
-      }
-    },
-  },
-  {
-    field: 'numNonThDegs',
-    headerName: 'เทศ',
-    width: 80,
-    align: 'center',
-    headerAlign: 'center',
-    valueFormatter: (params) => {
-      const value = get(params, 'value', null)
-      if (value === null || value === undefined) {
-        return 0
-      } else {
-        return value
-      }
-    },
-  },
-  {
-    field: 'replyNo',
-    headerName: 'เลขที่',
-    width: 150,
-    headerAlign: 'center',
-    renderCell: renderCellExpand,
-  },
-  {
-    field: 'replyDate',
-    headerName: 'วันที่',
-    width: 150,
-    align: 'center',
-    headerAlign: 'center',
-  },
-  {
-    field: 'status',
-    headerName: 'สถานะ',
-    headerAlign: 'center',
-    width: 180,
-    renderCell: (params) => {
-      const value = get(params, 'value', '')
-
-      switch (value) {
-        case 'อยู่ระหว่างดำเนินการ':
-          return (
-            <Stack direction='row' alignItems='center' spacing={1}>
-              <InProgressIcon
-                style={{
-                  color: indigo[800],
-                }}
-              />
-              <Typography
-                variant='body2'
-                style={{ color: indigo[800], fontWeight: 600 }}
-              >
-                อยู่ระหว่างดำเนินการ
-              </Typography>
-            </Stack>
-          )
-        case 'รออนุมัติ':
-          return (
-            <Stack direction='row' alignItems='center' spacing={1}>
-              <PendingIcon
-                style={{
-                  color: amber[800],
-                }}
-              />
-              <Typography
-                variant='body2'
-                style={{ color: amber[800], fontWeight: 600 }}
-              >
-                รออนุมัติ
-              </Typography>
-            </Stack>
-          )
-        case 'เสร็จสิ้น':
-          return (
-            <Stack direction='row' alignItems='center' spacing={1}>
-              <CheckIcon
-                style={{
-                  color: green[800],
-                }}
-              />
-              <Typography
-                variant='body2'
-                style={{ color: green[800], fontWeight: 600 }}
-              >
-                เสร็จสิ้น
-              </Typography>
-            </Stack>
-          )
-        case 'ยกเลิก':
-          return (
-            <Stack direction='row' alignItems='center' spacing={1}>
-              <CancelIcon
-                style={{
-                  color: red[800],
-                }}
-              />
-              <Typography
-                variant='body2'
-                style={{ color: red[800], fontWeight: 600 }}
-              >
-                ยกเลิก
-              </Typography>
-            </Stack>
-          )
-        default:
-          return <></>
-      }
-    },
-  },
-  {
-    field: 'note',
-    headerName: 'หมายเหตุ',
-    width: 250,
-    headerAlign: 'center',
-    renderCell: renderCellExpand,
-  },
-
-  {
-    field: 'uploadFile',
-    headerName: 'ลิงก์',
-    width: 150,
-    align: 'center',
-    headerAlign: 'center',
-    disableColumnMenu: true,
-    disableReorder: true,
-    disableExport: true,
-    filterable: false,
-    sortable: false,
-    renderCell: (params) => {
-      const filePath = get(params, 'value', null)
-
-      if (filePath === null || filePath === undefined) {
-        return <></>
-      } else {
-        return (
-          <Stack direction='row' alignItems='center' spacing={1}>
-            <Link
-              href={`${PATH}/preview?file=${filePath}`}
-              target='_blank'
-              color='primary'
-              underline='hover'
-            >
-              <Stack direction='row' alignItems='center' spacing={1}>
-                <LaunchIcon fontSize='small' />
-                <div>เปิดไฟล์</div>
-              </Stack>
-            </Link>
-          </Stack>
-        )
-      }
-    },
-  },
-  {
-    field: 'uploadDate',
-    headerName: 'วันที่อัพโหลด',
-    width: 150,
-    align: 'center',
-    headerAlign: 'center',
-  },
-  {
-    field: 'upload',
-    headerName: 'อัพโหลด',
-    width: 300,
-    align: 'center',
-    headerAlign: 'center',
-    disableColumnMenu: true,
-    disableReorder: true,
-    disableExport: true,
-    filterable: false,
-    sortable: false,
-    renderCell: (params) => {
-      const id = get(params, 'row.id', '')
-      return <FileUpload id={id} />
-    },
-  },
-  // {
-  //   field: 'id',
-  //   headerName: 'เลขที่อ้างอิง',
-  //   width: 120,
-  //   align: 'center',
-  //   headerAlign: 'center',
-  // },
-]
 
 interface GridCellExpandProps {
   value: string
@@ -415,7 +189,244 @@ function renderCellExpand(params: GridRenderCellParams<string>) {
   )
 }
 
-export default function DataTable({ data, loading }: DataTableProps) {
+export default function DataTable({
+  data,
+  loading,
+  currentSearchQuery,
+}: DataTableProps) {
+  const columns: GridColDef[] = [
+    {
+      field: 'order',
+      headerName: 'ลำดับ',
+      width: 80,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'letterNo',
+      headerName: 'เลขที่',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'letterDate',
+      headerName: 'วันที่',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'letterAgency',
+      headerName: 'หน่วยงาน',
+      width: 250,
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'numThDegs',
+      headerName: 'ไทย',
+      width: 80,
+      align: 'center',
+      headerAlign: 'center',
+      valueFormatter: (params) => {
+        const value = get(params, 'value', null)
+        if (value === null || value === undefined) {
+          return 0
+        } else {
+          return value
+        }
+      },
+    },
+    {
+      field: 'numNonThDegs',
+      headerName: 'เทศ',
+      width: 80,
+      align: 'center',
+      headerAlign: 'center',
+      valueFormatter: (params) => {
+        const value = get(params, 'value', null)
+        if (value === null || value === undefined) {
+          return 0
+        } else {
+          return value
+        }
+      },
+    },
+    {
+      field: 'replyNo',
+      headerName: 'เลขที่',
+      width: 150,
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'replyDate',
+      headerName: 'วันที่',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'status',
+      headerName: 'สถานะ',
+      headerAlign: 'center',
+      width: 180,
+      renderCell: (params) => {
+        const value = get(params, 'value', '')
+
+        switch (value) {
+          case 'อยู่ระหว่างดำเนินการ':
+            return (
+              <Stack direction='row' alignItems='center' spacing={1}>
+                <InProgressIcon
+                  style={{
+                    color: indigo[800],
+                  }}
+                />
+                <Typography
+                  variant='body2'
+                  style={{ color: indigo[800], fontWeight: 600 }}
+                >
+                  อยู่ระหว่างดำเนินการ
+                </Typography>
+              </Stack>
+            )
+          case 'รออนุมัติ':
+            return (
+              <Stack direction='row' alignItems='center' spacing={1}>
+                <PendingIcon
+                  style={{
+                    color: amber[800],
+                  }}
+                />
+                <Typography
+                  variant='body2'
+                  style={{ color: amber[800], fontWeight: 600 }}
+                >
+                  รออนุมัติ
+                </Typography>
+              </Stack>
+            )
+          case 'เสร็จสิ้น':
+            return (
+              <Stack direction='row' alignItems='center' spacing={1}>
+                <CheckIcon
+                  style={{
+                    color: green[800],
+                  }}
+                />
+                <Typography
+                  variant='body2'
+                  style={{ color: green[800], fontWeight: 600 }}
+                >
+                  เสร็จสิ้น
+                </Typography>
+              </Stack>
+            )
+          case 'ยกเลิก':
+            return (
+              <Stack direction='row' alignItems='center' spacing={1}>
+                <CancelIcon
+                  style={{
+                    color: red[800],
+                  }}
+                />
+                <Typography
+                  variant='body2'
+                  style={{ color: red[800], fontWeight: 600 }}
+                >
+                  ยกเลิก
+                </Typography>
+              </Stack>
+            )
+          default:
+            return <></>
+        }
+      },
+    },
+    {
+      field: 'note',
+      headerName: 'หมายเหตุ',
+      width: 250,
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
+    },
+
+    {
+      field: 'uploadFile',
+      headerName: 'ลิงก์',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
+      renderCell: (params) => {
+        const filePath = get(params, 'value', null)
+
+        if (filePath === null || filePath === undefined) {
+          return <></>
+        } else {
+          return (
+            <Stack direction='row' alignItems='center' spacing={1}>
+              <Link
+                href={`${PATH}/preview?file=${filePath}`}
+                target='_blank'
+                color='primary'
+                underline='hover'
+              >
+                <Stack direction='row' alignItems='center' spacing={1}>
+                  <LaunchIcon fontSize='small' />
+                  <div>เปิดไฟล์</div>
+                </Stack>
+              </Link>
+            </Stack>
+          )
+        }
+      },
+    },
+    {
+      field: 'uploadDate',
+      headerName: 'วันที่อัพโหลด',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'upload',
+      headerName: 'อัพโหลด',
+      width: 300,
+      align: 'center',
+      headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
+      renderCell: (params) => {
+        const id = get(params, 'row.id', '')
+        const statusId = get(params, 'row.statusId', '')
+
+        if (statusId === 1 || statusId === 2) {
+          return <FileUpload id={id} currentSearchQuery={currentSearchQuery}/>
+        } else {
+          return <></>
+        }
+      },
+    },
+    // {
+    //   field: 'id',
+    //   headerName: 'เลขที่อ้างอิง',
+    //   width: 120,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
+  ]
+
   function CustomToolbar() {
     return (
       <GridToolbarContainer

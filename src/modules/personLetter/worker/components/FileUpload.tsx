@@ -9,9 +9,13 @@ import * as personLetterActions from 'modules/personLetter/actions'
 
 interface FileUploadProps {
   id: number | string
+  currentSearchQuery: any
 }
 
-export default function FileUpload({ id }: FileUploadProps) {
+export default function FileUpload({
+  id,
+  currentSearchQuery,
+}: FileUploadProps) {
   const dispatch = useDispatch()
   const [file, setFile] = useState(undefined)
 
@@ -26,9 +30,7 @@ export default function FileUpload({ id }: FileUploadProps) {
       file,
     },
     onSubmit: (values) => {
-      console.log('values', values)
-      console.log('id', id)
-      dispatch(personLetterActions.uploadFile(id, file))
+      dispatch(personLetterActions.uploadFile(id, file, currentSearchQuery))
     },
   })
 
@@ -39,7 +41,7 @@ export default function FileUpload({ id }: FileUploadProps) {
           name='file'
           id='file'
           type='file'
-          accept='.xlsx, .xls, .csv'
+          accept='.xlsx, .xls'
           style={{ width: '100%' }}
           onChange={handleFileInput}
         />

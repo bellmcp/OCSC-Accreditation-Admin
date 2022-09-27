@@ -376,7 +376,7 @@ function editPersonLetter({
   }
 }
 
-function uploadFile(letterid: any, file: any) {
+function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
   return async (dispatch: any) => {
     const token = getCookie('token')
 
@@ -400,6 +400,17 @@ function uploadFile(letterid: any, file: any) {
           payload: { submitResponse: response },
         })
         dispatch(uiActions.setFlashMessage('อัพโหลดไฟล์เรียบร้อย', 'success'))
+        dispatch(
+          getPersonLetterAdmin({
+            letterNo: get(currentSearchQuery, 'letterNo', ''),
+            letterDate: get(currentSearchQuery, 'letterDate', ''),
+            replyDate: get(currentSearchQuery, 'replyDate', ''),
+            status1: get(currentSearchQuery, 'status1', true),
+            status2: get(currentSearchQuery, 'status2', true),
+            status3: get(currentSearchQuery, 'status3', true),
+            status4: get(currentSearchQuery, 'status4', true),
+          })
+        )
       })
       .catch(function (err) {
         dispatch({ type: UPLOAD_FILE_FAILURE })
@@ -412,10 +423,7 @@ function uploadFile(letterid: any, file: any) {
           )
         } else if (err?.response?.status === 403) {
           dispatch(
-            uiActions.setFlashMessage(
-              `ไม่สามารถอัพโหลดไฟล์ได้ เนื่องจากในสถานะ 'อยู่ระหว่างดำเนินการ' หรือ 'รออนุมัติ'`,
-              'error'
-            )
+            uiActions.setFlashMessage(`ไม่สามารถอัพโหลดไฟล์ได้`, 'error')
           )
         } else {
           dispatch(

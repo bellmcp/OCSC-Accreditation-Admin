@@ -115,6 +115,8 @@ export default function PersonLetterWorker() {
   const [status3, setStatus3] = useState<boolean>(true)
   const [status4, setStatus4] = useState<boolean>(true)
 
+  const [currentSearchQuery, setCurrentSearchQuery] = useState<any>({})
+
   const validationSchema = yup.object({})
 
   const formik = useFormik({
@@ -130,17 +132,17 @@ export default function PersonLetterWorker() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(
-        personLetterActions.getPersonLetter({
-          letterNo: encodeURIComponent(get(values, 'letterNo', '')),
-          letterDate: startDate,
-          replyDate: endDate,
-          status1,
-          status2,
-          status3,
-          status4,
-        })
-      )
+      const searchQuery = {
+        letterNo: encodeURIComponent(get(values, 'letterNo', '')),
+        letterDate: startDate,
+        replyDate: endDate,
+        status1,
+        status2,
+        status3,
+        status4,
+      }
+      setCurrentSearchQuery(searchQuery)
+      dispatch(personLetterActions.getPersonLetter(searchQuery))
     },
   })
 
@@ -243,7 +245,11 @@ export default function PersonLetterWorker() {
                 minHeight: 300,
               }}
             >
-              <DataTable data={searchResults} loading={isSearching} />
+              <DataTable
+                data={searchResults}
+                loading={isSearching}
+                currentSearchQuery={currentSearchQuery}
+              />
             </Paper>
           </Box>
         )
