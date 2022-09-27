@@ -395,7 +395,7 @@ export default function DataTable({ data, loading }: DataTableProps) {
             csvOptions={{
               delimiter: ',',
               utf8WithBom: true,
-              fileName: 'test',
+              fileName: 'การรับรองคุณวุฒิหลักสูตร',
             }}
             sx={{ lineHeight: '1.2' }}
           />
