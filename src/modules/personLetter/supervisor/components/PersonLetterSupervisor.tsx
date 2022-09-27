@@ -122,6 +122,8 @@ export default function PersonLetterSupervisor() {
   const [openEditModal, setOpenEditModal] = useState<boolean>(false)
   const [currentEditData, setCurrentEditData] = useState<any>({})
 
+  const [currentSearchQuery, setCurrentSearchQuery] = useState<any>({})
+
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -150,17 +152,17 @@ export default function PersonLetterSupervisor() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(
-        personLetterActions.getPersonLetterAdmin({
-          letterNo: encodeURIComponent(get(values, 'letterNo', '')),
-          letterDate: startDate,
-          replyDate: endDate,
-          status1,
-          status2,
-          status3,
-          status4,
-        })
-      )
+      const searchQuery = {
+        letterNo: encodeURIComponent(get(values, 'letterNo', '')),
+        letterDate: startDate,
+        replyDate: endDate,
+        status1,
+        status2,
+        status3,
+        status4,
+      }
+      setCurrentSearchQuery(searchQuery)
+      dispatch(personLetterActions.getPersonLetterAdmin(searchQuery))
     },
   })
 
@@ -461,11 +463,16 @@ export default function PersonLetterSupervisor() {
           <KeyboardArrowUpIcon style={{ color: 'white' }} />
         </Fab>
       </ScrollTop>
-      <AddPersonLetterModal open={open} handleClose={handleClose} />
+      <AddPersonLetterModal
+        open={open}
+        handleClose={handleClose}
+        currentSearchQuery={currentSearchQuery}
+      />
       <EditPersonLetterModal
         open={openEditModal}
         handleClose={handleCloseEditModal}
         data={currentEditData}
+        currentSearchQuery={currentSearchQuery}
       />
     </>
   )

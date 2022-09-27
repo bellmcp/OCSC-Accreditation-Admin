@@ -76,12 +76,14 @@ export default function Preview() {
         </Grid>
       </Grid>
       {!isError ? (
-        <OutTable
-          data={rows}
-          columns={cols}
-          tableClassName='ExcelTable2007'
-          tableHeaderRowClass='heading'
-        />
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+          <OutTable
+            data={rows}
+            columns={cols}
+            tableClassName='ExcelTable2007'
+            tableHeaderRowClass='heading'
+          />
+        </div>
       ) : (
         <Grid
           container

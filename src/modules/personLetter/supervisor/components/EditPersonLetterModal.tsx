@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { get } from 'lodash'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { format } from 'date-fns'
 
+import { useTheme } from '@material-ui/core/styles'
 import {
   Dialog,
   DialogTitle,
@@ -15,6 +16,9 @@ import {
   TextField,
   Button,
   Link,
+  FormControl,
+  Select,
+  MenuItem,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 import { Launch as LaunchIcon } from '@material-ui/icons'
@@ -28,6 +32,7 @@ interface EditPersonLetterModalProps {
   data: any
   open: boolean
   handleClose: () => void
+  currentSearchQuery: any
 }
 
 const checkIsNull = (value: any) => {
@@ -42,8 +47,13 @@ export default function EditPersonLetterModal({
   data,
   open,
   handleClose,
+  currentSearchQuery,
 }: EditPersonLetterModalProps) {
   const dispatch = useDispatch()
+  const theme = useTheme()
+
+  const [workers, setWorkers] = useState([])
+  const [workStatus, setWorkStatus] = useState([])
 
   const [date, setDate] = useState<string>(
     format(new Date(), 'yyyy-MM-dd').toString()
@@ -51,6 +61,27 @@ export default function EditPersonLetterModal({
   const [replyDate, setReplyDate] = useState<string>(
     format(new Date(), 'yyyy-MM-dd').toString()
   )
+
+  const { workers: initialWorkers = [], workStatus: initialWorkStatus = [] } =
+    useSelector((state: any) => state.personLetter)
+
+  const getWorkerNameById = (id: any) => {
+    const result = workers.find((worker: any) => worker.id === id)
+    return get(result, 'name', '')
+  }
+
+  const getStatusNameById = (id: any) => {
+    const result = workStatus.find((status: any) => status.id === id)
+    return get(result, 'status', '')
+  }
+
+  useEffect(() => {
+    setWorkers(initialWorkers)
+  }, [initialWorkers])
+
+  useEffect(() => {
+    setWorkStatus(initialWorkStatus)
+  }, [initialWorkStatus])
 
   const validationSchema = yup.object({})
   const formik = useFormik({
@@ -60,20 +91,19 @@ export default function EditPersonLetterModal({
       letterdate: get(data, 'letterDate', ''),
       letteragency: get(data, 'letterAgency', ''),
       note: get(data, 'note', ''),
-      worker: get(data, 'worker', ''),
+      workerid: get(data, 'workerId', null),
       numthdegs: checkIsNull(get(data, 'numThDegs', null)),
       numnonthdegs: checkIsNull(get(data, 'numThDegs', null)),
       uploadfile: get(data, 'uploadFile', ''),
       uploaddate: get(data, 'uploadDate', ''),
       replyno: get(data, 'replyNo', ''),
       replydate: get(data, 'replyDate', ''),
-      status: get(data, 'status', ''),
+      status: get(data, 'statusId', ''),
       lastupdate: get(data, 'lastUpdate', ''),
       supervisor: get(data, 'supervisor', ''),
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log('values', values)
       dispatch(
         personLetterActions.editPersonLetter({
           letterid: get(data, 'id', ''),
@@ -81,10 +111,11 @@ export default function EditPersonLetterModal({
           letterdate: date,
           letteragency: get(values, 'letteragency', ''),
           note: get(values, 'note', ''),
-          workerid: parseInt(get(values, 'worker', '')),
+          workerid: get(values, 'workerid', ''),
           replyno: get(values, 'replyno', ''),
           replydate: replyDate,
-          statusid: parseInt(get(values, 'status', '')),
+          statusid: get(values, 'status', ''),
+          currentSearchQuery,
         })
       )
       onCloseModal()
@@ -219,15 +250,43 @@ export default function EditPersonLetterModal({
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  id='worker'
-                  name='worker'
-                  value={formik.values.worker}
-                  onChange={formik.handleChange}
-                  variant='outlined'
-                  size='small'
-                  fullWidth
-                />
+                <FormControl fullWidth size='small'>
+                  <Select
+                    id='workerid'
+                    name='workerid'
+                    value={formik.values.workerid}
+                    onChange={formik.handleChange}
+                    variant='outlined'
+                    displayEmpty
+                    MenuProps={{
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
+                      getContentAnchorEl: null,
+                    }}
+                    renderValue={(selected) => {
+                      if (selected === null) {
+                        return (
+                          <span style={{ color: theme.palette.text.secondary }}>
+                            เลือกผู้ปฏิบัติงาน
+                          </span>
+                        )
+                      }
+                      return getWorkerNameById(selected)
+                    }}
+                  >
+                    {workers.map((worker: any) => (
+                      <MenuItem value={get(worker, 'id', '')}>
+                        {get(worker, 'name', '')}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container alignItems='center'>
@@ -375,15 +434,43 @@ export default function EditPersonLetterModal({
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  id='status'
-                  name='status'
-                  value={formik.values.status}
-                  onChange={formik.handleChange}
-                  variant='outlined'
-                  size='small'
-                  fullWidth
-                />
+                <FormControl fullWidth size='small'>
+                  <Select
+                    id='status'
+                    name='status'
+                    value={formik.values.status}
+                    onChange={formik.handleChange}
+                    variant='outlined'
+                    displayEmpty
+                    MenuProps={{
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
+                      getContentAnchorEl: null,
+                    }}
+                    renderValue={(selected) => {
+                      if (selected === null) {
+                        return (
+                          <span style={{ color: theme.palette.text.secondary }}>
+                            เลือกสถานะ
+                          </span>
+                        )
+                      }
+                      return getStatusNameById(selected)
+                    }}
+                  >
+                    {workStatus.map((status: any) => (
+                      <MenuItem value={get(status, 'id', '')}>
+                        {get(status, 'status', '')}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container alignItems='center'>
@@ -436,7 +523,18 @@ export default function EditPersonLetterModal({
           <Button onClick={onCloseModal} variant='outlined'>
             ยกเลิก
           </Button>
-          <Button color='secondary' variant='contained' type='submit'>
+          <Button
+            color='secondary'
+            variant='contained'
+            type='submit'
+            disabled={
+              !(
+                formik.dirty ||
+                get(data, 'letterDate', '') !== date ||
+                get(data, 'replyDate', '') !== replyDate
+              )
+            }
+          >
             บันทึก
           </Button>
         </DialogActions>

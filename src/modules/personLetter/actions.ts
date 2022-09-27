@@ -241,6 +241,7 @@ function addPersonLetter({
   letteragency,
   note,
   workerid,
+  currentSearchQuery,
 }: any) {
   return async (dispatch: any) => {
     const token = getCookie('token')
@@ -274,6 +275,17 @@ function addPersonLetter({
           'success'
         )
       )
+      dispatch(
+        getPersonLetterAdmin({
+          letterNo: get(currentSearchQuery, 'letterNo', ''),
+          letterDate: get(currentSearchQuery, 'letterDate', ''),
+          replyDate: get(currentSearchQuery, 'replyDate', ''),
+          status1: get(currentSearchQuery, 'status1', true),
+          status2: get(currentSearchQuery, 'status2', true),
+          status3: get(currentSearchQuery, 'status3', true),
+          status4: get(currentSearchQuery, 'status4', true),
+        })
+      )
     } catch (err) {
       dispatch({ type: ADD_PERSON_LETTER_FAILURE })
       dispatch(
@@ -300,6 +312,7 @@ function editPersonLetter({
   replyno,
   replydate,
   statusid,
+  currentSearchQuery,
 }: any) {
   return async (dispatch: any) => {
     const token = getCookie('token')
@@ -332,9 +345,20 @@ function editPersonLetter({
       })
       dispatch(
         uiActions.setFlashMessage(
-          `แก้ไขหนังสือเข้า '${letterid}' สำเร็จ`,
+          `แก้ไขหนังสือเข้า '${letterno}' สำเร็จ`,
           'success'
         )
+      )
+      dispatch(
+        getPersonLetterAdmin({
+          letterNo: get(currentSearchQuery, 'letterNo', ''),
+          letterDate: get(currentSearchQuery, 'letterDate', ''),
+          replyDate: get(currentSearchQuery, 'replyDate', ''),
+          status1: get(currentSearchQuery, 'status1', true),
+          status2: get(currentSearchQuery, 'status2', true),
+          status3: get(currentSearchQuery, 'status3', true),
+          status4: get(currentSearchQuery, 'status4', true),
+        })
       )
     } catch (err) {
       dispatch({ type: EDIT_PERSON_LETTER_FAILURE })
@@ -389,7 +413,7 @@ function uploadFile(letterid: any, file: any) {
         } else if (err?.response?.status === 403) {
           dispatch(
             uiActions.setFlashMessage(
-              `นามสกุลไฟล์ไม่รองรับ โปรดเลือกไฟล์ใหม่อีกครั้ง`,
+              `ไม่สามารถอัพโหลดไฟล์ได้ เนื่องจากในสถานะ 'อยู่ระหว่างดำเนินการ' หรือ 'รออนุมัติ'`,
               'error'
             )
           )

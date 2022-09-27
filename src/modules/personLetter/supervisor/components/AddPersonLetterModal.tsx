@@ -27,11 +27,13 @@ import DatePicker from './DatePicker'
 interface AddPersonLetterModalProps {
   open: boolean
   handleClose: () => void
+  currentSearchQuery: any
 }
 
 export default function AddPersonLetterModal({
   open,
   handleClose,
+  currentSearchQuery,
 }: AddPersonLetterModalProps) {
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -78,6 +80,7 @@ export default function AddPersonLetterModal({
           letteragency: get(values, 'letteragency', ''),
           note: get(values, 'note', ''),
           workerid: getWorkerIdByName(get(values, 'workerid', '')),
+          currentSearchQuery,
         })
       )
       onCloseModal()
