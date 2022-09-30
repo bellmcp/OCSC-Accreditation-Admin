@@ -47,6 +47,7 @@ import DatePicker from './DatePicker'
 import DataTable from './DataTable'
 import AddPersonLetterModal from './AddPersonLetterModal'
 import EditPersonLetterModal from './EditPersonLetterModal'
+import PreviewModal from 'modules/preview/components/PreviewModal'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -123,6 +124,17 @@ export default function PersonLetterSupervisor() {
   const [currentEditData, setCurrentEditData] = useState<any>({})
 
   const [currentSearchQuery, setCurrentSearchQuery] = useState<any>({})
+
+  const [open2, setOpen2] = useState(false)
+  const [currentFilePath, setCurrentFilePath] = useState('')
+
+  const handleClickOpen2 = (filePath: string) => {
+    setOpen2(true)
+    setCurrentFilePath(filePath)
+  }
+  const handleClose2 = () => {
+    setOpen2(false)
+  }
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -473,6 +485,12 @@ export default function PersonLetterSupervisor() {
         handleClose={handleCloseEditModal}
         data={currentEditData}
         currentSearchQuery={currentSearchQuery}
+        handleClickLink={handleClickOpen2}
+      />
+      <PreviewModal
+        open={open2}
+        handleClose={handleClose2}
+        filePath={currentFilePath}
       />
     </>
   )

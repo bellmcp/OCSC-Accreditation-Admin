@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { get } from 'lodash'
 
 import {
@@ -28,6 +28,8 @@ import {
 } from '@material-ui/icons'
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 import { green, red, amber, indigo } from '@material-ui/core/colors'
+
+import PreviewModal from 'modules/preview/components/PreviewModal'
 
 const ODD_OPACITY = 0.07
 const PATH = process.env.REACT_APP_BASE_PATH
@@ -194,6 +196,17 @@ export default function DataTable({
   handleOpenEditModal,
   setCurrentEditData,
 }: DataTableProps) {
+  const [open, setOpen] = useState(false)
+  const [currentFilePath, setCurrentFilePath] = useState('')
+
+  const handleClickOpen = (filePath: string) => {
+    setOpen(true)
+    setCurrentFilePath(filePath)
+  }
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const handleClickEdit = (row: any) => {
     setCurrentEditData(row)
     handleOpenEditModal()
@@ -387,10 +400,12 @@ export default function DataTable({
           return (
             <Stack direction='row' alignItems='center' spacing={1}>
               <Link
-                href={`${PATH}/preview?file=${filePath}`}
-                target='_blank'
+                // href={`${PATH}/preview?file=${filePath}`}
+                // target='_blank'
                 color='primary'
                 underline='hover'
+                onClick={() => handleClickOpen(filePath)}
+                style={{ cursor: 'pointer' }}
               >
                 <Stack direction='row' alignItems='center' spacing={1}>
                   <LaunchIcon fontSize='small' />
@@ -716,6 +731,11 @@ export default function DataTable({
           }}
         />
       </div>
+      <PreviewModal
+        open={open}
+        handleClose={handleClose}
+        filePath={currentFilePath}
+      />
     </ThemeProvider>
   )
 }

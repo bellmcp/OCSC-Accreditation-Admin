@@ -2,16 +2,12 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ExcelRenderer, OutTable } from 'react-excel-renderer'
-import { useLocation } from 'react-router-dom'
-import queryString from 'query-string'
 
 import { Typography, Button, Grid, Link, Box } from '@material-ui/core'
 import { SentimentVeryDissatisfied as ErrorIcon } from '@material-ui/icons'
 import Stack from '@mui/material/Stack'
 
-export default function Preview() {
-  const { search } = useLocation()
-  const { file } = queryString.parse(search)
+export default function Preview({ onClose, filePath }: any) {
   const [cols, setCols] = useState([])
   const [rows, setRows] = useState([])
 
@@ -20,7 +16,7 @@ export default function Preview() {
   useEffect(() => {
     const config = { responseType: 'blob' }
     axios
-      .get(file, config)
+      .get(filePath, config)
       .then((response) => {
         ExcelRenderer(new File([response.data], 'excel'), (err, resp) => {
           if (err) {
@@ -35,10 +31,10 @@ export default function Preview() {
       .catch((error) => {
         setIsError(true)
       })
-  }, [file])
+  }, [filePath])
 
   const closeTab = () => {
-    window.close()
+    onClose()
   }
 
   return (
@@ -64,7 +60,7 @@ export default function Preview() {
             <Button
               variant='contained'
               color='secondary'
-              href={file}
+              href={filePath}
               target='_blank'
             >
               ดาวน์โหลด
@@ -114,8 +110,8 @@ export default function Preview() {
       )}
       <Typography variant='body2' color='textSecondary'>
         กำลังแสดงไฟล์:{' '}
-        <Link href={file} target='_blank'>
-          {file}
+        <Link href={filePath} target='_blank'>
+          {filePath}
         </Link>
       </Typography>
     </Stack>

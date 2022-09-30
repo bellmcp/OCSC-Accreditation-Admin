@@ -33,6 +33,7 @@ interface EditPersonLetterModalProps {
   open: boolean
   handleClose: () => void
   currentSearchQuery: any
+  handleClickLink: any
 }
 
 const checkIsNull = (value: any) => {
@@ -48,6 +49,7 @@ export default function EditPersonLetterModal({
   open,
   handleClose,
   currentSearchQuery,
+  handleClickLink,
 }: EditPersonLetterModalProps) {
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -347,14 +349,18 @@ export default function EditPersonLetterModal({
                 {checkIsNull(get(data, 'uploadFile', null)) !== 0 && (
                   <Stack direction='row' alignItems='center' spacing={1}>
                     <Link
-                      href={`${PATH}/preview?file=${get(
-                        data,
-                        'uploadFile',
-                        null
-                      )}`}
-                      target='_blank'
+                      // href={`${PATH}/preview?file=${get(
+                      //   data,
+                      //   'uploadFile',
+                      //   null
+                      // )}`}
+                      // target='_blank'
                       color='primary'
                       underline='hover'
+                      onClick={() =>
+                        handleClickLink(get(data, 'uploadFile', null))
+                      }
+                      style={{ cursor: 'pointer' }}
                     >
                       <Stack direction='row' alignItems='center' spacing={1}>
                         <LaunchIcon fontSize='small' />

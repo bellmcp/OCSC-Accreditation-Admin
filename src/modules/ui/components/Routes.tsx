@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import PrivateRoute from 'modules/routes/PrivateRoute'
 
 import Login from 'modules/login/components/Login'
@@ -28,6 +28,7 @@ export default function Routes() {
         component={PasswordRoutes}
         path={`${PATH}/edit/password`}
       />
+      <Redirect to={`${PATH}`}></Redirect>
       <Route>
         <NotFound />
       </Route>

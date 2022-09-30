@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { get } from 'lodash'
 
 import {
@@ -30,6 +30,7 @@ import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 import { green, red, amber, indigo } from '@material-ui/core/colors'
 
 import FileUpload from './FileUpload'
+import PreviewModal from 'modules/preview/components/PreviewModal'
 
 const ODD_OPACITY = 0.07
 const PATH = process.env.REACT_APP_BASE_PATH
@@ -194,6 +195,17 @@ export default function DataTable({
   loading,
   currentSearchQuery,
 }: DataTableProps) {
+  const [open, setOpen] = useState(false)
+  const [currentFilePath, setCurrentFilePath] = useState('')
+
+  const handleClickOpen = (filePath: string) => {
+    setOpen(true)
+    setCurrentFilePath(filePath)
+  }
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const columns: GridColDef[] = [
     {
       field: 'order',
@@ -374,10 +386,12 @@ export default function DataTable({
           return (
             <Stack direction='row' alignItems='center' spacing={1}>
               <Link
-                href={`${PATH}/preview?file=${filePath}`}
-                target='_blank'
+                // href={`${PATH}/preview?file=${filePath}`}
+                // target='_blank'
                 color='primary'
                 underline='hover'
+                onClick={() => handleClickOpen(filePath)}
+                style={{ cursor: 'pointer' }}
               >
                 <Stack direction='row' alignItems='center' spacing={1}>
                   <LaunchIcon fontSize='small' />
@@ -412,7 +426,7 @@ export default function DataTable({
         const statusId = get(params, 'row.statusId', '')
 
         if (statusId === 1 || statusId === 2) {
-          return <FileUpload id={id} currentSearchQuery={currentSearchQuery}/>
+          return <FileUpload id={id} currentSearchQuery={currentSearchQuery} />
         } else {
           return <></>
         }
@@ -703,6 +717,11 @@ export default function DataTable({
           }}
         />
       </div>
+      <PreviewModal
+        open={open}
+        handleClose={handleClose}
+        filePath={currentFilePath}
+      />
     </ThemeProvider>
   )
 }
