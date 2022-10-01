@@ -223,7 +223,7 @@ export default function DataTable({
       renderCell: renderCellExpand,
     },
     {
-      field: 'letterDate',
+      field: 'letterDatePrint',
       headerName: 'วันที่',
       width: 150,
       align: 'center',
@@ -274,7 +274,7 @@ export default function DataTable({
       renderCell: renderCellExpand,
     },
     {
-      field: 'replyDate',
+      field: 'replyDatePrint',
       headerName: 'วันที่',
       width: 150,
       align: 'center',
@@ -484,7 +484,7 @@ export default function DataTable({
               headerAlign: 'center',
               children: [
                 { field: 'letterNo' },
-                { field: 'letterDate' },
+                { field: 'letterDatePrint' },
                 { field: 'letterAgency' },
               ],
               renderHeaderGroup: () => (
@@ -518,7 +518,7 @@ export default function DataTable({
               groupId: 'reply',
               headerName: 'หนังสือออก',
               headerAlign: 'center',
-              children: [{ field: 'replyNo' }, { field: 'replyDate' }],
+              children: [{ field: 'replyNo' }, { field: 'replyDatePrint' }],
               renderHeaderGroup: () => (
                 <Typography
                   style={{
