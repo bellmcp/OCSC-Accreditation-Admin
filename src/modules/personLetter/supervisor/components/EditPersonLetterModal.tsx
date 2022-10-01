@@ -21,7 +21,14 @@ import {
   MenuItem,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
-import { Launch as LaunchIcon } from '@material-ui/icons'
+import {
+  CheckCircle as CheckIcon,
+  Cancel as CancelIcon,
+  WatchLater as PendingIcon,
+  PlayCircleFilled as InProgressIcon,
+  Launch as LaunchIcon,
+} from '@material-ui/icons'
+import { green, red, amber, indigo } from '@material-ui/core/colors'
 
 import * as personLetterActions from 'modules/personLetter/actions'
 import DatePicker from './DatePicker'
@@ -460,6 +467,8 @@ export default function EditPersonLetterModal({
                       getContentAnchorEl: null,
                     }}
                     renderValue={(selected) => {
+                      const value = getStatusNameById(selected)
+
                       if (selected === null) {
                         return (
                           <span style={{ color: theme.palette.text.secondary }}>
@@ -467,14 +476,195 @@ export default function EditPersonLetterModal({
                           </span>
                         )
                       }
-                      return getStatusNameById(selected)
+
+                      switch (value) {
+                        case 'อยู่ระหว่างดำเนินการ':
+                          return (
+                            <Stack
+                              direction='row'
+                              alignItems='center'
+                              spacing={1}
+                            >
+                              <InProgressIcon
+                                style={{
+                                  color: indigo[800],
+                                }}
+                              />
+                              <Typography
+                                variant='body1'
+                                style={{
+                                  color: indigo[800],
+                                  fontWeight: 600,
+                                }}
+                              >
+                                อยู่ระหว่างดำเนินการ
+                              </Typography>
+                            </Stack>
+                          )
+                        case 'รออนุมัติ':
+                          return (
+                            <Stack
+                              direction='row'
+                              alignItems='center'
+                              spacing={1}
+                            >
+                              <PendingIcon
+                                style={{
+                                  color: amber[800],
+                                }}
+                              />
+                              <Typography
+                                variant='body1'
+                                style={{ color: amber[800], fontWeight: 600 }}
+                              >
+                                รออนุมัติ
+                              </Typography>
+                            </Stack>
+                          )
+                        case 'เสร็จสิ้น':
+                          return (
+                            <Stack
+                              direction='row'
+                              alignItems='center'
+                              spacing={1}
+                            >
+                              <CheckIcon
+                                style={{
+                                  color: green[800],
+                                }}
+                              />
+                              <Typography
+                                variant='body1'
+                                style={{ color: green[800], fontWeight: 600 }}
+                              >
+                                เสร็จสิ้น
+                              </Typography>
+                            </Stack>
+                          )
+                        case 'ยกเลิก':
+                          return (
+                            <Stack
+                              direction='row'
+                              alignItems='center'
+                              spacing={1}
+                            >
+                              <CancelIcon
+                                style={{
+                                  color: red[800],
+                                }}
+                              />
+                              <Typography
+                                variant='body1'
+                                style={{ color: red[800], fontWeight: 600 }}
+                              >
+                                ยกเลิก
+                              </Typography>
+                            </Stack>
+                          )
+                        default:
+                          return <></>
+                      }
                     }}
                   >
-                    {workStatus.map((status: any) => (
-                      <MenuItem value={get(status, 'id', '')}>
-                        {get(status, 'status', '')}
-                      </MenuItem>
-                    ))}
+                    {workStatus.map((status: any) => {
+                      const value = get(status, 'status', '')
+
+                      switch (value) {
+                        case 'อยู่ระหว่างดำเนินการ':
+                          return (
+                            <MenuItem value={get(status, 'id', '')}>
+                              <Stack
+                                direction='row'
+                                alignItems='center'
+                                spacing={1}
+                              >
+                                <InProgressIcon
+                                  style={{
+                                    color: indigo[800],
+                                  }}
+                                />
+                                <Typography
+                                  variant='body1'
+                                  style={{
+                                    color: indigo[800],
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  อยู่ระหว่างดำเนินการ
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                          )
+                        case 'รออนุมัติ':
+                          return (
+                            <MenuItem value={get(status, 'id', '')}>
+                              <Stack
+                                direction='row'
+                                alignItems='center'
+                                spacing={1}
+                              >
+                                <PendingIcon
+                                  style={{
+                                    color: amber[800],
+                                  }}
+                                />
+                                <Typography
+                                  variant='body1'
+                                  style={{ color: amber[800], fontWeight: 600 }}
+                                >
+                                  รออนุมัติ
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                          )
+                        case 'เสร็จสิ้น':
+                          return (
+                            <MenuItem value={get(status, 'id', '')}>
+                              <Stack
+                                direction='row'
+                                alignItems='center'
+                                spacing={1}
+                              >
+                                <CheckIcon
+                                  style={{
+                                    color: green[800],
+                                  }}
+                                />
+                                <Typography
+                                  variant='body1'
+                                  style={{ color: green[800], fontWeight: 600 }}
+                                >
+                                  เสร็จสิ้น
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                          )
+                        case 'ยกเลิก':
+                          return (
+                            <MenuItem value={get(status, 'id', '')}>
+                              <Stack
+                                direction='row'
+                                alignItems='center'
+                                spacing={1}
+                              >
+                                <CancelIcon
+                                  style={{
+                                    color: red[800],
+                                  }}
+                                />
+                                <Typography
+                                  variant='body1'
+                                  style={{ color: red[800], fontWeight: 600 }}
+                                >
+                                  ยกเลิก
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                          )
+                        default:
+                          return <></>
+                      }
+                    })}
                   </Select>
                 </FormControl>
               </Grid>
