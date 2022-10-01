@@ -95,7 +95,7 @@ export default function EditPersonLetterModal({
       note: get(data, 'note', ''),
       workerid: get(data, 'workerId', null),
       numthdegs: checkIsNull(get(data, 'numThDegs', null)),
-      numnonthdegs: checkIsNull(get(data, 'numThDegs', null)),
+      numnonthdegs: checkIsNull(get(data, 'numNonThDegs', null)),
       uploadfile: get(data, 'uploadFile', ''),
       uploaddate: get(data, 'uploadDate', ''),
       replyno: get(data, 'replyNo', ''),

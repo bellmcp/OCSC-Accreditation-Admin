@@ -329,7 +329,7 @@ function editPersonLetter({
           workerid,
           replyno,
           replydate,
-          statusid,
+          workStatusId: statusid,
         },
         {
           headers: {
