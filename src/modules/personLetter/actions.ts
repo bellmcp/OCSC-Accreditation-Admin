@@ -60,7 +60,7 @@ function getPersonLetter({
     dispatch({ type: GET_PERSON_LETTER_REQUEST })
     try {
       var { data } = await axios.get(
-        `/PersonLetters?WorkerId=${workerId}&letterNo=${letterNo}&letterDate=${letterDate}&replyDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
+        `/PersonLetters?WorkerId=${workerId}&letterNo=${letterNo}&startDate=${letterDate}&endDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ function getPersonLetterAdmin({
     dispatch({ type: GET_PERSON_LETTER_REQUEST })
     try {
       var { data } = await axios.get(
-        `/PersonLetters?letterNo=${letterNo}&letterDate=${letterDate}&replyDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
+        `/PersonLetters?letterNo=${letterNo}&startDate=${letterDate}&endDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
