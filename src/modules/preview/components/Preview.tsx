@@ -22,7 +22,12 @@ export default function Preview({ onClose, filePath }: any) {
           if (err) {
             setIsError(true)
           } else {
-            setCols(resp.cols)
+            const columns = [{ name: '', key: 0 }]
+            resp.cols.map((item) => {
+              columns.push({ name: item.name, key: item.key + 1 })
+              return null
+            })
+            setCols(columns)
             setRows(resp.rows)
             setIsError(false)
           }
