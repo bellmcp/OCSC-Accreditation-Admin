@@ -6,7 +6,7 @@ import Login from 'modules/login/components/Login'
 import PersonLetterRoutes from 'modules/personLetter/Routes'
 import SearchRoutes from 'modules/search/Routes'
 import InfoRoutes from 'modules/info/Routes'
-import PreviewRoutes from 'modules/preview/Routes'
+// import PreviewRoutes from 'modules/preview/Routes'
 import PasswordRoutes from 'modules/edit/password/components/Routes'
 
 import NotFound from './NotFound'
@@ -21,7 +21,7 @@ export default function Routes() {
       </Route>
       <PrivateRoute path={`${PATH}/search`} component={SearchRoutes} />
       <PrivateRoute path={`${PATH}/info`} component={InfoRoutes} />
-      <PrivateRoute path={`${PATH}/preview`} component={PreviewRoutes} />
+      {/* <PrivateRoute path={`${PATH}/preview`} component={PreviewRoutes} /> */}
       <PrivateRoute exact path={`${PATH}`} component={PersonLetterRoutes} />
       <PrivateRoute
         exact

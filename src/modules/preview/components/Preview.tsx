@@ -4,7 +4,11 @@ import axios from 'axios'
 import { ExcelRenderer, OutTable } from 'react-excel-renderer'
 
 import { Typography, Button, Grid, Link, Box } from '@material-ui/core'
-import { SentimentVeryDissatisfied as ErrorIcon } from '@material-ui/icons'
+import {
+  SentimentVeryDissatisfied as ErrorIcon,
+  Close as CloseIcon,
+  GetApp as DownloadIcon,
+} from '@material-ui/icons'
 import Stack from '@mui/material/Stack'
 
 export default function Preview({ onClose, filePath }: any) {
@@ -67,10 +71,15 @@ export default function Preview({ onClose, filePath }: any) {
               color='secondary'
               href={filePath}
               target='_blank'
+              startIcon={<DownloadIcon />}
             >
               ดาวน์โหลด
             </Button>
-            <Button variant='outlined' onClick={closeTab}>
+            <Button
+              variant='outlined'
+              onClick={closeTab}
+              startIcon={<CloseIcon />}
+            >
               ปิด
             </Button>
           </Stack>
@@ -105,9 +114,9 @@ export default function Preview({ onClose, filePath }: any) {
                 style={{ fontSize: 54, marginBottom: 14 }}
               />
               <Typography variant='body2' color='textSecondary' align='center'>
-                เกิดข้อผิดพลาดบางอย่าง
+                ไม่สามารถแสดงไฟล์ได้
                 <br />
-                โปรดดาวน์โหลดไฟล์ หรือลองใหม่อีกครั้ง
+                โปรดดาวน์โหลด หรือลองใหม่อีกครั้ง
               </Typography>
             </Grid>
           </Box>
