@@ -33,7 +33,7 @@ import FileUpload from './FileUpload'
 import PreviewModal from 'modules/preview/components/PreviewModal'
 
 const ODD_OPACITY = 0.07
-const PATH = process.env.REACT_APP_BASE_PATH
+// const PATH = process.env.REACT_APP_BASE_PATH
 
 interface DataTableProps {
   data: any

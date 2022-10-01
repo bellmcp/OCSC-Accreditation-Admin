@@ -33,7 +33,7 @@ import { green, red, amber, indigo } from '@material-ui/core/colors'
 import * as personLetterActions from 'modules/personLetter/actions'
 import DatePicker from './DatePicker'
 
-const PATH = process.env.REACT_APP_BASE_PATH
+// const PATH = process.env.REACT_APP_BASE_PATH
 
 interface EditPersonLetterModalProps {
   data: any
