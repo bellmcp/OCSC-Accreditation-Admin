@@ -361,14 +361,11 @@ function editPersonLetter({
       //   })
       // )
     } catch (err) {
+      const responseMessage = get(err, 'response.data.mesg', '')
       dispatch({ type: EDIT_PERSON_LETTER_FAILURE })
       dispatch(
         uiActions.setFlashMessage(
-          `แก้ไขหนังสือเข้าไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )} โปรดลองใหม่อีกครั้ง`,
+          `แก้ไขหนังสือเข้าไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
           'error'
         )
       )
@@ -413,30 +410,14 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
         // )
       })
       .catch(function (err) {
+        const responseMessage = get(err, 'response.data.mesg', '')
         dispatch({ type: UPLOAD_FILE_FAILURE })
-        if (err?.response?.status === 413) {
-          dispatch(
-            uiActions.setFlashMessage(
-              `ไฟล์แนบมีขนาดใหญ่เกินกำหนด โปรดเลือกไฟล์ใหม่อีกครั้ง`,
-              'error'
-            )
+        dispatch(
+          uiActions.setFlashMessage(
+            `อัพโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
+            'error'
           )
-        } else if (err?.response?.status === 403) {
-          dispatch(
-            uiActions.setFlashMessage(`ไม่สามารถอัพโหลดไฟล์ได้`, 'error')
-          )
-        } else {
-          dispatch(
-            uiActions.setFlashMessage(
-              `อัพโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-                err,
-                'response.status',
-                'บางอย่าง'
-              )} โปรดลองใหม่อีกครั้ง`,
-              'error'
-            )
-          )
-        }
+        )
       })
   }
 }
