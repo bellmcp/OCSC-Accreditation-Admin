@@ -167,8 +167,6 @@ const columns: GridColDef[] = [
     field: 'letterNo',
     headerName: 'เลขที่หนังสือเวียน',
     width: 150,
-    align: 'center',
-    headerAlign: 'center',
     renderCell: renderCellExpand,
   },
   {

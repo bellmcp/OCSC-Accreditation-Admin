@@ -239,7 +239,12 @@ const columns: GridColDef[] = [
     width: 300,
     renderCell: renderCellExpand,
   },
-  { field: 'letterNo', headerName: 'เลขที่หนังสือเวียน', width: 150 },
+  {
+    field: 'letterNo',
+    headerName: 'เลขที่หนังสือเวียน',
+    width: 150,
+    renderCell: renderCellExpand,
+  },
   { field: 'letterDate', headerName: 'ลงวันที่', width: 120 },
   {
     field: 'id',
