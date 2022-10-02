@@ -146,11 +146,25 @@ export default function PersonLetterWorker() {
     },
   })
 
+  const initialSubmitForm = () => {
+    const searchQuery = {
+      letterNo: '',
+      letterDate: startDate,
+      replyDate: endDate,
+      status1: true,
+      status2: true,
+      status3: true,
+      status4: true,
+    }
+    dispatch(personLetterActions.getPersonLetter(searchQuery))
+  }
+
   useEffect(() => {
+    initialSubmitForm()
     return () => {
       dispatch(personLetterActions.clearSearchResult())
     }
-  }, [dispatch])
+  }, [dispatch]) //eslint-disable-line
 
   const handleChangeStatus1 = (event: any) => {
     setStatus1(event.target.checked)

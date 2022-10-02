@@ -178,13 +178,27 @@ export default function PersonLetterSupervisor() {
     },
   })
 
+  const initialSubmitForm = () => {
+    const searchQuery = {
+      letterNo: '',
+      letterDate: startDate,
+      replyDate: endDate,
+      status1: true,
+      status2: true,
+      status3: true,
+      status4: true,
+    }
+    dispatch(personLetterActions.getPersonLetterAdmin(searchQuery))
+  }
+
   useEffect(() => {
     dispatch(personLetterActions.loadWorkers())
     dispatch(personLetterActions.loadWorkStatus())
+    initialSubmitForm()
     return () => {
       dispatch(personLetterActions.clearSearchResult())
     }
-  }, [dispatch])
+  }, [dispatch]) //eslint-disable-line
 
   const handleChangeStatus1 = (event: any) => {
     setStatus1(event.target.checked)
