@@ -349,17 +349,17 @@ function editPersonLetter({
           'success'
         )
       )
-      dispatch(
-        getPersonLetterAdmin({
-          letterNo: get(currentSearchQuery, 'letterNo', ''),
-          letterDate: get(currentSearchQuery, 'letterDate', ''),
-          replyDate: get(currentSearchQuery, 'replyDate', ''),
-          status1: get(currentSearchQuery, 'status1', true),
-          status2: get(currentSearchQuery, 'status2', true),
-          status3: get(currentSearchQuery, 'status3', true),
-          status4: get(currentSearchQuery, 'status4', true),
-        })
-      )
+      // dispatch(
+      //   getPersonLetterAdmin({
+      //     letterNo: get(currentSearchQuery, 'letterNo', ''),
+      //     letterDate: get(currentSearchQuery, 'letterDate', ''),
+      //     replyDate: get(currentSearchQuery, 'replyDate', ''),
+      //     status1: get(currentSearchQuery, 'status1', true),
+      //     status2: get(currentSearchQuery, 'status2', true),
+      //     status3: get(currentSearchQuery, 'status3', true),
+      //     status4: get(currentSearchQuery, 'status4', true),
+      //   })
+      // )
     } catch (err) {
       dispatch({ type: EDIT_PERSON_LETTER_FAILURE })
       dispatch(
@@ -400,17 +400,17 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
           payload: { submitResponse: response },
         })
         dispatch(uiActions.setFlashMessage('อัพโหลดไฟล์เรียบร้อย', 'success'))
-        dispatch(
-          getPersonLetterAdmin({
-            letterNo: get(currentSearchQuery, 'letterNo', ''),
-            letterDate: get(currentSearchQuery, 'letterDate', ''),
-            replyDate: get(currentSearchQuery, 'replyDate', ''),
-            status1: get(currentSearchQuery, 'status1', true),
-            status2: get(currentSearchQuery, 'status2', true),
-            status3: get(currentSearchQuery, 'status3', true),
-            status4: get(currentSearchQuery, 'status4', true),
-          })
-        )
+        // dispatch(
+        //   getPersonLetterAdmin({
+        //     letterNo: get(currentSearchQuery, 'letterNo', ''),
+        //     letterDate: get(currentSearchQuery, 'letterDate', ''),
+        //     replyDate: get(currentSearchQuery, 'replyDate', ''),
+        //     status1: get(currentSearchQuery, 'status1', true),
+        //     status2: get(currentSearchQuery, 'status2', true),
+        //     status3: get(currentSearchQuery, 'status3', true),
+        //     status4: get(currentSearchQuery, 'status4', true),
+        //   })
+        // )
       })
       .catch(function (err) {
         dispatch({ type: UPLOAD_FILE_FAILURE })

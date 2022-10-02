@@ -128,7 +128,7 @@ export default function EditPersonLetterModal({
         })
       )
       onCloseModal()
-      dispatch(personLetterActions.clearSearchResult())
+      // dispatch(personLetterActions.clearSearchResult())
     },
   })
 
