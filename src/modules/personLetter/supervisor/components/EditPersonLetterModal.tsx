@@ -43,14 +43,6 @@ interface EditPersonLetterModalProps {
   handleClickLink: any
 }
 
-const checkIsNull = (value: any) => {
-  if (value === null || value === undefined) {
-    return 0
-  } else {
-    return value
-  }
-}
-
 export default function EditPersonLetterModal({
   data,
   open,
@@ -101,8 +93,8 @@ export default function EditPersonLetterModal({
       letteragency: get(data, 'letterAgency', ''),
       note: get(data, 'note', ''),
       workerid: get(data, 'workerId', null),
-      numthdegs: checkIsNull(get(data, 'numThDegs', null)),
-      numnonthdegs: checkIsNull(get(data, 'numNonThDegs', null)),
+      numthdegs: get(data, 'numThDegs', null),
+      numnonthdegs: get(data, 'numNonThDegs', null),
       uploadfile: get(data, 'uploadFile', ''),
       uploaddate: get(data, 'uploadDate', ''),
       replyno: get(data, 'replyNo', ''),
@@ -353,7 +345,7 @@ export default function EditPersonLetterModal({
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                {checkIsNull(get(data, 'uploadFile', null)) !== 0 && (
+                {get(data, 'uploadFile', null) !== null && (
                   <Stack direction='row' alignItems='center' spacing={1}>
                     <Link
                       // href={`${PATH}/preview?file=${get(

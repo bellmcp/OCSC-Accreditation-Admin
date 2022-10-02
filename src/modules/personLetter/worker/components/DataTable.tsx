@@ -245,7 +245,7 @@ export default function DataTable({
       valueFormatter: (params) => {
         const value = get(params, 'value', null)
         if (value === null || value === undefined) {
-          return 0
+          return '-'
         } else {
           return value
         }
@@ -260,7 +260,7 @@ export default function DataTable({
       valueFormatter: (params) => {
         const value = get(params, 'value', null)
         if (value === null || value === undefined) {
-          return 0
+          return '-'
         } else {
           return value
         }
