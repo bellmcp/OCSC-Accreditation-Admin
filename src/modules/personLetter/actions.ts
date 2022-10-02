@@ -398,7 +398,7 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
         })
         dispatch(uiActions.setFlashMessage('อัพโหลดไฟล์เรียบร้อย', 'success'))
         dispatch(
-          getPersonLetterAdmin({
+          getPersonLetter({
             letterNo: get(currentSearchQuery, 'letterNo', ''),
             letterDate: get(currentSearchQuery, 'letterDate', ''),
             replyDate: get(currentSearchQuery, 'replyDate', ''),
