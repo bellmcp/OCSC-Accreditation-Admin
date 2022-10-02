@@ -420,7 +420,7 @@ export default function DataTable({
     {
       field: 'uploadDate',
       headerName: 'วันที่อัพโหลด',
-      width: 150,
+      width: 180,
       align: 'center',
       headerAlign: 'center',
     },
