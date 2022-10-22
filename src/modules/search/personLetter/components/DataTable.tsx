@@ -165,14 +165,39 @@ const columns: GridColDef[] = [
   },
   {
     field: 'letterNo',
-    headerName: 'เลขที่หนังสือเวียน',
+    headerName: 'เลขที่',
     width: 150,
+    align: 'center',
+    headerAlign: 'center',
     renderCell: renderCellExpand,
   },
   {
     field: 'letterDate',
-    headerName: 'ลงวันที่',
-    width: 120,
+    headerName: 'วันที่',
+    width: 150,
+    align: 'center',
+    headerAlign: 'center',
+  },
+  {
+    field: 'letterAgency',
+    headerName: 'หน่วยงาน',
+    width: 250,
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'replyNo',
+    headerName: 'เลขที่',
+    width: 150,
+    align: 'center',
+    headerAlign: 'center',
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'replyDate',
+    headerName: 'วันที่',
+    width: 150,
     align: 'center',
     headerAlign: 'center',
   },
@@ -335,6 +360,45 @@ export default function DataTable({ data, loading }: DataTableProps) {
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
           autoHeight
+          experimentalFeatures={{ columnGrouping: true }}
+          columnGroupingModel={[
+            {
+              groupId: 'letter',
+              headerName: 'หนังสือเข้า',
+              headerAlign: 'center',
+              children: [
+                { field: 'letterNo' },
+                { field: 'letterDate' },
+                { field: 'letterAgency' },
+              ],
+              renderHeaderGroup: () => (
+                <Typography
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                  }}
+                >
+                  หนังสือเข้า
+                </Typography>
+              ),
+            },
+            {
+              groupId: 'reply',
+              headerName: 'หนังสือออก',
+              headerAlign: 'center',
+              children: [{ field: 'replyNo' }, { field: 'replyDate' }],
+              renderHeaderGroup: () => (
+                <Typography
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 14,
+                  }}
+                >
+                  หนังสือออก
+                </Typography>
+              ),
+            },
+          ]}
           initialState={{
             pagination: {
               pageSize: 50,

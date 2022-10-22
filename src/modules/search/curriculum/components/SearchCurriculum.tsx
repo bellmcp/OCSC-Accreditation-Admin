@@ -580,7 +580,7 @@ export default function SearchCurriculum() {
             >
               ค้นหา
             </Button>
-            <Grid
+            {/* <Grid
               container
               spacing={1}
               direction='row'
@@ -599,7 +599,7 @@ export default function SearchCurriculum() {
                 จำกัดผลการค้นหาแค่ 50 รายการแรกเท่านั้น
                 โปรดใช้คำค้นหาที่เฉพาะเจาะจง
               </Typography>
-            </Grid>
+            </Grid> */}
           </Box>
         </form>
       </Container>

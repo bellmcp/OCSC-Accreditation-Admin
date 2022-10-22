@@ -107,18 +107,27 @@ function searchCurriculums({
   isLetter,
 }: any) {
   return async (dispatch: any) => {
+    const token = getCookie('token')
     dispatch({ type: SEARCH_CURRICULUMS_REQUEST })
     try {
-      var { data } = await axios.post('/curriculums/search', {
-        isGov,
-        isPrivate,
-        level,
-        university,
-        faculty,
-        degree,
-        branch,
-        isLetter,
-      })
+      var { data } = await axios.post(
+        '/curriculums/search2',
+        {
+          isGov,
+          isPrivate,
+          level,
+          university,
+          faculty,
+          degree,
+          branch,
+          isLetter,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       if (data.length === 0) {
         data = []
         dispatch(

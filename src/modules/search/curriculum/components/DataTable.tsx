@@ -419,6 +419,7 @@ export default function DataTable({ data, loading }: DataTableProps) {
               pageSize: 50,
             },
           }}
+          rowsPerPageOptions={[25, 50, 100, 250, 500, 1000]}
           loading={loading}
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
@@ -426,7 +427,6 @@ export default function DataTable({ data, loading }: DataTableProps) {
           rows={data}
           columns={columns}
           disableSelectionOnClick
-          hideFooter
           components={{ Toolbar: CustomToolbar }}
           localeText={{
             // Root
