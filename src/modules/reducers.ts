@@ -8,6 +8,7 @@ import searchReducer from 'modules/search/reducer'
 import personLetterReducer from 'modules/personLetter/reducer'
 import infoReducer from 'modules/info/reducer'
 import passwordReducer from 'modules/edit/password/reducer'
+import curriculumReducer from 'modules/curriculum/reducer'
 
 export default (history: any) =>
   combineReducers({
@@ -19,4 +20,5 @@ export default (history: any) =>
     info: infoReducer,
     personLetter: personLetterReducer,
     password: passwordReducer,
+    curriculum: curriculumReducer,
   })
