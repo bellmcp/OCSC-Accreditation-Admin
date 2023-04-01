@@ -16,6 +16,8 @@ import NavBar from './NavBar'
 import Routes from './Routes'
 import Footer from './Footer'
 
+import { navigationItems } from '../navigation'
+
 export default function Layout() {
   const { pathname } = useLocation()
   const PATH = process.env.REACT_APP_BASE_PATH
@@ -26,35 +28,14 @@ export default function Layout() {
   const closeFlashMessage = () => dispatch(actions.clearFlashMessage())
 
   useEffect(() => {
-    const setInitialActivePage = () => {
-      switch (pathname) {
-        case `${PATH}`:
-          setActivePage(0)
-          break
-        case `${PATH}/search/person-letter`:
-          setActivePage(1)
-          break
-        case `${PATH}/search/curriculum`:
-          setActivePage(2)
-          break
-        case `${PATH}/info/country`:
-          setActivePage(3)
-          break
-        case `${PATH}/info/salary-group`:
-          setActivePage(4)
-          break
-        case `${PATH}/info/education-level`:
-          setActivePage(5)
-          break
-        case `${PATH}/info/university`:
-          setActivePage(6)
-          break
-        default:
-          setActivePage(99)
-          break
+    const currentNavigationItem = navigationItems.find(
+      (navigationItem: any) => {
+        return navigationItem.url === pathname
       }
-    }
-    setInitialActivePage()
+    )
+    currentNavigationItem
+      ? setActivePage(currentNavigationItem.id)
+      : setActivePage(999)
   }, [pathname]) //eslint-disable-line
 
   const [activePage, setActivePage] = useState(0)
@@ -133,7 +114,7 @@ export default function Layout() {
         }}
       />
       {!isPreviewPage && (
-        <NavBar active={activePage} setActivePage={setActivePage} />
+        <NavBar activePage={activePage} setActivePage={setActivePage} />
       )}
       <Routes />
       <Snackbar

@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React, { useState } from 'react'
-import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { getCookie, eraseCookie } from 'utils/cookies'
@@ -20,7 +19,6 @@ import {
   IconButton,
   Hidden,
   Container,
-  MenuItem,
   Avatar,
   Button,
 } from '@material-ui/core'
@@ -29,23 +27,25 @@ import {
   KeyboardArrowDown as ArrowDownIcon,
 } from '@material-ui/icons'
 import { grey } from '@material-ui/core/colors'
+
 import { NavMenu, NavItem } from '@mui-treasury/components/menu/navigation'
 import { useLineNavigationMenuStyles } from '@mui-treasury/styles/navigationMenu/line'
-
-import {
-  usePopupState,
-  bindHover,
-  bindMenu,
-} from 'material-ui-popup-state/hooks'
-import HoverMenu from 'material-ui-popup-state/HoverMenu'
-
+import { usePopupState } from 'material-ui-popup-state/hooks'
+import NavDrawer from './NavDrawer'
+import PopUpMenu from './PopUpMenu'
+import PopUpMenuDropdown from './PopUpMenuDropdown'
 import NavDropdownMobile from './NavDropdownMobile'
 import NavDropdownDesktop from './NavDropdownDesktop'
 
 import * as uiActions from 'modules/ui/actions'
 import { isLoginAsAdmin, isLoginAsUser } from 'utils/isLogin'
-
-import NavDrawer from './NavDrawer'
+import {
+  mainItems,
+  searchItems,
+  menuItems,
+  curriculumItems,
+  infoItems,
+} from '../navigation'
 
 const darkTheme = createMuiTheme({
   palette: {
@@ -203,11 +203,14 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface NavigationBarProps {
-  active: number
+  activePage: number
   setActivePage: (id: number) => void
 }
 
-export default function NavBar(props: NavigationBarProps) {
+export default function NavBar({
+  activePage,
+  setActivePage,
+}: NavigationBarProps) {
   const classes = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
@@ -255,27 +258,6 @@ export default function NavBar(props: NavigationBarProps) {
     setMobileMoreAnchorEl(null)
   }
 
-  const navigationItem = [
-    {
-      id: 0,
-      title: 'หนังสือเข้า',
-      url: `${PATH}`,
-      notification: 0,
-    },
-    {
-      id: 1,
-      title: 'ค้นหาการรับรองคุณวุฒิบุคคล',
-      url: `${PATH}/search/person-letter`,
-      notification: 0,
-    },
-    {
-      id: 2,
-      title: 'ค้นหาการรับรองคุณวุฒิหลักสูตร',
-      url: `${PATH}/search/curriculum`,
-      notification: 0,
-    },
-  ]
-
   const isUserCurrentlyInLearn = false
 
   const linkToChangePassword = () => {
@@ -292,14 +274,21 @@ export default function NavBar(props: NavigationBarProps) {
     setMobileOpen(!mobileOpen)
   }
 
-  const popupState = usePopupState({
+  const infoPopUpState = usePopupState({
     variant: 'popover',
-    popupId: 'demoMenu',
+    popupId: 'infoPopUp',
   })
-
-  const popupState2 = usePopupState({
+  const curriculumPopUpState = usePopupState({
     variant: 'popover',
-    popupId: 'demoMenu2',
+    popupId: 'curriculumPopUp',
+  })
+  const searchPopUpState = usePopupState({
+    variant: 'popover',
+    popupId: 'searchPopUp',
+  })
+  const menuPopUpState = usePopupState({
+    variant: 'popover',
+    popupId: 'menuPopUp',
   })
 
   const handleMenuClose = () => {
@@ -345,6 +334,7 @@ export default function NavBar(props: NavigationBarProps) {
               style={{ filter: 'saturate(1.3)' }}
             />
             <div className={classes.grow} />
+
             {/* FULL DESKTOP NAVIGATION */}
             <Hidden mdDown implementation='css'>
               <ThemeProvider theme={darkTheme}>
@@ -353,32 +343,38 @@ export default function NavBar(props: NavigationBarProps) {
                   color='inherit'
                   className={classes.navMenu}
                 >
-                  {navigationItem.map((item) => (
+                  {mainItems.map((item) => (
                     <NavItem
-                      active={props.active === item.id}
+                      active={activePage === item.id}
                       className={
-                        props.active === item.id
+                        activePage === item.id
                           ? classes.navItemActive
                           : classes.navItem
                       }
                       onClick={() => {
-                        history.push(`${item.url}`)
-                        props.setActivePage(item.id)
+                        history.push(item.url)
+                        setActivePage(item.id)
                       }}
                     >
                       <Typography noWrap>{item.title}</Typography>
                     </NavItem>
                   ))}
-                  <NavItem
-                    className={classes.navItem}
-                    {...bindHover(popupState)}
-                  >
-                    <Typography noWrap>ข้อมูลพื้นฐาน</Typography>
-                    <ArrowDownIcon style={{ marginLeft: 8 }} />
-                  </NavItem>
+                  <PopUpMenu
+                    title='ค้นหาการรับรอง'
+                    popUpState={searchPopUpState}
+                  />
+                  <PopUpMenu
+                    title='หนังสือเวียน'
+                    popUpState={curriculumPopUpState}
+                  />
+                  <PopUpMenu
+                    title='ข้อมูลพื้นฐาน'
+                    popUpState={infoPopUpState}
+                  />
                 </NavMenu>
               </ThemeProvider>
             </Hidden>
+
             {/* MEDIUM DESKTOP NAVIGATION */}
             <Hidden xsDown lgUp implementation='css'>
               <ThemeProvider theme={darkTheme}>
@@ -386,24 +382,20 @@ export default function NavBar(props: NavigationBarProps) {
                   useStyles={useLineNavigationMenuStyles}
                   color='inherit'
                 >
-                  <NavItem
-                    className={classes.navItem}
-                    {...bindHover(popupState2)}
-                  >
-                    <Typography noWrap>เมนู</Typography>
-                    <ArrowDownIcon style={{ marginLeft: 8 }} />
-                  </NavItem>
-                  <NavItem
-                    className={classes.navItem}
-                    {...bindHover(popupState)}
-                  >
-                    <Typography noWrap>ข้อมูลพื้นฐาน</Typography>
-                    <ArrowDownIcon style={{ marginLeft: 8 }} />
-                  </NavItem>
+                  <PopUpMenu title='เมนู' popUpState={menuPopUpState} />
+                  <PopUpMenu
+                    title='หนังสือเวียน'
+                    popUpState={curriculumPopUpState}
+                  />
+                  <PopUpMenu
+                    title='ข้อมูลพื้นฐาน'
+                    popUpState={infoPopUpState}
+                  />
                 </NavMenu>
               </ThemeProvider>
             </Hidden>
-            {/* DESKTOP DROPDOWN */}
+
+            {/* DESKTOP USER DROPDOWN */}
             <div className={classes.sectionDesktop}>
               <Button
                 onClick={handleProfileMenuOpen}
@@ -428,7 +420,8 @@ export default function NavBar(props: NavigationBarProps) {
                 </Typography>
               </Button>
             </div>
-            {/* MOBILE DROPDOWN */}
+
+            {/* MOBILE USER DROPDOWN */}
             <Hidden only={['xs', 'lg', 'md', 'xl']}>
               <div className={classes.grow} />
             </Hidden>
@@ -445,148 +438,38 @@ export default function NavBar(props: NavigationBarProps) {
           </Toolbar>
         </Container>
       </AppBar>
-      <HoverMenu
-        {...bindMenu(popupState)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        PaperProps={{
-          style: {
-            marginTop: '36px',
-            borderRadius: 8,
-            boxShadow: 'rgb(0 0 0 / 15%) 0px 0px 10px',
-          },
-        }}
-      >
-        <MenuItem
-          selected={props.active === 3}
-          onClick={() => {
-            history.push(`${PATH}/info/country`)
-            popupState.close()
-            props.setActivePage(3)
-          }}
-          className={clsx({
-            [classes.dropdownMenu]: true,
-            [classes.selected]: props.active === 3,
-          })}
-        >
-          ประเทศ
-        </MenuItem>
-        <MenuItem
-          selected={props.active === 4}
-          onClick={() => {
-            history.push(`${PATH}/info/salary-group`)
-            popupState.close()
-            props.setActivePage(4)
-          }}
-          className={clsx({
-            [classes.dropdownMenu]: true,
-            [classes.selected]: props.active === 4,
-          })}
-        >
-          กลุ่มเงินเดือน
-        </MenuItem>
-        <MenuItem
-          selected={props.active === 5}
-          onClick={() => {
-            history.push(`${PATH}/info/education-level`)
-            popupState.close()
-            props.setActivePage(5)
-          }}
-          className={clsx({
-            [classes.dropdownMenu]: true,
-            [classes.selected]: props.active === 5,
-          })}
-        >
-          ระดับการศึกษา
-        </MenuItem>
-        <MenuItem
-          selected={props.active === 6}
-          onClick={() => {
-            history.push(`${PATH}/info/university`)
-            popupState.close()
-            props.setActivePage(6)
-          }}
-          className={clsx({
-            [classes.dropdownMenu]: true,
-            [classes.selected]: props.active === 6,
-          })}
-        >
-          มหาวิทยาลัย
-        </MenuItem>
-      </HoverMenu>
+
       <Hidden lgUp implementation='css'>
-        <HoverMenu
-          {...bindMenu(popupState2)}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          PaperProps={{
-            style: {
-              marginTop: '36px',
-              borderRadius: 8,
-              boxShadow: 'rgb(0 0 0 / 15%) 0px 0px 10px',
-            },
-          }}
-        >
-          <MenuItem
-            selected={props.active === 0}
-            onClick={() => {
-              popupState2.close()
-              history.push(`${PATH}`)
-              props.setActivePage(0)
-            }}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-              [classes.selected]: props.active === 0,
-            })}
-          >
-            หนังสือเข้า
-          </MenuItem>
-          <MenuItem
-            selected={props.active === 1}
-            onClick={() => {
-              popupState2.close()
-              history.push(`${PATH}/search/person-letter`)
-              props.setActivePage(1)
-            }}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-              [classes.selected]: props.active === 1,
-            })}
-          >
-            คุณวุฒิบุคคล
-          </MenuItem>
-          <MenuItem
-            selected={props.active === 2}
-            onClick={() => {
-              popupState2.close()
-              history.push(`${PATH}/search/curriculum`)
-              props.setActivePage(2)
-            }}
-            className={clsx({
-              [classes.dropdownMenu]: true,
-              [classes.selected]: props.active === 2,
-            })}
-          >
-            คุณวุฒิหลักสูตร
-          </MenuItem>
-        </HoverMenu>
+        <PopUpMenuDropdown
+          popUpState={menuPopUpState}
+          menuItems={menuItems}
+          activePage={activePage}
+          setActivePage={setActivePage}
+        />
       </Hidden>
+      <PopUpMenuDropdown
+        popUpState={searchPopUpState}
+        menuItems={searchItems}
+        activePage={activePage}
+        setActivePage={setActivePage}
+      />
+      <PopUpMenuDropdown
+        popUpState={curriculumPopUpState}
+        menuItems={curriculumItems}
+        activePage={activePage}
+        setActivePage={setActivePage}
+      />
+      <PopUpMenuDropdown
+        popUpState={infoPopUpState}
+        menuItems={infoItems}
+        activePage={activePage}
+        setActivePage={setActivePage}
+      />
+
       <NavDrawer
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
-        active={props.active}
+        active={activePage}
         unreadNotificationCount={0}
         isUserCurrentlyInLearn={isUserCurrentlyInLearn}
       />

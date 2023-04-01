@@ -18,11 +18,12 @@ import {
   ListItem,
   ListItemText,
   IconButton,
+  Typography,
 } from '@material-ui/core'
 import { CloseRounded as CloseIcon } from '@material-ui/icons'
+import { navigationItems } from '../navigation'
 
 const DRAWER_WIDTH = '80%'
-const PATH = process.env.REACT_APP_BASE_PATH
 
 interface NavigationDrawerProps {
   window?: () => Window
@@ -101,52 +102,12 @@ export default function NavDrawer({
   handleDrawerToggle,
   mobileOpen,
   active,
-  unreadNotificationCount,
-  isUserCurrentlyInLearn,
 }: NavigationDrawerProps) {
   const classes = useStyles()
   const theme = useTheme()
   const history = useHistory()
   const container =
     window !== undefined ? () => window().document.body : undefined
-
-  const navigationItems = [
-    {
-      id: 0,
-      title: 'หนังสือเข้า',
-      url: `${PATH}`,
-    },
-    {
-      id: 1,
-      title: 'ค้นหาการรับรองคุณวุฒิบุคคล',
-      url: `${PATH}/search/person-letter`,
-    },
-    {
-      id: 2,
-      title: 'ค้นหาการรับรองคุณวุฒิหลักสูตร',
-      url: `${PATH}/search/curriculum`,
-    },
-    {
-      id: 3,
-      title: 'ข้อมูลพื้นฐาน : ประเทศ',
-      url: `${PATH}/info/country`,
-    },
-    {
-      id: 4,
-      title: 'ข้อมูลพื้นฐาน : กลุ่มเงินเดือน',
-      url: `${PATH}/info/salary-group`,
-    },
-    {
-      id: 5,
-      title: 'ข้อมูลพื้นฐาน : ระดับการศึกษา',
-      url: `${PATH}/info/education-level`,
-    },
-    {
-      id: 6,
-      title: 'ข้อมูลพื้นฐาน : มหาวิทยาลัย',
-      url: `${PATH}/info/university`,
-    },
-  ]
 
   function MobileDrawer() {
     return (
@@ -167,6 +128,14 @@ export default function NavDrawer({
         <List>
           {navigationItems.map((navigationItem, index) => (
             <React.Fragment>
+              {navigationItem.sectionTitle && (
+                <Typography
+                  variant='subtitle1'
+                  style={{ fontWeight: 600, padding: '28px 0 10px 25px' }}
+                >
+                  {navigationItem.sectionTitle}
+                </Typography>
+              )}
               {navigationItem.id === 0 ? <Divider /> : null}
               <MenuItem
                 button
