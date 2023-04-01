@@ -223,6 +223,50 @@ function unlockRequest() {
   }
 }
 
+function loadWaitCurriculum(
+  isGov: number = 0,
+  university: string = '',
+  faculty: string = ''
+) {
+  const token = getCookie('token')
+  return async (dispatch: any) => {
+    dispatch({ type: LOAD_WAIT_CURRICULUM_REQUEST })
+    try {
+      var { data } = await axios.get(
+        `/WaitCurriculums?isGov=${isGov}&university=${encodeURIComponent(
+          university
+        )}&faculty=${encodeURIComponent(faculty)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      if (data.length === 0) {
+        data = []
+      }
+      dispatch({
+        type: LOAD_WAIT_CURRICULUM_SUCCESS,
+        payload: {
+          waitCurriculums: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_WAIT_CURRICULUM_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดข้อมูลหลักสูตรที่รอรับรองไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -233,6 +277,9 @@ export {
   LOAD_LOCK_STATUS_REQUEST,
   LOAD_LOCK_STATUS_SUCCESS,
   LOAD_LOCK_STATUS_FAILURE,
+  LOAD_WAIT_CURRICULUM_REQUEST,
+  LOAD_WAIT_CURRICULUM_SUCCESS,
+  LOAD_WAIT_CURRICULUM_FAILURE,
   LOCK_REQUEST,
   LOCK_SUCCESS,
   LOCK_FAILURE,
@@ -244,4 +291,5 @@ export {
   loadLockStatus,
   lockRequest,
   unlockRequest,
+  loadWaitCurriculum,
 }
