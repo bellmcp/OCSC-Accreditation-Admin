@@ -1,6 +1,5 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { get } from 'lodash'
-import { useDispatch } from 'react-redux'
 
 import {
   DataGrid,
@@ -8,37 +7,23 @@ import {
   bgBG,
   GridRenderCellParams,
   gridClasses,
-  GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  GridToolbarExport,
-  GridToolbarDensitySelector,
-  useGridApiContext,
-  GridRenderEditCellParams,
-  GridRowEditStartParams,
-  MuiEvent,
+  GridSelectionModel,
 } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
 import InputBase from '@mui/material/InputBase'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
-import Stack from '@mui/material/Stack'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
-import { FindInPage as FillIcon } from '@material-ui/icons'
-import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 
-import * as uiActions from 'modules/ui/actions'
-import * as curriculumActions from 'modules/curriculum/actions'
+import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 
 const ODD_OPACITY = 0.07
 
 interface DataTableProps {
   data: any
   loading: boolean
-  openModal: () => void
+  selectionModel: any
+  setSelectionModel: any
 }
 
 interface GridAccreditationCellExpandProps {
@@ -316,180 +301,105 @@ function renderAccreditationCellExpand(params: GridRenderCellParams<string>) {
   )
 }
 
-export default function DataTable({
+const columns: GridColDef[] = [
+  {
+    field: 'order',
+    headerName: 'ลำดับ',
+    width: 80,
+    align: 'center',
+    headerAlign: 'center',
+  },
+  {
+    field: 'university',
+    headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
+    width: 220,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'degree',
+    headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
+    width: 220,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'branch',
+    headerName: 'สาขา/วิชาเอก',
+    width: 220,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'category',
+    headerName: 'รัฐ/เอกชน',
+    width: 100,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'level',
+    headerName: 'ระดับการศึกษา',
+    width: 120,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'faculty',
+    headerName: 'คณะ/หน่วยงาน',
+    width: 200,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'accreditation1',
+    headerName: 'ผลการรับรอง',
+    width: 375,
+    renderCell: renderAccreditationCellExpand,
+  },
+  {
+    field: 'note',
+    headerName: 'หมายเหตุ',
+    width: 300,
+    renderCell: renderCellExpand,
+  },
+  {
+    field: 'letterNo',
+    headerName: 'เลขที่หนังสือเวียน',
+    width: 150,
+    renderCell: renderCellExpand,
+  },
+  { field: 'letterDate', headerName: 'ลงวันที่', width: 120 },
+  {
+    field: 'score',
+    headerName: 'คะแนน',
+    width: 120,
+    align: 'center',
+    headerAlign: 'center',
+  },
+]
+
+export default function RecommendationTable({
   data,
   loading,
-  openModal,
+  selectionModel,
+  setSelectionModel,
 }: DataTableProps) {
-  const dispatch = useDispatch()
-
-  function CustomToolbar() {
-    return (
-      <GridToolbarContainer
-        sx={{
-          paddingLeft: '6px',
-        }}
-      >
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
-          {/* <Divider orientation='vertical' light flexItem />
-          <GridToolbarExport
-            printOptions={{ disableToolbarButton: true }}
-            csvOptions={{
-              delimiter: ',',
-              utf8WithBom: true,
-              fileName: 'การรับรองคุณวุฒิหลักสูตร',
-            }}
-            sx={{ lineHeight: '1.2' }}
-          /> */}
-        </Stack>
-      </GridToolbarContainer>
-    )
-  }
-
-  const renderAccreditationEditCell = (params: GridRenderEditCellParams) => {
-    return <AccreditationEditInputCell {...params} />
-  }
-
-  function AccreditationEditInputCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-    const rowData = apiRef.current.getRow(id)
-
-    const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value
-      apiRef.current.setEditCellValue({ id, field, value: newValue })
-    }
-
-    return (
-      <Stack
-        direction='row'
-        alignItems='center'
-        justifyContent='space-between'
-        spacing={1}
-        sx={{ width: '100%', padding: '0 16px' }}
-      >
-        <StyledInputBase
-          value={value}
-          onChange={handleValueChange}
-          size='small'
-          fullWidth
-        />
-        <Tooltip title='ขอคำแนะนำ'>
-          <IconButton
-            color='primary'
-            onClick={() => handleClickRecommendation(rowData)}
-          >
-            <FillIcon />
-          </IconButton>
-        </Tooltip>
-      </Stack>
-    )
-  }
-
-  const columns: GridColDef[] = [
-    {
-      field: 'order',
-      headerName: 'ลำดับ',
-      width: 80,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'isDeleted',
-      headerName: 'ลบ/ไม่ลบ',
-      width: 90,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params) => {
-        const deleted = get(params, 'value', false)
-        return deleted ? 'ลบ' : 'ไม่ลบ'
-      },
-    },
-    {
-      field: 'university',
-      headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
-      width: 220,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'degree',
-      headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
-      width: 220,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'branch',
-      headerName: 'สาขา/วิชาเอก',
-      width: 220,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'category',
-      headerName: 'รัฐ/เอกชน',
-      width: 100,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'level',
-      headerName: 'ระดับการศึกษา',
-      width: 120,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'faculty',
-      headerName: 'คณะ/หน่วยงาน',
-      width: 200,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'accreditation',
-      headerName: 'ผลการรับรอง',
-      width: 375,
-      renderCell: renderAccreditationCellExpand,
-      renderEditCell: renderAccreditationEditCell,
-      editable: true,
-    },
-    {
-      field: 'note',
-      headerName: 'หมายเหตุ',
-      width: 300,
-      renderCell: renderCellExpand,
-      editable: true,
-    },
-    {
-      field: 'id',
-      headerName: 'เลขที่อ้างอิง',
-      width: 120,
-      align: 'center',
-      headerAlign: 'center',
-    },
-  ]
-
-  const handleClickRecommendation = (rowData: any) => {
-    const { university = '', faculty = '', degree = '', branch = '' } = rowData
-    dispatch(
-      curriculumActions.loadRecommendation(university, faculty, degree, branch)
-    )
-    openModal()
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
+          checkboxSelection
+          onSelectionModelChange={(newSelectionModel: any) => {
+            const old = selectionModel
+            const current = newSelectionModel
+            const res = current.filter((item: number) => !old.includes(item))
+
+            console.log('res :>> ', res)
+            setSelectionModel(res)
+          }}
+          selectionModel={selectionModel}
           autoHeight
-          editMode='row'
+          sx={{
+            '& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer':
+              {
+                display: 'none',
+              },
+          }}
           initialState={{
             pagination: {
               pageSize: 50,
@@ -502,14 +412,6 @@ export default function DataTable({
           }
           rows={data}
           columns={columns}
-          disableSelectionOnClick
-          components={{ Toolbar: CustomToolbar }}
-          // onRowEditStart={(params: GridRowEditStartParams, event: MuiEvent) => {
-          //   dispatch(uiActions.setFlashMessage('เข้าสู่โหมดการแก้ไข', 'info'))
-          // }}
-          // onRowEditStop={() => {
-          //   dispatch(uiActions.setFlashMessage('บันทึกข้อมูลสำเร็จ', 'success'))
-          // }}
           localeText={{
             // Root
             noRowsLabel: 'ไม่มีข้อมูล',

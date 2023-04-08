@@ -4,37 +4,43 @@ import * as uiActions from 'modules/ui/actions'
 import { getCookie } from 'utils/cookies'
 
 const LOAD_PROGRESS_GOVERNMENT_REQUEST =
-  'ocsc-person-accredit/curriclum/progress/LOAD_PROGRESS_GOVERNMENT_REQUEST'
+  'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_GOVERNMENT_REQUEST'
 const LOAD_PROGRESS_GOVERNMENT_SUCCESS =
-  'ocsc-person-accredit/curriclum/progress/LOAD_PROGRESS_GOVERNMENT_SUCCESS'
+  'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_GOVERNMENT_SUCCESS'
 const LOAD_PROGRESS_GOVERNMENT_FAILURE =
-  'ocsc-person-accredit/curriclum/progress/LOAD_PROGRESS_GOVERNMENT_FAILURE'
+  'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_GOVERNMENT_FAILURE'
 const LOAD_PROGRESS_INDIVIDUAL_REQUEST =
-  'ocsc-person-accredit/curriclum/progress/LOAD_PROGRESS_INDIVIDUAL_REQUEST'
+  'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_INDIVIDUAL_REQUEST'
 const LOAD_PROGRESS_INDIVIDUAL_SUCCESS =
-  'ocsc-person-accredit/curriclum/progress/LOAD_PROGRESS_INDIVIDUAL_SUCCESS'
+  'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_INDIVIDUAL_SUCCESS'
 const LOAD_PROGRESS_INDIVIDUAL_FAILURE =
-  'ocsc-person-accredit/curriclum/progress/LOAD_PROGRESS_INDIVIDUAL_FAILURE'
+  'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_INDIVIDUAL_FAILURE'
 
 const LOAD_LOCK_STATUS_REQUEST =
-  'ocsc-person-accredit/curriclum/approve/LOAD_LOCK_STATUS_REQUEST'
+  'ocsc-person-accredit/curriculum/approve/LOAD_LOCK_STATUS_REQUEST'
 const LOAD_LOCK_STATUS_SUCCESS =
-  'ocsc-person-accredit/curriclum/approve/LOAD_LOCK_STATUS_SUCCESS'
+  'ocsc-person-accredit/curriculum/approve/LOAD_LOCK_STATUS_SUCCESS'
 const LOAD_LOCK_STATUS_FAILURE =
-  'ocsc-person-accredit/curriclum/approve/LOAD_LOCK_STATUS_FAILURE'
-const LOCK_REQUEST = 'ocsc-person-accredit/curriclum/approve/LOCK_REQUEST'
-const LOCK_SUCCESS = 'ocsc-person-accredit/curriclum/approve/LOCK_SUCCESS'
-const LOCK_FAILURE = 'ocsc-person-accredit/curriclum/approve/LOCK_FAILURE'
-const UNLOCK_REQUEST = 'ocsc-person-accredit/curriclum/approve/UNLOCK_REQUEST'
-const UNLOCK_SUCCESS = 'ocsc-person-accredit/curriclum/approve/UNLOCK_SUCCESS'
-const UNLOCK_FAILURE = 'ocsc-person-accredit/curriclum/approve/UNLOCK_FAILURE'
+  'ocsc-person-accredit/curriculum/approve/LOAD_LOCK_STATUS_FAILURE'
+const LOCK_REQUEST = 'ocsc-person-accredit/curriculum/approve/LOCK_REQUEST'
+const LOCK_SUCCESS = 'ocsc-person-accredit/curriculum/approve/LOCK_SUCCESS'
+const LOCK_FAILURE = 'ocsc-person-accredit/curriculum/approve/LOCK_FAILURE'
+const UNLOCK_REQUEST = 'ocsc-person-accredit/curriculum/approve/UNLOCK_REQUEST'
+const UNLOCK_SUCCESS = 'ocsc-person-accredit/curriculum/approve/UNLOCK_SUCCESS'
+const UNLOCK_FAILURE = 'ocsc-person-accredit/curriculum/approve/UNLOCK_FAILURE'
 
 const LOAD_WAIT_CURRICULUM_REQUEST =
-  'ocsc-person-accredit/curriclum/approve/LOAD_WAIT_CURRICULUM_REQUEST'
+  'ocsc-person-accredit/curriculum/approve/LOAD_WAIT_CURRICULUM_REQUEST'
 const LOAD_WAIT_CURRICULUM_SUCCESS =
-  'ocsc-person-accredit/curriclum/approve/LOAD_WAIT_CURRICULUM_SUCCESS'
+  'ocsc-person-accredit/curriculum/approve/LOAD_WAIT_CURRICULUM_SUCCESS'
 const LOAD_WAIT_CURRICULUM_FAILURE =
-  'ocsc-person-accredit/curriclum/approve/LOAD_WAIT_CURRICULUM_FAILURE'
+  'ocsc-person-accredit/curriculum/approve/LOAD_WAIT_CURRICULUM_FAILURE'
+const LOAD_RECOMMENDATION_REQUEST =
+  'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_REQUEST'
+const LOAD_RECOMMENDATION_SUCCESS =
+  'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_SUCCESS'
+const LOAD_RECOMMENDATION_FAILURE =
+  'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_FAILURE'
 
 function loadProgressGovernment() {
   const token = getCookie('token')
@@ -267,6 +273,53 @@ function loadWaitCurriculum(
   }
 }
 
+function loadRecommendation(
+  university: string = '',
+  faculty: string = '',
+  degree: string = '',
+  branch: string = ''
+) {
+  const token = getCookie('token')
+  return async (dispatch: any) => {
+    dispatch({ type: LOAD_RECOMMENDATION_REQUEST })
+    try {
+      var { data } = await axios.get(
+        `/recommendation1?university=${encodeURIComponent(
+          university
+        )}&faculty=${encodeURIComponent(faculty)}&degree=${encodeURIComponent(
+          degree
+        )}&branch=${encodeURIComponent(branch)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      if (data.length === 0) {
+        data = []
+      }
+      dispatch({
+        type: LOAD_RECOMMENDATION_SUCCESS,
+        payload: {
+          recommendations: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_RECOMMENDATION_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดคำแนะนำไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -280,6 +333,9 @@ export {
   LOAD_WAIT_CURRICULUM_REQUEST,
   LOAD_WAIT_CURRICULUM_SUCCESS,
   LOAD_WAIT_CURRICULUM_FAILURE,
+  LOAD_RECOMMENDATION_REQUEST,
+  LOAD_RECOMMENDATION_SUCCESS,
+  LOAD_RECOMMENDATION_FAILURE,
   LOCK_REQUEST,
   LOCK_SUCCESS,
   LOCK_FAILURE,
@@ -292,4 +348,5 @@ export {
   lockRequest,
   unlockRequest,
   loadWaitCurriculum,
+  loadRecommendation,
 }

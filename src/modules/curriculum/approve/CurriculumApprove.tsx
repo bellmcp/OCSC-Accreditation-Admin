@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -38,6 +38,7 @@ import {
 import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
 import DataTable from './DataTable'
+import RecommendationModal from './RecommendationModal'
 
 import * as curriculumActions from 'modules/curriculum/actions'
 
@@ -67,6 +68,15 @@ export default function CurriculumApprove() {
 
   const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
   const [searchResults, setSearchResults] = useState([])
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [selectionModel, setSelectionModel] = useState<any>([])
+
+  const openModal = () => {
+    setIsOpenModal(true)
+  }
+  const closeModal = () => {
+    setIsOpenModal(false)
+  }
 
   const {
     isLocked = false,
@@ -171,6 +181,14 @@ export default function CurriculumApprove() {
                   </Hidden>
                 </Stack>
               </Grid>
+              <Typography
+                variant='body2'
+                color='primary'
+                style={{ fontWeight: 500, paddingBottom: 24 }}
+              >
+                <b>*</b> คลิกสองครั้งที่เซลล์เพื่อแก้ไขข้อมูล และกดปุ่ม 'บันทึก'
+                ที่คอลัมน์ขวาสุดของแถว
+              </Typography>
             </Container>
             <Paper
               elevation={0}
@@ -182,7 +200,11 @@ export default function CurriculumApprove() {
                 minHeight: 300,
               }}
             >
-              <DataTable data={searchResults} loading={isSearching} />
+              <DataTable
+                data={searchResults}
+                loading={isSearching}
+                openModal={openModal}
+              />
             </Paper>
           </Box>
         )
@@ -196,7 +218,7 @@ export default function CurriculumApprove() {
       <Container maxWidth='lg' className={classes.content}>
         <form onSubmit={formik.handleSubmit}>
           <Box mt={2} mb={4}>
-            <Grid container direction='column'>
+            <Grid container justify='space-between'>
               <Typography
                 gutterBottom
                 component='h2'
@@ -207,38 +229,42 @@ export default function CurriculumApprove() {
               >
                 หนังสือเวียน : รับรองหลักสูตรใหม่
               </Typography>
+              <Stack
+                spacing={2}
+                direction='column'
+                alignItems='flex-end'
+                style={{ marginBottom: 24 }}
+              >
+                <ButtonGroup>
+                  <Button
+                    variant={!isLocked ? 'contained' : 'outlined'}
+                    color='secondary'
+                    startIcon={<LockIcon />}
+                    onClick={lock}
+                  >
+                    ล็อค
+                  </Button>
+                  <Button
+                    variant={isLocked ? 'contained' : 'outlined'}
+                    color='secondary'
+                    startIcon={<UnlockIcon />}
+                    onClick={unlock}
+                    disabled={!isLocked}
+                  >
+                    ปลดล็อค
+                  </Button>
+                </ButtonGroup>
+                {lockMessage && (
+                  <Typography
+                    variant='body2'
+                    color='error'
+                    style={{ fontWeight: 500 }}
+                  >
+                    {lockMessage}
+                  </Typography>
+                )}
+              </Stack>
             </Grid>
-            <Stack
-              spacing={2}
-              direction='row'
-              alignItems='center'
-              style={{ marginBottom: 24 }}
-            >
-              <ButtonGroup>
-                <Button
-                  variant={!isLocked ? 'contained' : 'outlined'}
-                  color='secondary'
-                  startIcon={<LockIcon />}
-                  onClick={lock}
-                >
-                  ล็อค
-                </Button>
-                <Button
-                  variant={isLocked ? 'contained' : 'outlined'}
-                  color='secondary'
-                  startIcon={<UnlockIcon />}
-                  onClick={unlock}
-                  disabled={!isLocked}
-                >
-                  ปลดล็อค
-                </Button>
-              </ButtonGroup>
-              {lockMessage && (
-                <Typography variant='body2' color='error'>
-                  {lockMessage}
-                </Typography>
-              )}
-            </Stack>
             <Paper
               elevation={0}
               style={{
@@ -345,6 +371,12 @@ export default function CurriculumApprove() {
       <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
         {renderSearchResult()}
       </Container>
+      <RecommendationModal
+        isOpen={isOpenModal}
+        onClose={closeModal}
+        selectionModel={selectionModel}
+        setSelectionModel={setSelectionModel}
+      />
     </>
   )
 }

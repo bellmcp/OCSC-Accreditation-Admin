@@ -11,16 +11,21 @@ import {
   LOAD_WAIT_CURRICULUM_REQUEST,
   LOAD_WAIT_CURRICULUM_SUCCESS,
   LOAD_WAIT_CURRICULUM_FAILURE,
+  LOAD_RECOMMENDATION_REQUEST,
+  LOAD_RECOMMENDATION_SUCCESS,
+  LOAD_RECOMMENDATION_FAILURE,
 } from './actions'
 
 const initialState = {
   isLoading: false,
   isSearching: false,
+  isRecommending: false,
   progressGovernment: [],
   progressIndividual: [],
   isLocked: false,
   lockMessage: '',
   waitCurriculums: [],
+  recommendations: [],
 }
 
 export default function (state = initialState, action: any) {
@@ -33,6 +38,8 @@ export default function (state = initialState, action: any) {
       return { ...state, isLoading: true, isLocked: false, lockMessage: '' }
     case LOAD_WAIT_CURRICULUM_REQUEST:
       return { ...state, isSearching: true, waitCurriculums: [] }
+    case LOAD_RECOMMENDATION_REQUEST:
+      return { ...state, isRecommending: true, recommendations: [] }
     case LOAD_PROGRESS_GOVERNMENT_SUCCESS:
       return {
         ...state,
@@ -58,12 +65,20 @@ export default function (state = initialState, action: any) {
         isSearching: false,
         waitCurriculums: action.payload.waitCurriculums,
       }
+    case LOAD_RECOMMENDATION_SUCCESS:
+      return {
+        ...state,
+        isRecommending: false,
+        recommendations: action.payload.recommendations,
+      }
     case LOAD_PROGRESS_GOVERNMENT_FAILURE:
     case LOAD_PROGRESS_INDIVIDUAL_FAILURE:
     case LOAD_LOCK_STATUS_FAILURE:
       return { ...state, isLoading: false }
     case LOAD_WAIT_CURRICULUM_FAILURE:
       return { ...state, isSearching: false }
+    case LOAD_RECOMMENDATION_FAILURE:
+      return { ...state, isRecommending: false }
     default:
       return state
   }
