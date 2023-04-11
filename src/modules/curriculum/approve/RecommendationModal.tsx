@@ -48,11 +48,16 @@ export default function RecommendationModal({
     setRecommendationList(parsed)
   }, [initialRecommendations])
 
+  const onCancel = () => {
+    setSelectionModel([])
+    onClose()
+  }
+
   return (
     <div>
       <Dialog
         open={isOpen}
-        onClose={onClose}
+        // onClose={onCancel}
         fullScreen
         TransitionComponent={Transition}
       >
@@ -61,14 +66,14 @@ export default function RecommendationModal({
           color='secondary'
         >
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               edge='start'
               color='inherit'
-              onClick={onClose}
+              onClick={onCancel}
               aria-label='close'
             >
               <CloseIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography
               style={{ marginLeft: 2, flex: 1 }}
               variant='h6'
@@ -94,8 +99,8 @@ export default function RecommendationModal({
             color='primary'
             style={{ fontWeight: 500, paddingTop: 16, paddingBottom: 24 }}
           >
-            <b>*</b> โปรดเลือกข้อมูลที่ต้องการจะเติมค่าลงในช่อง 'ผลการรับรอง'
-            ของตารางก่อนหน้า และกดปุ่ม 'บันทึก'
+            <b>*</b> โปรดเลือกข้อมูล 'ผลการรับรอง' ที่ต้องการจะเติมค่าลงในช่อง
+            'ผลการรับรอง' ของตารางก่อนหน้า และกดปุ่ม 'บันทึก'
           </Typography>
           <RecommendationTable
             data={recommendationList}

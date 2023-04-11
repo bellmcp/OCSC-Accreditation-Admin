@@ -37,9 +37,7 @@ import {
 
 import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
-import DataTable from './DataTable'
 import DataTableEdit from './DataTableEdit'
-import RecommendationModal from './RecommendationModal'
 
 import * as curriculumActions from 'modules/curriculum/actions'
 import * as infoActions from 'modules/info/actions'
@@ -70,21 +68,11 @@ export default function CurriculumApprove() {
 
   const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
   const [searchResults, setSearchResults] = useState([])
-  const [isOpenModal, setIsOpenModal] = useState(false)
-  const [selectionModel, setSelectionModel] = useState<any>([])
   const [educationLevels, setEducationLevels] = useState([])
-
-  const openModal = () => {
-    setIsOpenModal(true)
-  }
-  const closeModal = () => {
-    setIsOpenModal(false)
-  }
 
   const {
     isLocked = false,
     lockMessage,
-    isLoading = false,
     isSearching = false,
     waitCurriculums: initialSearchResults = [],
   } = useSelector((state: any) => state.curriculum)
@@ -202,14 +190,25 @@ export default function CurriculumApprove() {
                   </Hidden>
                 </Stack>
               </Grid>
-              <Typography
-                variant='body2'
-                color='primary'
-                style={{ fontWeight: 500, paddingBottom: 24 }}
-              >
-                <b>*</b> คลิกสองครั้งที่เซลล์เพื่อแก้ไขข้อมูล และกดปุ่ม 'บันทึก'
-                ที่คอลัมน์ขวาสุดของแถว
-              </Typography>
+              {isLocked ? (
+                <Typography
+                  variant='body2'
+                  color='error'
+                  style={{ fontWeight: 500, paddingBottom: 24 }}
+                >
+                  <b>*</b> ไม่สามารถแก้ไขข้อมูลในตารางได้เนื่องจากถูกล็อค
+                  หากต้องการแก้ไขโปรด 'ปลดล็อค'
+                </Typography>
+              ) : (
+                <Typography
+                  variant='body2'
+                  color='primary'
+                  style={{ fontWeight: 500, paddingBottom: 24 }}
+                >
+                  <b>*</b> โปรดคลิกไอคอน 'ดินสอ'
+                  ที่คอลัมน์ขวาสุดของแต่ละแถวเพื่อเริ่มแก้ไขข้อมูล
+                </Typography>
+              )}
             </Container>
             <Paper
               elevation={0}
@@ -221,11 +220,7 @@ export default function CurriculumApprove() {
                 minHeight: 300,
               }}
             >
-              <DataTable
-                data={searchResults}
-                loading={isSearching}
-                openModal={openModal}
-              />
+              <DataTableEdit data={searchResults} isLocked={isLocked} />
             </Paper>
           </Box>
         )
@@ -389,18 +384,9 @@ export default function CurriculumApprove() {
           </Box>
         </form>
       </Container>
-      {/* <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
-        {renderSearchResult()}
-      </Container> */}
       <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
-        <DataTableEdit data={searchResults} />
+        {renderSearchResult()}
       </Container>
-      <RecommendationModal
-        isOpen={isOpenModal}
-        onClose={closeModal}
-        selectionModel={selectionModel}
-        setSelectionModel={setSelectionModel}
-      />
     </>
   )
 }

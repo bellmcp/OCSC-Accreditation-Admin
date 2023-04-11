@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import InputBase from '@mui/material/InputBase'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Paper from '@mui/material/Paper'
+import Popper from '@mui/material/Popper'
 import {
   Save as SaveIcon,
   Edit as EditIcon,
   Cancel as CancelIcon,
-  Add as AddIcon,
+  FindInPage as FillIcon,
 } from '@material-ui/icons'
 import {
-  GridRowsProp,
+  gridClasses,
   GridRowModesModel,
   GridRowModes,
   DataGrid,
@@ -28,8 +34,13 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
+  GridRenderEditCellParams,
+  useGridApiContext,
+  GridRenderCellParams,
 } from '@mui/x-data-grid'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { createTheme, ThemeProvider, styled, alpha } from '@mui/material/styles'
+
+import RecommendationModal from './RecommendationModal'
 
 import * as curriculumActions from 'modules/curriculum/actions'
 
@@ -46,11 +57,36 @@ const theme = createTheme(
   bgBG
 )
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void
+const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+  [`& .${gridClasses.row}.deleted`]: {
+    backgroundColor: alpha(theme.palette.error.main, 0.1),
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.error.main, 0.15),
+      '@media (hover: none)': {
+        backgroundColor: alpha(theme.palette.error.main, 0.15),
+      },
+    },
+  },
+  [`& .${gridClasses.row}.default`]: {
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.secondary.main, 0.07),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
+}))
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  [`& .MuiInputBase-input`]: {
+    padding: 0,
+    fontSize: 14,
+  },
+}))
+
+interface GridCellExpandProps {
+  value: string
+  width: number
 }
 
 interface SubmitData {
@@ -66,7 +102,7 @@ interface SubmitData {
   note: string
 }
 
-export default function DataTableEdit({ data }: any) {
+export default function DataTableEdit({ data, isLocked }: any) {
   const dispatch = useDispatch()
 
   const [rows, setRows] = React.useState(data)
@@ -74,10 +110,20 @@ export default function DataTableEdit({ data }: any) {
     {}
   )
   const [educationLevels, setEducationLevels] = useState([])
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [selectionModel, setSelectionModel] = useState<any>([])
 
   const { educationLevels: initalEducationLevels = [] } = useSelector(
     (state: any) => state.info
   )
+  const { recommendations = [] } = useSelector((state: any) => state.curriculum)
+
+  const openModal = () => {
+    setIsOpenModal(true)
+  }
+  const closeModal = () => {
+    setIsOpenModal(false)
+  }
 
   useEffect(() => {
     setRows(data)
@@ -122,6 +168,7 @@ export default function DataTableEdit({ data }: any) {
     if (editedRow!.isNew) {
       setRows(rows.filter((row: any) => row.id !== id))
     }
+    setSelectionModel([])
   }
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -168,6 +215,172 @@ export default function DataTableEdit({ data }: any) {
     return updatedRow
   }
 
+  function isOverflown(element: Element): boolean {
+    return (
+      element.scrollHeight > element.clientHeight ||
+      element.scrollWidth > element.clientWidth
+    )
+  }
+
+  const GridCellExpand = React.memo(function GridCellExpand(
+    props: GridCellExpandProps
+  ) {
+    const { width, value } = props
+    const wrapper = React.useRef<HTMLDivElement | null>(null)
+    const cellDiv = React.useRef(null)
+    const cellValue = React.useRef(null)
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [showFullCell, setShowFullCell] = React.useState(false)
+    const [showPopper, setShowPopper] = React.useState(false)
+
+    const handleMouseEnter = () => {
+      const isCurrentlyOverflown = isOverflown(cellValue.current!)
+      setShowPopper(isCurrentlyOverflown)
+      setAnchorEl(cellDiv.current)
+      setShowFullCell(true)
+    }
+
+    const handleMouseLeave = () => {
+      setShowFullCell(false)
+    }
+
+    React.useEffect(() => {
+      if (!showFullCell) {
+        return undefined
+      }
+
+      function handleKeyDown(nativeEvent: KeyboardEvent) {
+        // IE11, Edge (prior to using Bink?) use 'Esc'
+        if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+          setShowFullCell(false)
+        }
+      }
+
+      document.addEventListener('keydown', handleKeyDown)
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown)
+      }
+    }, [setShowFullCell, showFullCell])
+
+    return (
+      <Box
+        ref={wrapper}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        sx={{
+          alignItems: 'center',
+          lineHeight: '24px',
+          width: 1,
+          height: 1,
+          position: 'relative',
+          display: 'flex',
+        }}
+      >
+        <Box
+          ref={cellDiv}
+          sx={{
+            height: 1,
+            width,
+            display: 'block',
+            position: 'absolute',
+            top: 0,
+          }}
+        />
+        <Box
+          ref={cellValue}
+          sx={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {value}
+        </Box>
+        {showPopper && (
+          <Popper
+            open={showFullCell && anchorEl !== null}
+            anchorEl={anchorEl}
+            style={{ width, marginLeft: -17 }}
+          >
+            <Paper
+              elevation={1}
+              style={{ minHeight: wrapper.current!.offsetHeight - 3 }}
+            >
+              <Typography variant='body2' style={{ padding: 8 }}>
+                {value}
+              </Typography>
+            </Paper>
+          </Popper>
+        )}
+      </Box>
+    )
+  })
+
+  function renderCellExpand(params: GridRenderCellParams<string>) {
+    return (
+      <GridCellExpand
+        value={params.value || ''}
+        width={params.colDef.computedWidth}
+      />
+    )
+  }
+
+  const renderAccreditationEditCell = (params: GridRenderEditCellParams) => {
+    return <AccreditationEditInputCell {...params} />
+  }
+
+  function AccreditationEditInputCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+    const rowData = apiRef.current.getRow(id)
+
+    const [inputValue, setInputValue] = useState(value)
+
+    useEffect(() => {
+      if (!isEmpty(selectionModel)) {
+        const selected = get(recommendations, `[${selectionModel}]`)
+        const value = get(selected, 'accreditation', '')
+        setInputValue(value)
+      }
+    }, [selectionModel]) //eslint-disable-line
+
+    useEffect(() => {
+      apiRef.current.setEditCellValue({ id, field, value: inputValue })
+    }, [inputValue]) //eslint-disable-line
+
+    const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value
+      setInputValue(newValue)
+    }
+
+    return (
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+        spacing={1}
+        sx={{ width: '100%', padding: '0 16px' }}
+      >
+        <StyledInputBase
+          value={inputValue}
+          onChange={handleValueChange}
+          size='small'
+          fullWidth
+        />
+        <Tooltip title='ขอคำแนะนำ'>
+          <IconButton
+            size='small'
+            color='primary'
+            onClick={() => handleClickRecommendation(rowData)}
+          >
+            <FillIcon />
+          </IconButton>
+        </Tooltip>
+      </Stack>
+    )
+  }
+
   const columns: GridColumns = [
     {
       field: 'order',
@@ -184,9 +397,15 @@ export default function DataTableEdit({ data }: any) {
       headerAlign: 'center',
       renderCell: (params) => {
         const deleted = get(params, 'value', false)
-        return deleted ? 'ลบ' : 'ไม่ลบ'
+        return deleted ? (
+          <Typography variant='body2' color='error'>
+            ลบ
+          </Typography>
+        ) : (
+          'ไม่ลบ'
+        )
       },
-      editable: true,
+      editable: !isLocked,
       type: 'singleSelect',
       valueOptions: [
         { value: true, label: 'ลบ' },
@@ -197,25 +416,28 @@ export default function DataTableEdit({ data }: any) {
       field: 'university',
       headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
       width: 220,
-      editable: true,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
     },
     {
       field: 'degree',
       headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
       width: 220,
-      editable: true,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
     },
     {
       field: 'branch',
       headerName: 'สาขา/วิชาเอก',
       width: 220,
-      editable: true,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
     },
     {
       field: 'isGov',
       headerName: 'รัฐ/เอกชน',
       width: 100,
-      editable: true,
+      editable: !isLocked,
       type: 'singleSelect',
       valueOptions: [
         { value: true, label: 'รัฐ' },
@@ -230,7 +452,7 @@ export default function DataTableEdit({ data }: any) {
       field: 'levelId',
       headerName: 'ระดับการศึกษา',
       width: 120,
-      editable: true,
+      editable: !isLocked,
       type: 'singleSelect',
       valueOptions: educationLevels,
       renderCell: (params) => {
@@ -242,19 +464,23 @@ export default function DataTableEdit({ data }: any) {
       field: 'faculty',
       headerName: 'คณะ/หน่วยงาน',
       width: 200,
-      editable: true,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
     },
     {
       field: 'accreditation',
       headerName: 'ผลการรับรอง',
       width: 375,
-      editable: true,
+      editable: !isLocked,
+      renderEditCell: renderAccreditationEditCell,
+      renderCell: renderCellExpand,
     },
     {
       field: 'note',
       headerName: 'หมายเหตุ',
       width: 300,
-      editable: true,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
     },
     {
       field: 'id',
@@ -274,32 +500,49 @@ export default function DataTableEdit({ data }: any) {
 
         if (isInEditMode) {
           return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label='Save'
-              onClick={handleSaveClick(id)}
-              color='primary'
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label='Cancel'
-              onClick={handleCancelClick(id)}
-              color='inherit'
-            />,
+            <Tooltip title='บันทึก'>
+              <GridActionsCellItem
+                icon={<SaveIcon />}
+                label='Save'
+                onClick={handleSaveClick(id)}
+                color='primary'
+                disabled={isLocked}
+              />
+            </Tooltip>,
+            <Tooltip title='ยกเลิก'>
+              <GridActionsCellItem
+                icon={<CancelIcon />}
+                label='Cancel'
+                onClick={handleCancelClick(id)}
+                color='default'
+                disabled={isLocked}
+              />
+            </Tooltip>,
           ]
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label='Edit'
-            onClick={handleEditClick(id)}
-            color='primary'
-          />,
+          <Tooltip title='แก้ไข'>
+            <GridActionsCellItem
+              icon={<EditIcon />}
+              label='Edit'
+              onClick={handleEditClick(id)}
+              color='primary'
+              disabled={isLocked}
+            />
+          </Tooltip>,
         ]
       },
     },
   ]
+
+  const handleClickRecommendation = (rowData: any) => {
+    const { university = '', faculty = '', degree = '', branch = '' } = rowData
+    dispatch(
+      curriculumActions.loadRecommendation(university, faculty, degree, branch)
+    )
+    openModal()
+  }
 
   function CustomToolbar() {
     return (
@@ -322,7 +565,7 @@ export default function DataTableEdit({ data }: any) {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ minHeight: 500 }}>
-        <DataGrid
+        <StripedDataGrid
           autoHeight
           rows={rows}
           columns={columns}
@@ -332,6 +575,9 @@ export default function DataTableEdit({ data }: any) {
           onRowEditStart={handleRowEditStart}
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
+          getRowClassName={(params) =>
+            params.row.isDeleted ? 'deleted' : 'default'
+          }
           initialState={{
             pagination: {
               pageSize: 50,
@@ -497,6 +743,12 @@ export default function DataTableEdit({ data }: any) {
           }}
         />
       </div>
+      <RecommendationModal
+        isOpen={isOpenModal}
+        onClose={closeModal}
+        selectionModel={selectionModel}
+        setSelectionModel={setSelectionModel}
+      />
     </ThemeProvider>
   )
 }

@@ -348,8 +348,9 @@ const columns: GridColDef[] = [
   {
     field: 'accreditation1',
     headerName: 'ผลการรับรอง',
-    width: 375,
+    width: 425,
     renderCell: renderAccreditationCellExpand,
+    cellClassName: 'blue',
   },
   {
     field: 'note',
@@ -388,8 +389,6 @@ export default function RecommendationTable({
             const old = selectionModel
             const current = newSelectionModel
             const res = current.filter((item: number) => !old.includes(item))
-
-            console.log('res :>> ', res)
             setSelectionModel(res)
           }}
           selectionModel={selectionModel}
@@ -399,6 +398,10 @@ export default function RecommendationTable({
               {
                 display: 'none',
               },
+            '& .blue': {
+              backgroundColor: alpha('#09348b', ODD_OPACITY),
+              color: '#09348b',
+            },
           }}
           initialState={{
             pagination: {
