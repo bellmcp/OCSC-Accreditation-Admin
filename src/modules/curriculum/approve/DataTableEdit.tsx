@@ -59,6 +59,8 @@ const theme = createTheme(
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   [`& .${gridClasses.row}.deleted`]: {
+    color: theme.palette.error.main,
+    textDecoration: 'line-through',
     backgroundColor: alpha(theme.palette.error.main, 0.1),
     '&:hover, &.Mui-hovered': {
       backgroundColor: alpha(theme.palette.error.main, 0.15),
@@ -397,13 +399,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
       headerAlign: 'center',
       renderCell: (params) => {
         const deleted = get(params, 'value', false)
-        return deleted ? (
-          <Typography variant='body2' color='error'>
-            ลบ
-          </Typography>
-        ) : (
-          'ไม่ลบ'
-        )
+        return deleted ? 'ลบ' : 'ไม่ลบ'
       },
       editable: !isLocked,
       type: 'singleSelect',
