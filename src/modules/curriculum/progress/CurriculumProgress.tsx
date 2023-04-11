@@ -16,6 +16,7 @@ import {
   Divider,
   useMediaQuery,
 } from '@material-ui/core'
+import Stack from '@mui/material/Stack'
 import { green, red } from '@material-ui/core/colors'
 
 import Header from 'modules/ui/components/Header'
@@ -137,7 +138,7 @@ export default function CurriculumProgress() {
             direction='row'
             alignItems='center'
             justify='space-between'
-            style={{ marginBottom: 8 }}
+            style={{ marginBottom: 14 }}
           >
             <Typography
               gutterBottom
@@ -149,48 +150,24 @@ export default function CurriculumProgress() {
             >
               หนังสือเวียน : ความคืบหน้า
             </Typography>
-            <Typography variant='body2' color='textPrimary'>
-              <ul>
-                <li style={{ color: red[600] }}>
-                  <span style={{ fontWeight: 600 }}>สีแดง</span> : ยังไม่เสร็จ
-                </li>
-                <li style={{ color: green[800] }}>
-                  <span style={{ fontWeight: 600 }}>สีเขียว</span> : เสร็จแล้ว
-                </li>
-                <li style={{ color: theme.palette.text.primary }}>
-                  <span style={{ fontWeight: 600 }}>สีดำ</span> : ยังไม่ได้ทำ
-                </li>
-              </ul>
-            </Typography>
+            <Stack
+              direction='row'
+              alignItems='center'
+              spacing={2}
+              divider={<Divider orientation='vertical' flexItem />}
+            >
+              <Typography variant='body2' style={{ color: green[800] }}>
+                <span style={{ fontWeight: 600 }}>สีเขียว</span> : เสร็จแล้ว
+              </Typography>
+              <Typography variant='body2' style={{ color: red[600] }}>
+                <span style={{ fontWeight: 600 }}>สีแดง</span> : ยังไม่เสร็จ
+              </Typography>
+              <Typography variant='body2' color='textPrimary'>
+                <span style={{ fontWeight: 600 }}>สีดำ</span> : ยังไม่ได้ทำ
+              </Typography>
+            </Stack>
           </Grid>
           {renderContent()}
-          {/* <Paper
-            elevation={0}
-            style={{
-              borderRadius: 16,
-              padding: 24,
-              boxShadow: '0 0 20px 0 rgba(204,242,251,0.3)',
-              border: '1px solid rgb(204 242 251)',
-              marginTop: 32,
-            }}
-          >
-            <Typography
-              variant='body2'
-              align='right'
-              color='secondary'
-              style={{ fontWeight: 500 }}
-            >
-              <span style={{ color: red[600] }}>สีแดง</span> หมายถึง ยังไม่เสร็จ
-              <br />
-              <span style={{ color: green[800] }}>สีเขียว</span> หมายถึง
-              เสร็จแล้ว
-              <br />
-              <span style={{ color: theme.palette.text.primary }}>
-                สีดำ
-              </span>{' '}
-              หมายถึง ยังไม่ได้ทำ
-            </Typography>
-          </Paper> */}
         </Box>
       </Container>
     </>

@@ -49,6 +49,13 @@ const UPDATE_ROW_SUCCESS =
 const UPDATE_ROW_FAILURE =
   'ocsc-person-accredit/curriculum/approve/UPDATE_ROW_FAILURE'
 
+const IMPORT_FILE_REQUEST =
+  'ocsc-person-accredit/curriculum/approve/IMPORT_FILE_REQUEST'
+const IMPORT_FILE_SUCCESS =
+  'ocsc-person-accredit/curriculum/approve/IMPORT_FILE_SUCCESS'
+const IMPORT_FILE_FAILURE =
+  'ocsc-person-accredit/curriculum/approve/IMPORT_FILE_FAILURE'
+
 function loadProgressGovernment() {
   const token = getCookie('token')
   return async (dispatch: any) => {
@@ -390,6 +397,48 @@ function updateRow(
   }
 }
 
+function importFile(file: any) {
+  return async (dispatch: any) => {
+    const token = getCookie('token')
+
+    var bodyFormData = new FormData()
+    bodyFormData.append('file', file)
+
+    dispatch({ type: IMPORT_FILE_REQUEST })
+
+    axios({
+      method: 'patch',
+      url: `${process.env.REACT_APP_API_URL}WaitCurriculums`,
+      data: bodyFormData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(function (response) {
+        const responseMessage = get(response, 'data.mesg', '')
+        dispatch({
+          type: IMPORT_FILE_SUCCESS,
+          payload: { submitResponse: response },
+        })
+        dispatch(uiActions.setFlashMessage(responseMessage, 'success'))
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000)
+      })
+      .catch(function (err) {
+        const responseMessage = get(err, 'response.data.mesg', '')
+        dispatch({ type: IMPORT_FILE_FAILURE })
+        dispatch(
+          uiActions.setFlashMessage(
+            `อัพโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
+            'error'
+          )
+        )
+      })
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -415,6 +464,9 @@ export {
   UPDATE_ROW_REQUEST,
   UPDATE_ROW_SUCCESS,
   UPDATE_ROW_FAILURE,
+  IMPORT_FILE_REQUEST,
+  IMPORT_FILE_SUCCESS,
+  IMPORT_FILE_FAILURE,
   loadProgressGovernment,
   loadProgressIndividual,
   loadLockStatus,
@@ -423,4 +475,5 @@ export {
   loadWaitCurriculum,
   loadRecommendation,
   updateRow,
+  importFile,
 }
