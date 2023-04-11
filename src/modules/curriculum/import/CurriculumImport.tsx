@@ -134,7 +134,7 @@ export default function CurriculumImport() {
                       color='primary'
                       style={{ fontWeight: 500 }}
                     >
-                      <b>*</b> รับเฉพาะไฟล์ Excel ที่มีนามสกุล .xls หรือ .xlsx
+                      <b>*</b> รับเฉพาะไฟล์ Excel ที่มีนามสกุล .XLS หรือ .XLSX
                       เท่านั้น
                     </Typography>
                   </Grid>

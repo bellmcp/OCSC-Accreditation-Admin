@@ -4,6 +4,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import CurriculumProgress from './progress/CurriculumProgress'
 import CurriculumApprove from './approve/CurriculumApprove'
 import CurriculumImport from './import/CurriculumImport'
+import CurriculumExport from './export/CurriculumExport'
 
 export default function Routes() {
   const { path } = useRouteMatch()
@@ -18,6 +19,9 @@ export default function Routes() {
       </Route>
       <Route path={`${path}/import`}>
         <CurriculumImport />
+      </Route>
+      <Route path={`${path}/export`}>
+        <CurriculumExport />
       </Route>
     </Switch>
   )

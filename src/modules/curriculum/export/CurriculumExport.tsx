@@ -1,0 +1,316 @@
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useFormik } from 'formik'
+import { format } from 'date-fns'
+
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  useTheme,
+} from '@material-ui/core/styles'
+import {
+  Container,
+  Typography,
+  Grid,
+  Box,
+  Paper,
+  Button,
+  useMediaQuery,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  TextField,
+} from '@material-ui/core'
+import {
+  Launch as ExportIcon,
+  GetApp as DownloadIcon,
+} from '@material-ui/icons'
+
+import Header from 'modules/ui/components/Header'
+import DatePicker from './DatePicker'
+
+import * as curriculumActions from 'modules/curriculum/actions'
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    content: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
+    },
+    sectionTitle: {
+      fontSize: '1.7rem',
+      fontWeight: 600,
+      zIndex: 3,
+      lineHeight: '1.3',
+    },
+    sectionSubtitle: {
+      fontSize: '1.4rem',
+      fontWeight: 600,
+      zIndex: 3,
+      lineHeight: '1.3',
+    },
+    table: {
+      minWidth: 650,
+    },
+  })
+)
+
+export default function CurriculumExport() {
+  const classes = useStyles()
+  const theme = useTheme()
+  const dispatch = useDispatch()
+  const matches = useMediaQuery(theme.breakpoints.up('sm'))
+
+  const [date, setDate] = useState<string>(
+    format(new Date(), 'yyyy-MM-dd').toString()
+  )
+
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      type: 'gov',
+      letterNo: '',
+      letterDate: '',
+    },
+    onSubmit: (values) => {
+      //   dispatch(curriculumActions.importFile(file))
+    },
+  })
+
+  const note = (
+    <span style={{ color: theme.palette.error.main, marginLeft: 2 }}>*</span>
+  )
+
+  return (
+    <>
+      <Header />
+      <form onSubmit={formik.handleSubmit}>
+        <Container maxWidth='lg' className={classes.content}>
+          <Box mt={2} mb={4}>
+            <Grid
+              container
+              direction='row'
+              alignItems='center'
+              justify='space-between'
+              style={{ marginBottom: 8 }}
+            >
+              <Typography
+                gutterBottom
+                component='h2'
+                variant='h6'
+                color='secondary'
+                className={classes.sectionTitle}
+                align={matches ? 'left' : 'center'}
+              >
+                หนังสือเวียน : ออกหนังสือเวียน
+              </Typography>
+            </Grid>
+            <Paper
+              elevation={0}
+              style={{
+                borderRadius: 16,
+                padding: 24,
+                boxShadow: '0 0 20px 0 rgba(204,242,251,0.3)',
+                border: '1px solid rgb(204 242 251)',
+              }}
+            >
+              <Grid container item spacing={2}>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12}>
+                    <Typography
+                      component='h2'
+                      variant='h6'
+                      color='secondary'
+                      className={classes.sectionSubtitle}
+                    >
+                      นำออกผลการรับรองคุณวุฒิที่จะนำไปออกหนังสือเวียน
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12}>
+                    <Typography
+                      gutterBottom
+                      variant='body2'
+                      color='primary'
+                      style={{ fontWeight: 500 }}
+                    >
+                      <b>*</b> นำออก (Export) เป็นไฟล์สเปรดชีต (.CSV)
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12} md={3}>
+                    <Typography
+                      variant='body1'
+                      color='textPrimary'
+                      style={{ fontWeight: 600 }}
+                    >
+                      ประเภทหลักสูตร
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} md={9}>
+                    <RadioGroup
+                      row
+                      id='type'
+                      name='type'
+                      value={formik.values.type}
+                      onChange={formik.handleChange}
+                    >
+                      <FormControlLabel
+                        value='gov'
+                        control={<Radio size='small' />}
+                        label='รัฐ'
+                        style={{ marginRight: 96 }}
+                      />
+                      <FormControlLabel
+                        value='org'
+                        control={<Radio size='small' />}
+                        label='เอกชน'
+                      />
+                    </RadioGroup>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Button
+                    fullWidth
+                    variant='contained'
+                    color='secondary'
+                    startIcon={<DownloadIcon />}
+                    style={{ marginTop: 16 }}
+                    type='submit'
+                    disabled
+                  >
+                    ดาวน์โหลด
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper
+              elevation={0}
+              style={{
+                borderRadius: 16,
+                padding: 24,
+                boxShadow: '0 0 20px 0 rgba(204,242,251,0.3)',
+                border: '1px solid rgb(204 242 251)',
+                marginTop: 24,
+              }}
+            >
+              <Grid container item spacing={2}>
+                <Grid container item direction='row' alignItems='flex-start'>
+                  <Grid xs={12}>
+                    <Typography
+                      component='h2'
+                      variant='h6'
+                      color='secondary'
+                      className={classes.sectionSubtitle}
+                    >
+                      ออกหนังสือเวียน
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12}>
+                    <Typography
+                      gutterBottom
+                      variant='body2'
+                      color='primary'
+                      style={{ fontWeight: 500 }}
+                    >
+                      <b>*</b> ย้ายหลักสูตรที่มีผลการรับรองแล้วออกจากถังรอเวียน
+                      ประชาชนทั่วไปจะสามารถค้นหาผลการรับรองได้ทันที
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12} md={3}>
+                    <Typography
+                      variant='body1'
+                      color='textPrimary'
+                      style={{ fontWeight: 600 }}
+                    >
+                      ประเภทหลักสูตร
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} md={9}>
+                    <RadioGroup
+                      row
+                      id='type'
+                      name='type'
+                      value={formik.values.type}
+                      onChange={formik.handleChange}
+                    >
+                      <FormControlLabel
+                        value='gov'
+                        control={<Radio size='small' />}
+                        label='รัฐ'
+                        style={{ marginRight: 96 }}
+                      />
+                      <FormControlLabel
+                        value='org'
+                        control={<Radio size='small' />}
+                        label='เอกชน'
+                      />
+                    </RadioGroup>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12} md={3}>
+                    <Typography
+                      variant='body1'
+                      color='textPrimary'
+                      style={{ fontWeight: 600 }}
+                      gutterBottom
+                    >
+                      เลขที่หนังสือเวียน{note}
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} md={9}>
+                    <TextField
+                      id='letterNo'
+                      name='letterNo'
+                      value={formik.values.letterNo}
+                      onChange={formik.handleChange}
+                      placeholder=''
+                      variant='outlined'
+                      size='small'
+                      fullWidth
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid item xs={12} md={3}>
+                    <Typography
+                      variant='body1'
+                      color='textPrimary'
+                      style={{ fontWeight: 600 }}
+                    >
+                      วันที่ออกหนังสือเวียน{note}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={3}>
+                    <DatePicker date={date} setDate={setDate} />
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Button
+                    fullWidth
+                    variant='contained'
+                    color='secondary'
+                    startIcon={<ExportIcon />}
+                    style={{ marginTop: 16 }}
+                    type='submit'
+                    disabled
+                  >
+                    ออกหนังสือเวียน
+                  </Button>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Box>
+        </Container>
+      </form>
+    </>
+  )
+}
