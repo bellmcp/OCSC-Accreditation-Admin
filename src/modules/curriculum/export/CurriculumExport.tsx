@@ -90,6 +90,19 @@ export default function CurriculumExport() {
     },
   })
 
+  const formik2 = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      type: 'gov',
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      dispatch(
+        curriculumActions.loadCircularLetter(values.type === 'gov' ? 1 : 0)
+      )
+    },
+  })
+
   const note = (
     <span style={{ color: theme.palette.error.main, marginLeft: 2 }}>*</span>
   )
@@ -97,7 +110,6 @@ export default function CurriculumExport() {
   return (
     <>
       <Header />
-
       <Container maxWidth='lg' className={classes.content}>
         <Box mt={2} mb={4}>
           <Grid
@@ -127,79 +139,80 @@ export default function CurriculumExport() {
               border: '1px solid rgb(204 242 251)',
             }}
           >
-            <Grid container item spacing={2}>
-              <Grid container item direction='row' alignItems='center'>
-                <Grid xs={12}>
-                  <Typography
-                    component='h2'
-                    variant='h6'
+            <form onSubmit={formik2.handleSubmit}>
+              <Grid container item spacing={2}>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12}>
+                    <Typography
+                      component='h2'
+                      variant='h6'
+                      color='secondary'
+                      className={classes.sectionSubtitle}
+                    >
+                      นำออกผลการรับรองคุณวุฒิ
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12}>
+                    <Typography
+                      gutterBottom
+                      variant='body2'
+                      color='primary'
+                      style={{ fontWeight: 500 }}
+                    >
+                      <b>*</b> นำออก (Export)
+                      ผลการรับรองคุณวุฒิที่จะนำไปออกหนังสือเวียน
+                      เป็นไฟล์สเปรดชีต (.CSV)
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12} md={3}>
+                    <Typography
+                      variant='body1'
+                      color='textPrimary'
+                      style={{ fontWeight: 600 }}
+                    >
+                      ประเภทหลักสูตร
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} md={9}>
+                    <RadioGroup
+                      row
+                      id='type'
+                      name='type'
+                      value={formik2.values.type}
+                      onChange={formik2.handleChange}
+                    >
+                      <FormControlLabel
+                        value='gov'
+                        control={<Radio size='small' />}
+                        label='รัฐ'
+                        style={{ marginRight: 96 }}
+                      />
+                      <FormControlLabel
+                        value='org'
+                        control={<Radio size='small' />}
+                        label='เอกชน'
+                      />
+                    </RadioGroup>
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Button
+                    fullWidth
+                    variant='contained'
                     color='secondary'
-                    className={classes.sectionSubtitle}
+                    startIcon={<DownloadIcon />}
+                    style={{ marginTop: 16 }}
+                    type='submit'
                   >
-                    นำออกผลการรับรองคุณวุฒิ
-                  </Typography>
+                    ดาวน์โหลด
+                  </Button>
                 </Grid>
               </Grid>
-              <Grid container item direction='row' alignItems='center'>
-                <Grid xs={12}>
-                  <Typography
-                    gutterBottom
-                    variant='body2'
-                    color='primary'
-                    style={{ fontWeight: 500 }}
-                  >
-                    <b>*</b> นำออก (Export)
-                    ผลการรับรองคุณวุฒิที่จะนำไปออกหนังสือเวียน เป็นไฟล์สเปรดชีต
-                    (.CSV)
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container item direction='row' alignItems='center'>
-                <Grid xs={12} md={3}>
-                  <Typography
-                    variant='body1'
-                    color='textPrimary'
-                    style={{ fontWeight: 600 }}
-                  >
-                    ประเภทหลักสูตร
-                  </Typography>
-                </Grid>
-                <Grid xs={12} md={9}>
-                  <RadioGroup
-                    row
-                    id='type'
-                    name='type'
-                    value={formik.values.type}
-                    onChange={formik.handleChange}
-                  >
-                    <FormControlLabel
-                      value='gov'
-                      control={<Radio size='small' />}
-                      label='รัฐ'
-                      style={{ marginRight: 96 }}
-                    />
-                    <FormControlLabel
-                      value='org'
-                      control={<Radio size='small' />}
-                      label='เอกชน'
-                    />
-                  </RadioGroup>
-                </Grid>
-              </Grid>
-              <Grid container item direction='row' alignItems='center'>
-                <Button
-                  fullWidth
-                  variant='contained'
-                  color='secondary'
-                  startIcon={<DownloadIcon />}
-                  style={{ marginTop: 16 }}
-                  type='submit'
-                  disabled
-                >
-                  ดาวน์โหลด
-                </Button>
-              </Grid>
-            </Grid>
+            </form>
           </Paper>
           <Paper
             elevation={0}

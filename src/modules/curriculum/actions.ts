@@ -67,6 +67,13 @@ const DELETE_WAIT_CURRICULUM_SUCCESS =
 const DELETE_WAIT_CURRICULUM_FAILURE =
   'ocsc-person-accredit/curriculum/approve/DELETE_WAIT_CURRICULUM_FAILURE'
 
+const LOAD_CIRCULAR_LETTER_REQUEST =
+  'ocsc-person-accredit/curriculum/approve/LOAD_CIRCULAR_LETTER_REQUEST'
+const LOAD_CIRCULAR_LETTER_SUCCESS =
+  'ocsc-person-accredit/curriculum/approve/LOAD_CIRCULAR_LETTER_SUCCESS'
+const LOAD_CIRCULAR_LETTER_FAILURE =
+  'ocsc-person-accredit/curriculum/approve/LOAD_CIRCULAR_LETTER_FAILURE'
+
 function loadProgressGovernment() {
   const token = getCookie('token')
   return async (dispatch: any) => {
@@ -496,6 +503,44 @@ function deleteWaitCurriculum(
   }
 }
 
+function loadCircularLetter(isGov: number) {
+  const token = getCookie('token')
+  return async (dispatch: any) => {
+    dispatch({ type: LOAD_CIRCULAR_LETTER_REQUEST })
+    try {
+      var { data } = await axios.get(
+        `/WaitCurriculums/CircularLetter?isGov=${encodeURIComponent(isGov)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      if (data.length === 0) {
+        data = []
+      }
+      dispatch({
+        type: LOAD_CIRCULAR_LETTER_SUCCESS,
+        payload: {
+          waitCurriculums: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_CIRCULAR_LETTER_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `นำออกผลการรับรองคุณวุฒิไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -527,6 +572,9 @@ export {
   DELETE_WAIT_CURRICULUM_REQUEST,
   DELETE_WAIT_CURRICULUM_SUCCESS,
   DELETE_WAIT_CURRICULUM_FAILURE,
+  LOAD_CIRCULAR_LETTER_REQUEST,
+  LOAD_CIRCULAR_LETTER_SUCCESS,
+  LOAD_CIRCULAR_LETTER_FAILURE,
   loadProgressGovernment,
   loadProgressIndividual,
   loadLockStatus,
@@ -537,4 +585,5 @@ export {
   updateRow,
   importFile,
   deleteWaitCurriculum,
+  loadCircularLetter,
 }
