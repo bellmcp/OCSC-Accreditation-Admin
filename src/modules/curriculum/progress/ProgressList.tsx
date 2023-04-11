@@ -40,7 +40,7 @@ export default function ProgressList({ progressList }: any) {
           getSum(progressItem.total)
         )
         return (
-          <div>
+          <div style={{ paddingLeft: 18 }}>
             <Typography
               variant='subtitle1'
               className={titleClassName}
