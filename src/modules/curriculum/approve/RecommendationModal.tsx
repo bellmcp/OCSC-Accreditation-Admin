@@ -5,12 +5,12 @@ import { size } from 'lodash'
 import {
   Dialog,
   DialogContent,
-  Button,
   Slide,
   Toolbar,
   IconButton,
   AppBar,
   Typography,
+  Button,
 } from '@material-ui/core'
 import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
@@ -82,6 +82,7 @@ export default function RecommendationModal({
               color='inherit'
               onClick={onClose}
               disabled={size(selectionModel) === 0}
+              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             >
               บันทึก
             </Button>

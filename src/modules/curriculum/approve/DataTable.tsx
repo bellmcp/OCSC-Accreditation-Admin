@@ -18,6 +18,7 @@ import {
   GridRowEditStartParams,
   MuiEvent,
 } from '@mui/x-data-grid'
+import { Button } from '@material-ui/core'
 import Box from '@mui/material/Box'
 import InputBase from '@mui/material/InputBase'
 import Typography from '@mui/material/Typography'
@@ -473,6 +474,30 @@ export default function DataTable({
       width: 120,
       align: 'center',
       headerAlign: 'center',
+    },
+    {
+      field: 'submit',
+      headerName: 'บันทึก',
+      width: 120,
+      align: 'center',
+      headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
+      renderCell: () => {
+        return (
+          <Button
+            variant='contained'
+            color='secondary'
+            size='small'
+            type='submit'
+          >
+            บันทึก
+          </Button>
+        )
+      },
     },
   ]
 

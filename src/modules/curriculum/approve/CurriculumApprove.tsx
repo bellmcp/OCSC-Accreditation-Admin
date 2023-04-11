@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -38,9 +38,11 @@ import {
 import Header from 'modules/ui/components/Header'
 import Loading from 'modules/ui/components/Loading'
 import DataTable from './DataTable'
+import DataTableEdit from './DataTableEdit'
 import RecommendationModal from './RecommendationModal'
 
 import * as curriculumActions from 'modules/curriculum/actions'
+import * as infoActions from 'modules/info/actions'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,6 +72,7 @@ export default function CurriculumApprove() {
   const [searchResults, setSearchResults] = useState([])
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [selectionModel, setSelectionModel] = useState<any>([])
+  const [educationLevels, setEducationLevels] = useState([])
 
   const openModal = () => {
     setIsOpenModal(true)
@@ -86,19 +89,37 @@ export default function CurriculumApprove() {
     waitCurriculums: initialSearchResults = [],
   } = useSelector((state: any) => state.curriculum)
 
+  const { educationLevels: initalEducationLevels = [] } = useSelector(
+    (state: any) => state.info
+  )
+
+  const getLevelIdByLabel = (label: string) => {
+    const result = educationLevels.find((item: any) => {
+      return item.level === label
+    })
+    return get(result, 'id', 0)
+  }
+
   useEffect(() => {
     dispatch(curriculumActions.loadLockStatus())
+    dispatch(infoActions.loadEducationLevels())
   }, [dispatch])
 
   useEffect(() => {
     const parsed = initialSearchResults.map((item: any, index: number) => {
       return {
         order: index + 1,
+        isGov: item.category === 'รัฐ' ? true : false,
+        levelId: getLevelIdByLabel(get(item, 'level', '')),
         ...item,
       }
     })
     setSearchResults(parsed)
-  }, [initialSearchResults])
+  }, [initialSearchResults]) //eslint-disable-line
+
+  useEffect(() => {
+    setEducationLevels(initalEducationLevels)
+  }, [initalEducationLevels])
 
   const validationSchema = yup.object({})
   const formik = useFormik({
@@ -368,8 +389,11 @@ export default function CurriculumApprove() {
           </Box>
         </form>
       </Container>
-      <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
+      {/* <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
         {renderSearchResult()}
+      </Container> */}
+      <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
+        <DataTableEdit data={searchResults} />
       </Container>
       <RecommendationModal
         isOpen={isOpenModal}

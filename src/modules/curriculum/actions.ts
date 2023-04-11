@@ -42,6 +42,13 @@ const LOAD_RECOMMENDATION_SUCCESS =
 const LOAD_RECOMMENDATION_FAILURE =
   'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_FAILURE'
 
+const UPDATE_ROW_REQUEST =
+  'ocsc-person-accredit/curriculum/approve/UPDATE_ROW_REQUEST'
+const UPDATE_ROW_SUCCESS =
+  'ocsc-person-accredit/curriculum/approve/UPDATE_ROW_SUCCESS'
+const UPDATE_ROW_FAILURE =
+  'ocsc-person-accredit/curriculum/approve/UPDATE_ROW_FAILURE'
+
 function loadProgressGovernment() {
   const token = getCookie('token')
   return async (dispatch: any) => {
@@ -320,6 +327,69 @@ function loadRecommendation(
   }
 }
 
+function updateRow(
+  id: number,
+  isDeleted: boolean,
+  university: string,
+  degree: string,
+  branch: string,
+  isGov: boolean,
+  level: number,
+  faculty: string,
+  appro: string,
+  note: string
+) {
+  const token = getCookie('token')
+  return async (dispatch: any) => {
+    dispatch({ type: UPDATE_ROW_REQUEST })
+    try {
+      var { data } = await axios.put(
+        `/WaitCurriculums/${id}`,
+        {
+          isDeleted,
+          university,
+          degree,
+          branch,
+          isGov,
+          level,
+          faculty,
+          appro,
+          note,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      dispatch({
+        type: UPDATE_ROW_SUCCESS,
+        payload: {
+          isLocked: data.isLocked,
+        },
+      })
+      dispatch(
+        uiActions.setFlashMessage(
+          get(data, 'mesg', 'อัพเดทข้อมูลสำเร็จ'),
+          'success'
+        )
+      )
+    } catch (err) {
+      dispatch({ type: UPDATE_ROW_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `อัพเดทข้อมูลไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -342,6 +412,9 @@ export {
   UNLOCK_REQUEST,
   UNLOCK_SUCCESS,
   UNLOCK_FAILURE,
+  UPDATE_ROW_REQUEST,
+  UPDATE_ROW_SUCCESS,
+  UPDATE_ROW_FAILURE,
   loadProgressGovernment,
   loadProgressIndividual,
   loadLockStatus,
@@ -349,4 +422,5 @@ export {
   unlockRequest,
   loadWaitCurriculum,
   loadRecommendation,
+  updateRow,
 }
