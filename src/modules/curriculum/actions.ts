@@ -9,6 +9,7 @@ const LOAD_PROGRESS_GOVERNMENT_SUCCESS =
   'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_GOVERNMENT_SUCCESS'
 const LOAD_PROGRESS_GOVERNMENT_FAILURE =
   'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_GOVERNMENT_FAILURE'
+
 const LOAD_PROGRESS_INDIVIDUAL_REQUEST =
   'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_INDIVIDUAL_REQUEST'
 const LOAD_PROGRESS_INDIVIDUAL_SUCCESS =
@@ -22,9 +23,11 @@ const LOAD_LOCK_STATUS_SUCCESS =
   'ocsc-person-accredit/curriculum/approve/LOAD_LOCK_STATUS_SUCCESS'
 const LOAD_LOCK_STATUS_FAILURE =
   'ocsc-person-accredit/curriculum/approve/LOAD_LOCK_STATUS_FAILURE'
+
 const LOCK_REQUEST = 'ocsc-person-accredit/curriculum/approve/LOCK_REQUEST'
 const LOCK_SUCCESS = 'ocsc-person-accredit/curriculum/approve/LOCK_SUCCESS'
 const LOCK_FAILURE = 'ocsc-person-accredit/curriculum/approve/LOCK_FAILURE'
+
 const UNLOCK_REQUEST = 'ocsc-person-accredit/curriculum/approve/UNLOCK_REQUEST'
 const UNLOCK_SUCCESS = 'ocsc-person-accredit/curriculum/approve/UNLOCK_SUCCESS'
 const UNLOCK_FAILURE = 'ocsc-person-accredit/curriculum/approve/UNLOCK_FAILURE'
@@ -35,6 +38,7 @@ const LOAD_WAIT_CURRICULUM_SUCCESS =
   'ocsc-person-accredit/curriculum/approve/LOAD_WAIT_CURRICULUM_SUCCESS'
 const LOAD_WAIT_CURRICULUM_FAILURE =
   'ocsc-person-accredit/curriculum/approve/LOAD_WAIT_CURRICULUM_FAILURE'
+
 const LOAD_RECOMMENDATION_REQUEST =
   'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_REQUEST'
 const LOAD_RECOMMENDATION_SUCCESS =
@@ -55,6 +59,13 @@ const IMPORT_FILE_SUCCESS =
   'ocsc-person-accredit/curriculum/approve/IMPORT_FILE_SUCCESS'
 const IMPORT_FILE_FAILURE =
   'ocsc-person-accredit/curriculum/approve/IMPORT_FILE_FAILURE'
+
+const DELETE_WAIT_CURRICULUM_REQUEST =
+  'ocsc-person-accredit/curriculum/approve/DELETE_WAIT_CURRICULUM_REQUEST'
+const DELETE_WAIT_CURRICULUM_SUCCESS =
+  'ocsc-person-accredit/curriculum/approve/DELETE_WAIT_CURRICULUM_SUCCESS'
+const DELETE_WAIT_CURRICULUM_FAILURE =
+  'ocsc-person-accredit/curriculum/approve/DELETE_WAIT_CURRICULUM_FAILURE'
 
 function loadProgressGovernment() {
   const token = getCookie('token')
@@ -439,6 +450,52 @@ function importFile(file: any) {
   }
 }
 
+function deleteWaitCurriculum(
+  isGov: number,
+  letterNo: string,
+  letterDate: string
+) {
+  const token = getCookie('token')
+  return async (dispatch: any) => {
+    dispatch({ type: DELETE_WAIT_CURRICULUM_REQUEST })
+    try {
+      var { data } = await axios.delete(
+        `/WaitCurriculums?isGov=${encodeURIComponent(
+          isGov
+        )}&letterNo=${encodeURIComponent(
+          letterNo
+        )}&letterDate=${encodeURIComponent(letterDate)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      if (data.length === 0) {
+        data = []
+      }
+      dispatch({
+        type: DELETE_WAIT_CURRICULUM_SUCCESS,
+        payload: {
+          waitCurriculums: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: DELETE_WAIT_CURRICULUM_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `ออกหนังสือเวียนไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -467,6 +524,9 @@ export {
   IMPORT_FILE_REQUEST,
   IMPORT_FILE_SUCCESS,
   IMPORT_FILE_FAILURE,
+  DELETE_WAIT_CURRICULUM_REQUEST,
+  DELETE_WAIT_CURRICULUM_SUCCESS,
+  DELETE_WAIT_CURRICULUM_FAILURE,
   loadProgressGovernment,
   loadProgressIndividual,
   loadLockStatus,
@@ -476,4 +536,5 @@ export {
   loadRecommendation,
   updateRow,
   importFile,
+  deleteWaitCurriculum,
 }
