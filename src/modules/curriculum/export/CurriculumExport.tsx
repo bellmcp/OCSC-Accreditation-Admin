@@ -194,7 +194,7 @@ export default function CurriculumExport() {
                     >
                       <b>*</b> ส่งออก (Export)
                       ผลการรับรองคุณวุฒิที่จะนำไปออกหนังสือเวียน
-                      เป็นไฟล์สเปรดชีต (.CSV)
+                      เป็นไฟล์สเปรดชีต (.XLS)
                     </Typography>
                   </Grid>
                 </Grid>
