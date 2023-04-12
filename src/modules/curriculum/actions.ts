@@ -76,6 +76,9 @@ const LOAD_CIRCULAR_LETTER_SUCCESS =
 const LOAD_CIRCULAR_LETTER_FAILURE =
   'ocsc-person-accredit/curriculum/approve/LOAD_CIRCULAR_LETTER_FAILURE'
 
+const CLEAR_SEARCH_RESULT =
+  'ocsc-person-accredit/curriculum/approve/CLEAR_SEARCH_RESULT'
+
 function loadProgressGovernment() {
   const token = getCookie('token')
   return async (dispatch: any) => {
@@ -447,6 +450,14 @@ function loadCircularLetter(isGov: number) {
   }
 }
 
+function clearSearchResult() {
+  return (dispatch: any) => {
+    dispatch({
+      type: CLEAR_SEARCH_RESULT,
+    })
+  }
+}
+
 export {
   LOAD_PROGRESS_GOVERNMENT_REQUEST,
   LOAD_PROGRESS_GOVERNMENT_SUCCESS,
@@ -481,6 +492,7 @@ export {
   LOAD_CIRCULAR_LETTER_REQUEST,
   LOAD_CIRCULAR_LETTER_SUCCESS,
   LOAD_CIRCULAR_LETTER_FAILURE,
+  CLEAR_SEARCH_RESULT,
   loadProgressGovernment,
   loadProgressIndividual,
   loadLockStatus,
@@ -492,4 +504,5 @@ export {
   importFile,
   deleteWaitCurriculum,
   loadCircularLetter,
+  clearSearchResult,
 }

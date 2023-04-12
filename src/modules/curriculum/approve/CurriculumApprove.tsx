@@ -91,6 +91,9 @@ export default function CurriculumApprove() {
   useEffect(() => {
     dispatch(curriculumActions.loadLockStatus())
     dispatch(infoActions.loadEducationLevels())
+    return () => {
+      dispatch(curriculumActions.clearSearchResult())
+    }
   }, [dispatch])
 
   useEffect(() => {

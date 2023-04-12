@@ -14,6 +14,7 @@ import {
   LOAD_RECOMMENDATION_REQUEST,
   LOAD_RECOMMENDATION_SUCCESS,
   LOAD_RECOMMENDATION_FAILURE,
+  CLEAR_SEARCH_RESULT,
 } from './actions'
 
 const initialState = {
@@ -79,6 +80,8 @@ export default function (state = initialState, action: any) {
       return { ...state, isSearching: false }
     case LOAD_RECOMMENDATION_FAILURE:
       return { ...state, isRecommending: false }
+    case CLEAR_SEARCH_RESULT:
+      return { ...state, waitCurriculums: [] }
     default:
       return state
   }
