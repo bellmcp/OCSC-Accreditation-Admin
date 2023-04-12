@@ -193,14 +193,14 @@ export default function CurriculumImport() {
         </Container>
       </form>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>อัพโหลดไฟล์?</DialogTitle>
+        <DialogTitle>นำเข้าหลักสูตรใหม่?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             คุณแน่ใจหรือไม่ ว่าต้องการอัพโหลดไฟล์{' '}
             <span
               style={{ fontWeight: 500, color: theme.palette.text.primary }}
             >
-              {get(file, 'name', 'ไม่มีชื่อ')}
+              {`'${get(file, 'name', 'ไม่มีชื่อ')}'`}
             </span>
           </DialogContentText>
         </DialogContent>

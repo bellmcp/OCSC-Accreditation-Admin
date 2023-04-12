@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik'
 import { format } from 'date-fns'
 import * as yup from 'yup'
+import { get } from 'lodash'
 
 import {
   createStyles,
@@ -22,6 +23,11 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@material-ui/core'
 import {
   Launch as ExportIcon,
@@ -81,13 +87,7 @@ export default function CurriculumExport() {
     },
     validationSchema,
     onSubmit: (values) => {
-      dispatch(
-        curriculumActions.deleteWaitCurriculum(
-          values.type === 'gov' ? 1 : 0,
-          values.letterNo,
-          date
-        )
-      )
+      handleClickOpen()
     },
   })
 
@@ -108,6 +108,27 @@ export default function CurriculumExport() {
   const note = (
     <span style={{ color: theme.palette.error.main, marginLeft: 2 }}>*</span>
   )
+
+  const [open, setOpen] = useState(false)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleAccept = () => {
+    handleClose()
+    dispatch(
+      curriculumActions.deleteWaitCurriculum(
+        formik.values.type === 'gov' ? 1 : 0,
+        formik.values.letterNo,
+        date
+      )
+    )
+  }
 
   return (
     <>
@@ -341,6 +362,32 @@ export default function CurriculumExport() {
           </Paper>
         </Box>
       </Container>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>ออกหนังสือเวียน?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            คุณแน่ใจหรือไม่ ว่าต้องการออกหนังสือเวียน{' '}
+            <span
+              style={{ fontWeight: 500, color: theme.palette.text.primary }}
+            >
+              หลักสูตรที่มีผลการรับรองแล้วจะถูกย้ายออกจากถังรอเวียน
+            </span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color='default'>
+            ยกเลิก
+          </Button>
+          <Button
+            variant='contained'
+            onClick={handleAccept}
+            color='secondary'
+            autoFocus
+          >
+            ยืนยัน
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }
