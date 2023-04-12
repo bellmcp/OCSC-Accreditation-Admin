@@ -7,12 +7,12 @@ import {
   DialogContent,
   Slide,
   Toolbar,
-  IconButton,
+  // IconButton,
   AppBar,
   Typography,
   Button,
 } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+// import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import RecommendationTable from './RecommendationTable'
@@ -48,10 +48,10 @@ export default function RecommendationModal({
     setRecommendationList(parsed)
   }, [initialRecommendations])
 
-  const onCancel = () => {
-    setSelectionModel([])
-    onClose()
-  }
+  // const onCancel = () => {
+  //   setSelectionModel([])
+  //   onClose()
+  // }
 
   return (
     <div>

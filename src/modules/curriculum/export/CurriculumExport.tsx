@@ -32,6 +32,7 @@ import Header from 'modules/ui/components/Header'
 import DatePicker from './DatePicker'
 
 import * as curriculumActions from 'modules/curriculum/actions'
+import * as uiActions from 'modules/ui/actions'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,6 +101,7 @@ export default function CurriculumExport() {
       dispatch(
         curriculumActions.loadCircularLetter(values.type === 'gov' ? 1 : 0)
       )
+      dispatch(uiActions.setFlashMessage('Under development', 'warning'))
     },
   })
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { get } from 'lodash'
 
 import {
@@ -7,10 +7,8 @@ import {
   bgBG,
   GridRenderCellParams,
   gridClasses,
-  GridSelectionModel,
 } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
-import InputBase from '@mui/material/InputBase'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
@@ -56,13 +54,6 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   },
 }))
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  [`& .MuiInputBase-input`]: {
-    padding: 0,
-    fontSize: 14,
-  },
-}))
-
 const theme = createTheme(
   {
     typography: {
@@ -75,10 +66,6 @@ const theme = createTheme(
   },
   bgBG
 )
-
-const parseLinkToDefaultColor = (text: string) => {
-  return text.replace(/<a/g, '<a class="custom_link"')
-}
 
 const GridAccreditationCellExpand = React.memo(
   function GridAccreditationCellExpand(
