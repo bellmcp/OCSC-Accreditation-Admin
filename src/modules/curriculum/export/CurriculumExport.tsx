@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik'
 import { format } from 'date-fns'
 import * as yup from 'yup'
-import { get } from 'lodash'
 
 import {
   createStyles,
@@ -172,7 +171,7 @@ export default function CurriculumExport() {
                       color='secondary'
                       className={classes.sectionSubtitle}
                     >
-                      นำออกผลการรับรองคุณวุฒิ
+                      ส่งออกผลการรับรองคุณวุฒิ
                     </Typography>
                   </Grid>
                 </Grid>
@@ -184,7 +183,7 @@ export default function CurriculumExport() {
                       color='primary'
                       style={{ fontWeight: 500 }}
                     >
-                      <b>*</b> นำออก (Export)
+                      <b>*</b> ส่งออก (Export)
                       ผลการรับรองคุณวุฒิที่จะนำไปออกหนังสือเวียน
                       เป็นไฟล์สเปรดชีต (.CSV)
                     </Typography>
