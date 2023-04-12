@@ -38,10 +38,7 @@ export default function Preview({ curricularLetters }) {
           return (
             <>
               <tr>
-                <th
-                  colspan='5'
-                  className='border-none title vertical-align-center'
-                >
+                <th colspan='5' className='border-none title'>
                   {get(curricularLetter, 'university', '')}
                 </th>
               </tr>

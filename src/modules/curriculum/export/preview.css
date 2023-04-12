@@ -1,6 +1,7 @@
-table,
-th,
-td {
+#curriculum,
+#curriculum table,
+#curriculum th,
+#curriculum td {
   border-left: 1px solid black;
   border-right: 1px solid black;
   border-top: 1px solid black;
@@ -8,55 +9,52 @@ td {
   border-collapse: collapse;
 }
 
-th {
+#curriculum th {
   text-align: center;
 }
 
-th,
-td {
+#curriculum th,
+#curriculum td {
   vertical-align: top;
   padding: 8px;
 }
 
-table {
+#curriculum table {
   margin: 24px;
 }
 
-.text-center {
+#curriculum .text-center {
   text-align: center;
 }
 
-.border-top-none {
+#curriculum .border-top-none {
   border-top: 1px solid transparent !important;
 }
 
-.border-bottom-none {
+#curriculum .border-bottom-none {
   border-bottom: 1px solid transparent !important;
 }
 
-.border-left-none {
+#curriculum .border-left-none {
   border-left: 1px solid transparent !important;
 }
 
-.border-right-none {
+#curriculum .border-right-none {
   border-right: 1px solid transparent !important;
 }
 
-.border-none {
+#curriculum .border-none {
   border: 1px solid transparent !important;
 }
 
-.height-60 {
+#curriculum .height-60 {
   height: 60px;
 }
 
-.title {
+#curriculum .title {
   height: 60px;
-  font-size: 24px;
-}
-
-.vertical-align-center {
-  vertical-align: center !important;
+  font-size: 22px;
+  padding-top: 12px;
 }
 
 .download-table-xls-button {
