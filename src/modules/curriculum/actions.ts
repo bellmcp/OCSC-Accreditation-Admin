@@ -414,6 +414,15 @@ function deleteWaitCurriculum(
           waitCurriculums: data,
         },
       })
+      dispatch(
+        uiActions.setFlashMessage(
+          get(data, 'mesg', 'ออกหนังสือเวียนสำเร็จ'),
+          'success'
+        )
+      )
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
     } catch (err) {
       dispatch({ type: DELETE_WAIT_CURRICULUM_FAILURE })
       handleApiError(err, dispatch)
