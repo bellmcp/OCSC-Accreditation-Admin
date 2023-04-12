@@ -3,6 +3,8 @@ import { get } from 'lodash'
 import * as uiActions from 'modules/ui/actions'
 import { getCookie } from 'utils/cookies'
 
+import { handleApiError } from 'utils/error'
+
 const LOAD_PROGRESS_GOVERNMENT_REQUEST =
   'ocsc-person-accredit/curriculum/progress/LOAD_PROGRESS_GOVERNMENT_REQUEST'
 const LOAD_PROGRESS_GOVERNMENT_SUCCESS =
@@ -95,16 +97,7 @@ function loadProgressGovernment() {
       })
     } catch (err) {
       dispatch({ type: LOAD_PROGRESS_GOVERNMENT_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `โหลดข้อมูลความคืบหน้ามหาวิทยาลัยรัฐไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -130,16 +123,7 @@ function loadProgressIndividual() {
       })
     } catch (err) {
       dispatch({ type: LOAD_PROGRESS_INDIVIDUAL_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `โหลดข้อมูลความคืบหน้ามหาวิทยาลัยเอกชนไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -163,16 +147,7 @@ function loadLockStatus() {
       })
     } catch (err) {
       dispatch({ type: LOAD_LOCK_STATUS_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `โหลดข้อมูลสถานะการล็อกไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -205,16 +180,7 @@ function lockRequest() {
       dispatch(loadLockStatus())
     } catch (err) {
       dispatch({ type: LOCK_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `ล็อกไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -222,7 +188,7 @@ function lockRequest() {
 function unlockRequest() {
   const token = getCookie('token')
   return async (dispatch: any) => {
-    dispatch({ type: LOCK_REQUEST })
+    dispatch({ type: UNLOCK_REQUEST })
     try {
       var { data } = await axios.put(
         '/WaitCurriculums/Unlock',
@@ -236,7 +202,7 @@ function unlockRequest() {
         }
       )
       dispatch({
-        type: LOCK_SUCCESS,
+        type: UNLOCK_SUCCESS,
         payload: {
           isLocked: data.isLocked,
         },
@@ -246,17 +212,8 @@ function unlockRequest() {
       )
       dispatch(loadLockStatus())
     } catch (err) {
-      dispatch({ type: LOCK_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `ปลดล็อกไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      dispatch({ type: UNLOCK_FAILURE })
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -291,16 +248,7 @@ function loadWaitCurriculum(
       })
     } catch (err) {
       dispatch({ type: LOAD_WAIT_CURRICULUM_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `โหลดข้อมูลหลักสูตรที่รอรับรองไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -338,16 +286,7 @@ function loadRecommendation(
       })
     } catch (err) {
       dispatch({ type: LOAD_RECOMMENDATION_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `โหลดคำแนะนำไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -401,16 +340,7 @@ function updateRow(
       )
     } catch (err) {
       dispatch({ type: UPDATE_ROW_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `อัพเดทข้อมูลไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -445,14 +375,8 @@ function importFile(file: any) {
         }, 2000)
       })
       .catch(function (err) {
-        const responseMessage = get(err, 'response.data.mesg', '')
         dispatch({ type: IMPORT_FILE_FAILURE })
-        dispatch(
-          uiActions.setFlashMessage(
-            `อัพโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
-            'error'
-          )
-        )
+        handleApiError(err, dispatch)
       })
   }
 }
@@ -489,16 +413,7 @@ function deleteWaitCurriculum(
       })
     } catch (err) {
       dispatch({ type: DELETE_WAIT_CURRICULUM_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `ออกหนังสือเวียนไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }
@@ -527,16 +442,7 @@ function loadCircularLetter(isGov: number) {
       })
     } catch (err) {
       dispatch({ type: LOAD_CIRCULAR_LETTER_FAILURE })
-      dispatch(
-        uiActions.setFlashMessage(
-          `นำออกผลการรับรองคุณวุฒิไม่สำเร็จ เกิดข้อผิดพลาด ${get(
-            err,
-            'response.status',
-            'บางอย่าง'
-          )}`,
-          'error'
-        )
-      )
+      handleApiError(err, dispatch)
     }
   }
 }

@@ -139,7 +139,11 @@ export default function Layout() {
           elevation={6}
           variant='filled'
         >
-          {flashMessage}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: flashMessage,
+            }}
+          ></div>
         </Alert>
       </Snackbar>
       {!isPreviewPage && <Footer />}
