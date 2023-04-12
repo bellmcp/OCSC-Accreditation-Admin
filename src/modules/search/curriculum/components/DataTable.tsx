@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { get } from 'lodash'
+import { format } from 'date-fns'
 
 import {
   DataGrid,
@@ -400,7 +401,10 @@ export default function DataTable({ data, loading }: DataTableProps) {
             csvOptions={{
               delimiter: ',',
               utf8WithBom: true,
-              fileName: 'การรับรองคุณวุฒิหลักสูตร',
+              fileName: `การรับรองคุณวุฒิหลักสูตร_${format(
+                new Date(),
+                'yyyy-MM-dd-HH:mm:ss'
+              ).toString()}`,
             }}
             sx={{ lineHeight: '1.2' }}
           />

@@ -2,6 +2,7 @@ import React from 'react'
 import { get, size } from 'lodash'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 import './preview.css'
+import { format } from 'date-fns'
 
 export default function Preview({ curricularLetters }) {
   function section() {
@@ -29,7 +30,10 @@ export default function Preview({ curricularLetters }) {
         id='download-xls-button'
         className='download-table-xls-button'
         table='curriculum'
-        filename='ผลการรับรองคุณวุฒิ'
+        filename={`ผลการรับรองคุณวุฒิ_${format(
+          new Date(),
+          'yyyy-MM-dd-HH:mm:ss'
+        ).toString()}`}
         sheet='ผลการรับรองคุณวุฒิ'
         buttonText='ดาวน์โหลด XLS'
       />
