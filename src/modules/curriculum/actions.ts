@@ -440,7 +440,7 @@ function loadCircularLetter(isGov: number) {
       dispatch({
         type: LOAD_CIRCULAR_LETTER_SUCCESS,
         payload: {
-          waitCurriculums: data,
+          curricularLetters: data,
         },
       })
     } catch (err) {

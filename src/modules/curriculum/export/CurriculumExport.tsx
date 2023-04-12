@@ -35,9 +35,9 @@ import {
 
 import Header from 'modules/ui/components/Header'
 import DatePicker from './DatePicker'
+import PreviewModal from './PreviewModal'
 
 import * as curriculumActions from 'modules/curriculum/actions'
-import * as uiActions from 'modules/ui/actions'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,7 +100,7 @@ export default function CurriculumExport() {
       dispatch(
         curriculumActions.loadCircularLetter(values.type === 'gov' ? 1 : 0)
       )
-      dispatch(uiActions.setFlashMessage('Under development', 'warning'))
+      openModal()
     },
   })
 
@@ -116,6 +116,15 @@ export default function CurriculumExport() {
 
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
+  const openModal = () => {
+    setIsOpenModal(true)
+  }
+  const closeModal = () => {
+    setIsOpenModal(false)
   }
 
   const handleAccept = () => {
@@ -230,7 +239,7 @@ export default function CurriculumExport() {
                     style={{ marginTop: 16 }}
                     type='submit'
                   >
-                    ดาวน์โหลด
+                    ส่งออก
                   </Button>
                 </Grid>
               </Grid>
@@ -387,6 +396,7 @@ export default function CurriculumExport() {
           </Button>
         </DialogActions>
       </Dialog>
+      <PreviewModal isOpen={isOpenModal} onClose={closeModal} />
     </>
   )
 }

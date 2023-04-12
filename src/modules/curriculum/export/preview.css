@@ -1,0 +1,64 @@
+table,
+th,
+td {
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: center;
+}
+
+th,
+td {
+  vertical-align: top;
+  padding: 8px;
+}
+
+table {
+  margin: 24px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.border-top-none {
+  border-top: 1px solid transparent !important;
+}
+
+.border-bottom-none {
+  border-bottom: 1px solid transparent !important;
+}
+
+.border-left-none {
+  border-left: 1px solid transparent !important;
+}
+
+.border-right-none {
+  border-right: 1px solid transparent !important;
+}
+
+.border-none {
+  border: 1px solid transparent !important;
+}
+
+.height-60 {
+  height: 60px;
+}
+
+.title {
+  height: 60px;
+  font-size: 24px;
+}
+
+.vertical-align-center {
+  vertical-align: center !important;
+}
+
+.download-table-xls-button {
+  display: none;
+}
