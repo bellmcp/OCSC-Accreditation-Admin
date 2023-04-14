@@ -76,7 +76,7 @@ export default function RecommendationModal({ isOpen, onClose }: any) {
               onClick={handleClick}
               style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             >
-              ดาวน์โหลด
+              ดาวน์โหลด .XLS
             </Button>
           </Toolbar>
         </AppBar>

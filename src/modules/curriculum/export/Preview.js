@@ -35,7 +35,7 @@ export default function Preview({ curricularLetters }) {
           'yyyy-MM-dd-HH:mm:ss'
         ).toString()}`}
         sheet='ผลการรับรองคุณวุฒิ'
-        buttonText='ดาวน์โหลด XLS'
+        buttonText='ดาวน์โหลด .XLS'
       />
       <table id='curriculum'>
         {curricularLetters.map((curricularLetter) => {
