@@ -22,6 +22,8 @@ import {
 
 const initialState = {
   isLoading: false,
+  isLoadingGovernment: false,
+  isLoadingIndividual: false,
   isSearching: false,
   isRecommending: false,
   progressGovernment: [],
@@ -36,9 +38,9 @@ const initialState = {
 export default function (state = initialState, action: any) {
   switch (action.type) {
     case LOAD_PROGRESS_GOVERNMENT_REQUEST:
-      return { ...state, isLoading: true, progressGovernment: [] }
+      return { ...state, isLoadingGovernment: true, progressGovernment: [] }
     case LOAD_PROGRESS_INDIVIDUAL_REQUEST:
-      return { ...state, isLoading: true, progressIndividual: [] }
+      return { ...state, isLoadingIndividual: true, progressIndividual: [] }
     case LOAD_LOCK_STATUS_REQUEST:
       return { ...state, isLoading: true, isLocked: false, lockMessage: '' }
     case LOAD_WAIT_CURRICULUM_REQUEST:
@@ -50,13 +52,13 @@ export default function (state = initialState, action: any) {
     case LOAD_PROGRESS_GOVERNMENT_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        isLoadingGovernment: false,
         progressGovernment: action.payload.progressGovernment,
       }
     case LOAD_PROGRESS_INDIVIDUAL_SUCCESS:
       return {
         ...state,
-        isLoading: false,
+        isLoadingIndividual: false,
         progressIndividual: action.payload.progressIndividual,
       }
     case LOAD_LOCK_STATUS_SUCCESS:
@@ -85,7 +87,9 @@ export default function (state = initialState, action: any) {
         curricularLetters: action.payload.curricularLetters,
       }
     case LOAD_PROGRESS_GOVERNMENT_FAILURE:
+      return { ...state, isLoadingGovernment: false }
     case LOAD_PROGRESS_INDIVIDUAL_FAILURE:
+      return { ...state, isLoadingIndividual: false }
     case LOAD_CIRCULAR_LETTER_FAILURE:
     case LOAD_LOCK_STATUS_FAILURE:
       return { ...state, isLoading: false }

@@ -59,13 +59,16 @@ export default function CurriculumProgress() {
   const {
     progressGovernment: progressGovernmentList = [],
     progressIndividual: progressIndividualList = [],
-    isLoading = false,
+    isLoadingGovernment = false,
+    isLoadingIndividual = false,
   } = useSelector((state: any) => state.curriculum)
 
   useEffect(() => {
     dispatch(curriculumActions.loadProgressGovernment())
     dispatch(curriculumActions.loadProgressIndividual())
   }, [dispatch])
+
+  const isLoading = isLoadingGovernment || isLoadingIndividual
 
   const renderContent = () => {
     if (isLoading) {
@@ -92,10 +95,10 @@ export default function CurriculumProgress() {
                 align='center'
                 className={classes.sectionSubtitle}
               >
-                เอกชน
+                รัฐ
               </Typography>
               <Divider style={{ marginBottom: 32 }} />
-              <ProgressList progressList={progressIndividualList} />
+              <ProgressList progressList={progressGovernmentList} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -117,10 +120,10 @@ export default function CurriculumProgress() {
                 align='center'
                 className={classes.sectionSubtitle}
               >
-                รัฐ
+                เอกชน
               </Typography>
               <Divider style={{ marginBottom: 32 }} />
-              <ProgressList progressList={progressGovernmentList} />
+              <ProgressList progressList={progressIndividualList} />
             </Paper>
           </Grid>
         </Grid>
