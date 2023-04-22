@@ -255,7 +255,7 @@ export default function CurriculumApprove() {
       <Container maxWidth='lg' className={classes.content}>
         <form onSubmit={formik.handleSubmit}>
           <Box mt={2} mb={4}>
-            <Grid container justify='space-between'>
+            <Grid container justify={matches ? 'space-between' : 'center'}>
               <Typography
                 gutterBottom
                 component='h2'
@@ -269,7 +269,7 @@ export default function CurriculumApprove() {
               <Stack
                 spacing={2}
                 direction='column'
-                alignItems='flex-end'
+                alignItems={matches ? 'flex-end' : 'center'}
                 style={{ marginBottom: 24 }}
               >
                 <ButtonGroup>
@@ -296,6 +296,7 @@ export default function CurriculumApprove() {
                     variant='body2'
                     color='error'
                     style={{ fontWeight: 500 }}
+                    align={matches ? 'right' : 'center'}
                   >
                     {lockMessage}
                   </Typography>

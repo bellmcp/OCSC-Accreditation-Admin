@@ -140,7 +140,7 @@ export default function CurriculumProgress() {
             container
             direction='row'
             alignItems='center'
-            justify='space-between'
+            justify={matches ? 'space-between' : 'center'}
             style={{ marginBottom: 14 }}
           >
             <Typography
@@ -159,13 +159,21 @@ export default function CurriculumProgress() {
               spacing={2}
               divider={<Divider orientation='vertical' flexItem />}
             >
-              <Typography variant='body2' style={{ color: green[800] }}>
+              <Typography
+                variant='body2'
+                style={{ color: green[800] }}
+                align='center'
+              >
                 <span style={{ fontWeight: 600 }}>สีเขียว</span> : เสร็จแล้ว
               </Typography>
-              <Typography variant='body2' style={{ color: red[600] }}>
+              <Typography
+                variant='body2'
+                style={{ color: red[600] }}
+                align='center'
+              >
                 <span style={{ fontWeight: 600 }}>สีแดง</span> : ยังไม่เสร็จ
               </Typography>
-              <Typography variant='body2' color='textPrimary'>
+              <Typography variant='body2' color='textPrimary' align='center'>
                 <span style={{ fontWeight: 600 }}>สีดำ</span> : ยังไม่ได้ทำ
               </Typography>
             </Stack>
