@@ -114,6 +114,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
   const [educationLevels, setEducationLevels] = useState([])
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [selectionModel, setSelectionModel] = useState<any>([])
+  const [currentEditRowData, setCurrentEditRowData] = useState(null)
 
   const { educationLevels: initialEducationLevels = [] } = useSelector(
     (state: any) => state.info
@@ -542,6 +543,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
     dispatch(
       curriculumActions.loadRecommendation(university, faculty, degree, branch)
     )
+    setCurrentEditRowData(rowData)
     openModal()
   }
 
@@ -749,6 +751,8 @@ export default function DataTableEdit({ data, isLocked }: any) {
         onClose={closeModal}
         selectionModel={selectionModel}
         setSelectionModel={setSelectionModel}
+        currentEditRowData={currentEditRowData}
+        setCurrentEditRowData={setCurrentEditRowData}
       />
     </ThemeProvider>
   )

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { size } from 'lodash'
+import { get, size } from 'lodash'
 
 import {
   Dialog,
@@ -8,6 +8,7 @@ import {
   Slide,
   Toolbar,
   // IconButton,
+  Grid,
   AppBar,
   Typography,
   Button,
@@ -29,6 +30,8 @@ export default function RecommendationModal({
   onClose,
   selectionModel,
   setSelectionModel,
+  currentEditRowData,
+  setCurrentEditRowData,
 }: any) {
   const [recommendationList, setRecommendationList] = useState([])
 
@@ -55,8 +58,40 @@ export default function RecommendationModal({
 
   const onSave = () => {
     setSelectionModel([])
+    setCurrentEditRowData(null)
     onClose()
   }
+
+  const currentEditRowDataList = [
+    {
+      title: 'รัฐ/เอกชน',
+      value: get(currentEditRowData, 'category', ''),
+    },
+    {
+      title: 'ระดับการศึกษา',
+      value: get(currentEditRowData, 'level', ''),
+    },
+    {
+      title: 'มหาวิทยาลัย/สถาบันการศึกษา',
+      value: get(currentEditRowData, 'university', ''),
+    },
+    {
+      title: 'คณะ/หน่วยงาน',
+      value: get(currentEditRowData, 'faculty', ''),
+    },
+    {
+      title: 'ชื่อปริญญา/ประกาศนียบัตร',
+      value: get(currentEditRowData, 'degree', ''),
+    },
+    {
+      title: 'สาขา/วิชาเอก',
+      value: get(currentEditRowData, 'branch', ''),
+    },
+    {
+      title: 'หมายเหตุ',
+      value: get(currentEditRowData, 'note', ''),
+    },
+  ]
 
   return (
     <div>
@@ -99,6 +134,34 @@ export default function RecommendationModal({
           </Toolbar>
         </AppBar>
         <DialogContent>
+          <Grid
+            container
+            spacing={1}
+            style={{ paddingTop: 16, paddingBottom: 24 }}
+          >
+            {currentEditRowDataList.map((currentEditRowDataItem: any) => (
+              <>
+                <Grid item xs={2} style={{ maxWidth: 220 }}>
+                  <Typography
+                    variant='body2'
+                    color='secondary'
+                    style={{ fontWeight: 600 }}
+                  >
+                    {currentEditRowDataItem.title}
+                  </Typography>
+                </Grid>
+                <Grid item xs={10}>
+                  <Typography
+                    variant='body2'
+                    color='secondary'
+                    style={{ fontWeight: 500 }}
+                  >
+                    {currentEditRowDataItem.value}
+                  </Typography>
+                </Grid>
+              </>
+            ))}
+          </Grid>
           <Typography
             variant='body2'
             color='primary'
