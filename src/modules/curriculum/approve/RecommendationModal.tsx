@@ -53,6 +53,11 @@ export default function RecommendationModal({
   //   onClose()
   // }
 
+  const onSave = () => {
+    setSelectionModel([])
+    onClose()
+  }
+
   return (
     <div>
       <Dialog
@@ -85,7 +90,7 @@ export default function RecommendationModal({
               variant='outlined'
               autoFocus
               color='inherit'
-              onClick={onClose}
+              onClick={onSave}
               disabled={size(selectionModel) === 0}
               style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             >

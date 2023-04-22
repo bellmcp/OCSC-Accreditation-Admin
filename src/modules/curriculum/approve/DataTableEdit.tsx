@@ -158,6 +158,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
+    setSelectionModel([])
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
