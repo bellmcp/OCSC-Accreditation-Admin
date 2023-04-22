@@ -41,6 +41,7 @@ import DataTableEdit from './DataTableEdit'
 
 import * as curriculumActions from 'modules/curriculum/actions'
 import * as infoActions from 'modules/info/actions'
+import * as uiActions from 'modules/ui/actions'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,6 +70,7 @@ export default function CurriculumApprove() {
   const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
   const [searchResults, setSearchResults] = useState([])
   const [educationLevels, setEducationLevels] = useState([])
+  const [isInEditMode, setIsInEditMode] = useState(false)
 
   const {
     isLocked = false,
@@ -134,7 +136,16 @@ export default function CurriculumApprove() {
   })
 
   const lock = () => {
-    dispatch(curriculumActions.lockRequest())
+    if (isInEditMode) {
+      dispatch(
+        uiActions.setFlashMessage(
+          '<b>ไม่สามารถล็อคได้</b><br/>โปรดออกจากโหมดการแก้ไขข้อมูล และลองใหม่อีกครั้ง',
+          'error'
+        )
+      )
+    } else {
+      dispatch(curriculumActions.lockRequest())
+    }
   }
 
   const unlock = () => {
@@ -223,7 +234,12 @@ export default function CurriculumApprove() {
                 minHeight: 300,
               }}
             >
-              <DataTableEdit data={searchResults} isLocked={isLocked} />
+              <DataTableEdit
+                data={searchResults}
+                isLocked={isLocked}
+                isInEditMode={isInEditMode}
+                setIsInEditMode={setIsInEditMode}
+              />
             </Paper>
           </Box>
         )

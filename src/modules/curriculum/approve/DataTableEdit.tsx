@@ -104,7 +104,12 @@ interface SubmitData {
   note: string
 }
 
-export default function DataTableEdit({ data, isLocked }: any) {
+export default function DataTableEdit({
+  data,
+  isLocked,
+  isInEditMode,
+  setIsInEditMode,
+}: any) {
   const dispatch = useDispatch()
 
   const [rows, setRows] = React.useState(data)
@@ -154,12 +159,14 @@ export default function DataTableEdit({ data, isLocked }: any) {
   }
 
   const handleEditClick = (id: GridRowId) => () => {
+    setIsInEditMode(true)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
     setSelectionModel([])
+    setIsInEditMode(false)
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -173,6 +180,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
       setRows(rows.filter((row: any) => row.id !== id))
     }
     setSelectionModel([])
+    setIsInEditMode(false)
   }
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -481,9 +489,9 @@ export default function DataTableEdit({ data, isLocked }: any) {
       width: 120,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
+        const isInRowEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
 
-        if (isInEditMode) {
+        if (isInRowEditMode) {
           return [
             <Tooltip title='บันทึก'>
               <GridActionsCellItem
@@ -513,7 +521,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
               label='Edit'
               onClick={handleEditClick(id)}
               color='primary'
-              disabled={isLocked}
+              disabled={isLocked || isInEditMode}
             />
           </Tooltip>,
         ]
