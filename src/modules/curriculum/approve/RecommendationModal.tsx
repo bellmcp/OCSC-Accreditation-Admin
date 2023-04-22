@@ -7,13 +7,14 @@ import {
   DialogContent,
   Slide,
   Toolbar,
-  IconButton,
+  // IconButton,
   Grid,
   AppBar,
   Typography,
   Button,
 } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Stack } from '@mui/material'
+// import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import RecommendationTable from './RecommendationTable'
@@ -110,14 +111,14 @@ export default function RecommendationModal({
           color='secondary'
         >
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               edge='start'
               color='inherit'
               onClick={onCancel}
               aria-label='close'
             >
               <CloseIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography
               style={{ marginLeft: 2, flex: 1 }}
               variant='h6'
@@ -125,16 +126,30 @@ export default function RecommendationModal({
             >
               คำแนะนำผลการรับรอง
             </Typography>
-            <Button
-              variant='outlined'
-              autoFocus
-              color='inherit'
-              onClick={onSave}
-              disabled={size(selectionModelTemp) === 0}
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-            >
-              บันทึก
-            </Button>
+            <Stack direction='row' spacing={1}>
+              <Button
+                variant='text'
+                color='inherit'
+                onClick={onCancel}
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  paddingLeft: 16,
+                  paddingRight: 16,
+                }}
+              >
+                ยกเลิก (ESC)
+              </Button>
+              <Button
+                variant='outlined'
+                autoFocus
+                color='inherit'
+                onClick={onSave}
+                disabled={size(selectionModelTemp) === 0}
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              >
+                บันทึก
+              </Button>
+            </Stack>
           </Toolbar>
         </AppBar>
         <DialogContent>
