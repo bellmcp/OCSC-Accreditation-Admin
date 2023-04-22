@@ -33,6 +33,7 @@ import {
   LockOpen as UnlockIcon,
   UnfoldLess as ShrinkIcon,
   UnfoldMore as ExpandIcon,
+  Edit as EditIcon,
 } from '@material-ui/icons'
 
 import Header from 'modules/ui/components/Header'
@@ -219,8 +220,9 @@ export default function CurriculumApprove() {
                   color='primary'
                   style={{ fontWeight: 500, paddingBottom: 24 }}
                 >
-                  <b>*</b> โปรดคลิกไอคอน 'ดินสอ'
-                  ที่คอลัมน์ขวาสุดของแต่ละแถวเพื่อเริ่มแก้ไขข้อมูล
+                  <b>*</b> โปรดคลิกไอคอน{' '}
+                  <EditIcon style={{ fontSize: 20, marginBottom: '-5px' }} />{' '}
+                  ที่คอลัมน์ 'จัดการข้อมูล' ของแต่ละแถวเพื่อเริ่มแก้ไขข้อมูล
                 </Typography>
               )}
             </Container>
