@@ -7,14 +7,14 @@ import {
   DialogContent,
   Slide,
   Toolbar,
-  // IconButton,
+  IconButton,
   Grid,
   AppBar,
   Typography,
   Button,
 } from '@material-ui/core'
 import { Stack } from '@mui/material'
-// import { Close as CloseIcon } from '@material-ui/icons'
+import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import RecommendationTable from './RecommendationTable'
@@ -111,14 +111,14 @@ export default function RecommendationModal({
           color='secondary'
         >
           <Toolbar>
-            {/* <IconButton
+            <IconButton
               edge='start'
               color='inherit'
               onClick={onCancel}
               aria-label='close'
             >
               <CloseIcon />
-            </IconButton> */}
+            </IconButton>
             <Typography
               style={{ marginLeft: 2, flex: 1 }}
               variant='h6'
