@@ -242,6 +242,12 @@ function loadWaitCurriculum(
       )
       if (data.length === 0) {
         data = []
+        dispatch(
+          uiActions.setFlashMessage(
+            'ไม่พบผลลัพธ์การค้นหา โปรดลองใหม่อีกครั้ง',
+            'info'
+          )
+        )
       }
       dispatch({
         type: LOAD_WAIT_CURRICULUM_SUCCESS,
