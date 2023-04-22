@@ -7,13 +7,13 @@ import {
   DialogContent,
   Slide,
   Toolbar,
-  // IconButton,
+  IconButton,
   Grid,
   AppBar,
   Typography,
   Button,
 } from '@material-ui/core'
-// import { Close as CloseIcon } from '@material-ui/icons'
+import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import RecommendationTable from './RecommendationTable'
@@ -34,6 +34,7 @@ export default function RecommendationModal({
   setCurrentEditRowData,
 }: any) {
   const [recommendationList, setRecommendationList] = useState([])
+  const [selectionModelTemp, setSelectionModelTemp] = useState<any>([])
 
   const {
     isRecommending = false,
@@ -51,13 +52,16 @@ export default function RecommendationModal({
     setRecommendationList(parsed)
   }, [initialRecommendations])
 
-  // const onCancel = () => {
-  //   setSelectionModel([])
-  //   onClose()
-  // }
+  const onCancel = () => {
+    setSelectionModel([])
+    setSelectionModelTemp([])
+    setCurrentEditRowData(null)
+    onClose()
+  }
 
   const onSave = () => {
-    setSelectionModel([])
+    setSelectionModel(selectionModelTemp)
+    setSelectionModelTemp([])
     setCurrentEditRowData(null)
     onClose()
   }
@@ -97,7 +101,7 @@ export default function RecommendationModal({
     <div>
       <Dialog
         open={isOpen}
-        // onClose={onCancel}
+        onClose={onCancel}
         fullScreen
         TransitionComponent={Transition}
       >
@@ -106,14 +110,14 @@ export default function RecommendationModal({
           color='secondary'
         >
           <Toolbar>
-            {/* <IconButton
+            <IconButton
               edge='start'
               color='inherit'
               onClick={onCancel}
               aria-label='close'
             >
               <CloseIcon />
-            </IconButton> */}
+            </IconButton>
             <Typography
               style={{ marginLeft: 2, flex: 1 }}
               variant='h6'
@@ -126,7 +130,7 @@ export default function RecommendationModal({
               autoFocus
               color='inherit'
               onClick={onSave}
-              disabled={size(selectionModel) === 0}
+              disabled={size(selectionModelTemp) === 0}
               style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             >
               บันทึก
@@ -173,8 +177,8 @@ export default function RecommendationModal({
           <RecommendationTable
             data={recommendationList}
             loading={isRecommending}
-            selectionModel={selectionModel}
-            setSelectionModel={setSelectionModel}
+            selectionModel={selectionModelTemp}
+            setSelectionModel={setSelectionModelTemp}
           />
         </DialogContent>
       </Dialog>
