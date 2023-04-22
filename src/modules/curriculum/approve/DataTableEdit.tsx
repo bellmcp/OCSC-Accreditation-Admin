@@ -115,7 +115,7 @@ export default function DataTableEdit({ data, isLocked }: any) {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [selectionModel, setSelectionModel] = useState<any>([])
 
-  const { educationLevels: initalEducationLevels = [] } = useSelector(
+  const { educationLevels: initialEducationLevels = [] } = useSelector(
     (state: any) => state.info
   )
   const { recommendations = [] } = useSelector((state: any) => state.curriculum)
@@ -132,11 +132,11 @@ export default function DataTableEdit({ data, isLocked }: any) {
   }, [data])
 
   useEffect(() => {
-    const parsed = initalEducationLevels.map((item: any) => {
+    const parsed = initialEducationLevels.map((item: any) => {
       return { value: item.id, label: item.level }
     })
     setEducationLevels(parsed)
-  }, [initalEducationLevels])
+  }, [initialEducationLevels])
 
   const handleRowEditStart = (
     params: GridRowParams,
@@ -453,7 +453,11 @@ export default function DataTableEdit({ data, isLocked }: any) {
       type: 'singleSelect',
       valueOptions: educationLevels,
       renderCell: (params) => {
-        const level = get(params, 'row.level', false)
+        const id = get(params, 'value', 0)
+        const res = educationLevels.find(
+          (educationLevel: any) => educationLevel.value === id
+        )
+        const level = get(res, 'label', '')
         return level
       },
     },
