@@ -393,42 +393,11 @@ export default function DataTableEdit({ data, isLocked }: any) {
       headerAlign: 'center',
     },
     {
-      field: 'isDeleted',
-      headerName: 'ลบ/ไม่ลบ',
-      width: 90,
+      field: 'id',
+      headerName: 'เลขที่อ้างอิง',
+      width: 120,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => {
-        const deleted = get(params, 'value', false)
-        return deleted ? 'ลบ' : 'ไม่ลบ'
-      },
-      editable: !isLocked,
-      type: 'singleSelect',
-      valueOptions: [
-        { value: true, label: 'ลบ' },
-        { value: false, label: 'ไม่ลบ' },
-      ],
-    },
-    {
-      field: 'university',
-      headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
-      width: 220,
-      editable: !isLocked,
-      renderCell: renderCellExpand,
-    },
-    {
-      field: 'degree',
-      headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
-      width: 220,
-      editable: !isLocked,
-      renderCell: renderCellExpand,
-    },
-    {
-      field: 'branch',
-      headerName: 'สาขา/วิชาเอก',
-      width: 220,
-      editable: !isLocked,
-      renderCell: renderCellExpand,
     },
     {
       field: 'isGov',
@@ -462,9 +431,30 @@ export default function DataTableEdit({ data, isLocked }: any) {
       },
     },
     {
+      field: 'university',
+      headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
+      width: 220,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
+    },
+    {
       field: 'faculty',
       headerName: 'คณะ/หน่วยงาน',
       width: 200,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'degree',
+      headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
+      width: 220,
+      editable: !isLocked,
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'branch',
+      headerName: 'สาขา/วิชาเอก',
+      width: 220,
       editable: !isLocked,
       renderCell: renderCellExpand,
     },
@@ -482,13 +472,6 @@ export default function DataTableEdit({ data, isLocked }: any) {
       width: 300,
       editable: !isLocked,
       renderCell: renderCellExpand,
-    },
-    {
-      field: 'id',
-      headerName: 'เลขที่อ้างอิง',
-      width: 120,
-      align: 'center',
-      headerAlign: 'center',
     },
     {
       field: 'actions',
@@ -534,6 +517,23 @@ export default function DataTableEdit({ data, isLocked }: any) {
           </Tooltip>,
         ]
       },
+    },
+    {
+      field: 'isDeleted',
+      headerName: 'ลบ/ไม่ลบ',
+      width: 90,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => {
+        const deleted = get(params, 'value', false)
+        return deleted ? 'ลบ' : 'ไม่ลบ'
+      },
+      editable: !isLocked,
+      type: 'singleSelect',
+      valueOptions: [
+        { value: true, label: 'ลบ' },
+        { value: false, label: 'ไม่ลบ' },
+      ],
     },
   ]
 
