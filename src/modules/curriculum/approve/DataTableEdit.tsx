@@ -409,6 +409,20 @@ export default function DataTableEdit({
       headerAlign: 'center',
     },
     {
+      field: 'ref1',
+      headerName: 'รหัสหลักสูตร',
+      width: 140,
+      align: 'left',
+      headerAlign: 'left',
+    },
+    {
+      field: 'ref2',
+      headerName: 'รหัสอ้างอิงเพื่อการติดตามหลักสูตร',
+      width: 250,
+      align: 'left',
+      headerAlign: 'left',
+    },
+    {
       field: 'isGov',
       headerName: 'รัฐ/เอกชน',
       width: 100,
