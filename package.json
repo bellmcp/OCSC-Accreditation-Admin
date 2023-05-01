@@ -8,7 +8,7 @@
     "url": "https://www.ocsc.go.th/"
   },
   "main": "index.js",
-  "homepage": "https://learningportal.ocsc.go.th/accreditationadmin",
+  "homepage": "https://accreditation.ocsc.go.th/accreditationadmin",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
