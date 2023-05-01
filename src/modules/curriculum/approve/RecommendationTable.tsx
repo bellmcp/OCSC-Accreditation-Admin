@@ -7,6 +7,7 @@ import {
   bgBG,
   GridRenderCellParams,
   gridClasses,
+  GRID_CHECKBOX_SELECTION_COL_DEF,
 } from '@mui/x-data-grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -297,6 +298,26 @@ const columns: GridColDef[] = [
     headerAlign: 'center',
   },
   {
+    ...GRID_CHECKBOX_SELECTION_COL_DEF,
+    width: 50,
+    cellClassName: 'blue',
+  },
+  {
+    field: 'accreditation1',
+    headerName: 'ผลการรับรอง',
+    width: 425,
+    renderCell: renderAccreditationCellExpand,
+    cellClassName: 'blue',
+  },
+  {
+    field: 'score',
+    headerName: 'คะแนน',
+    width: 100,
+    align: 'center',
+    headerAlign: 'center',
+    cellClassName: 'blue',
+  },
+  {
     field: 'university',
     headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
     width: 220,
@@ -333,13 +354,6 @@ const columns: GridColDef[] = [
     renderCell: renderCellExpand,
   },
   {
-    field: 'accreditation1',
-    headerName: 'ผลการรับรอง',
-    width: 425,
-    renderCell: renderAccreditationCellExpand,
-    cellClassName: 'blue',
-  },
-  {
     field: 'note',
     headerName: 'หมายเหตุ',
     width: 300,
@@ -352,13 +366,6 @@ const columns: GridColDef[] = [
     renderCell: renderCellExpand,
   },
   { field: 'letterDate', headerName: 'ลงวันที่', width: 120 },
-  {
-    field: 'score',
-    headerName: 'คะแนน',
-    width: 120,
-    align: 'center',
-    headerAlign: 'center',
-  },
 ]
 
 export default function RecommendationTable({
@@ -388,6 +395,26 @@ export default function RecommendationTable({
             '& .blue': {
               backgroundColor: alpha('#09348b', ODD_OPACITY),
               color: '#09348b',
+            },
+            '& .MuiDataGrid-virtualScroller': {
+              transform: 'rotateX(180deg)',
+            },
+            '& .MuiDataGrid-virtualScrollerContent': {
+              transform: 'rotateX(180deg)',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '0.4em',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track': {
+              background: '#f1f1f1',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#888',
+              borderRadius: 8,
+              border: '3px solid #f1f1f1',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover': {
+              background: '#555',
             },
           }}
           initialState={{
