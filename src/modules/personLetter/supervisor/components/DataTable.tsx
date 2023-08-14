@@ -190,6 +190,10 @@ function renderCellExpand(params: GridRenderCellParams<string>) {
   )
 }
 
+const parseLinkToDefaultColor = (text: string) => {
+  return text.replace(/<a/g, '<a class="custom_link"')
+}
+
 export default function DataTable({
   data,
   loading,
@@ -224,9 +228,17 @@ export default function DataTable({
       field: 'letterNo',
       headerName: 'เลขที่',
       width: 150,
-      align: 'center',
       headerAlign: 'center',
-      renderCell: renderCellExpand,
+      renderCell: (params) => {
+        const value = get(params, 'value', '')
+        return (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: parseLinkToDefaultColor(value),
+            }}
+          ></div>
+        )
+      },
     },
     {
       field: 'letterDatePrint',
