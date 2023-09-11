@@ -53,7 +53,7 @@ export default function FileUpload({
           style={{ padding: '4px 16px' }}
           type='submit'
         >
-          อัพโหลด
+          อัปโหลด
         </Button>
       </Stack>
     </form>

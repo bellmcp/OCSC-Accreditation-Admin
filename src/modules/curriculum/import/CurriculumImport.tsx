@@ -187,7 +187,7 @@ export default function CurriculumImport() {
               type='submit'
               disabled={file === undefined}
             >
-              อัพโหลด
+              อัปโหลด
             </Button>
           </Box>
         </Container>
@@ -196,7 +196,7 @@ export default function CurriculumImport() {
         <DialogTitle>นำเข้าหลักสูตรใหม่?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            คุณแน่ใจหรือไม่ ว่าต้องการอัพโหลดไฟล์{' '}
+            คุณแน่ใจหรือไม่ ว่าต้องการอัปโหลดไฟล์{' '}
             <span
               style={{ fontWeight: 500, color: theme.palette.text.primary }}
             >

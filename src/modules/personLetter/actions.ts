@@ -396,7 +396,7 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
           type: UPLOAD_FILE_SUCCESS,
           payload: { submitResponse: response },
         })
-        dispatch(uiActions.setFlashMessage('อัพโหลดไฟล์เรียบร้อย', 'success'))
+        dispatch(uiActions.setFlashMessage('อัปโหลดไฟล์เรียบร้อย', 'success'))
         dispatch(
           getPersonLetter({
             letterNo: get(currentSearchQuery, 'letterNo', ''),
@@ -414,7 +414,7 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
         dispatch({ type: UPLOAD_FILE_FAILURE })
         dispatch(
           uiActions.setFlashMessage(
-            `อัพโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
+            `อัปโหลดไฟล์ไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
             'error'
           )
         )

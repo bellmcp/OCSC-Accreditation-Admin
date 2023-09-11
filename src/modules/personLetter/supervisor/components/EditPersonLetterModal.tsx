@@ -377,7 +377,7 @@ export default function EditPersonLetterModal({
                   color='textSecondary'
                   style={{ fontWeight: 600 }}
                 >
-                  วันที่อัพโหลด
+                  วันที่อัปโหลด
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>

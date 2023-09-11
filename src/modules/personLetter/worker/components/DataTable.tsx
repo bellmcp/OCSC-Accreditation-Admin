@@ -417,14 +417,14 @@ export default function DataTable({
     },
     {
       field: 'uploadDate',
-      headerName: 'วันที่อัพโหลด',
+      headerName: 'วันที่อัปโหลด',
       width: 180,
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'upload',
-      headerName: 'อัพโหลด',
+      headerName: 'อัปโหลด',
       width: 300,
       align: 'center',
       headerAlign: 'center',
