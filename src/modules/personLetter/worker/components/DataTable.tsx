@@ -17,7 +17,7 @@ import {
 import Popper from '@mui/material/Popper'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-import { Link, Typography, Paper, Divider } from '@material-ui/core'
+import { Link, Typography, Paper, Divider, Button } from '@material-ui/core'
 
 import {
   CheckCircle as CheckIcon,
@@ -442,6 +442,30 @@ export default function DataTable({
         } else {
           return <></>
         }
+      },
+    },
+    {
+      field: 'recommendation',
+      headerName: 'คำแนะนำ',
+      width: 120,
+      align: 'center',
+      headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Button
+            variant='contained'
+            color='secondary'
+            size='small'
+            style={{ padding: '4px 16px' }}
+          >
+            แนะนำ
+          </Button>
+        )
       },
     },
     // {
