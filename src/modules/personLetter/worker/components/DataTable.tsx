@@ -446,7 +446,7 @@ export default function DataTable({
     },
     {
       field: 'recommendation',
-      headerName: 'คำแนะนำ',
+      headerName: 'แนะนำ',
       width: 120,
       align: 'center',
       headerAlign: 'center',
@@ -456,16 +456,22 @@ export default function DataTable({
       filterable: false,
       sortable: false,
       renderCell: (params) => {
-        return (
-          <Button
-            variant='contained'
-            color='secondary'
-            size='small'
-            style={{ padding: '4px 16px' }}
-          >
-            แนะนำ
-          </Button>
-        )
+        const statusId = get(params, 'row.statusId', '')
+
+        if (statusId === 2) {
+          return (
+            <Button
+              variant='contained'
+              color='secondary'
+              size='small'
+              style={{ padding: '4px 16px' }}
+            >
+              แนะนำ
+            </Button>
+          )
+        } else {
+          return <></>
+        }
       },
     },
     // {
