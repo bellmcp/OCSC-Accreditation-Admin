@@ -9,6 +9,7 @@ import {
   AppBar,
   Typography,
   Button,
+  Box,
 } from '@material-ui/core'
 import { Stack } from '@mui/material'
 import { Close as CloseIcon } from '@material-ui/icons'
@@ -79,15 +80,17 @@ export default function RecommendationModal({
           </Toolbar>
         </AppBar>
         <DialogContent>
-          <DataTable
-            data={data}
-            loading={isLoading}
-            openModal={() => {}}
-            countries={countries}
-            educationLevels={educationLevels}
-            salaryGroups={salaryGroups}
-            circularLetters={circularLetters}
-          />
+          <Box style={{ margin: '18px 0' }}>
+            <DataTable
+              data={data}
+              loading={isLoading}
+              openModal={() => {}}
+              countries={countries}
+              educationLevels={educationLevels}
+              salaryGroups={salaryGroups}
+              circularLetters={circularLetters}
+            />
+          </Box>
         </DialogContent>
       </Dialog>
     </div>

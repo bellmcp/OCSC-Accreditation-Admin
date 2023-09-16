@@ -153,7 +153,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
         <Popper
           open={showFullCell && anchorEl !== null}
           anchorEl={anchorEl}
-          style={{ width, marginLeft: -17 }}
+          style={{ width, marginLeft: -17, zIndex: 9999999 }}
         >
           <Paper
             elevation={1}
@@ -176,10 +176,6 @@ function renderCellExpand(params: GridRenderCellParams<string>) {
       width={params.colDef.computedWidth}
     />
   )
-}
-
-const parseLinkToDefaultColor = (text: string) => {
-  return text.replace(/<a/g, '<a class="custom_link"')
 }
 
 export default function DataTable({
@@ -208,6 +204,8 @@ export default function DataTable({
       field: 'nationalId',
       headerName: 'เลขประจำตัวประชาชน',
       width: 180,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
       field: 'title',
@@ -250,36 +248,43 @@ export default function DataTable({
       field: 'university',
       headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
       width: 250,
+      renderCell: renderCellExpand,
     },
     {
       field: 'faculty',
       headerName: 'คณะ/หน่วยงานที่เทียบเท่าคณะ',
       width: 250,
+      renderCell: renderCellExpand,
     },
     {
       field: 'degree',
       headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
       width: 250,
+      renderCell: renderCellExpand,
     },
     {
       field: 'branch',
       headerName: 'สาขาวิชา/วิชาเอก',
-      width: 180,
+      width: 250,
+      renderCell: renderCellExpand,
     },
     {
       field: 'thesis',
       headerName: 'หัวข้อวิทยานิพนธ์',
       width: 180,
+      renderCell: renderCellExpand,
     },
     {
       field: 'appro',
       headerName: 'ผลการรับรอง',
       width: 300,
+      renderCell: renderCellExpand,
     },
     {
       field: 'note',
       headerName: 'หมายเหตุ',
       width: 300,
+      renderCell: renderCellExpand,
     },
     {
       field: 'salGrpId',
