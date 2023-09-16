@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { get } from 'lodash'
 
 import {
   DataGrid,
@@ -7,38 +6,21 @@ import {
   bgBG,
   GridRenderCellParams,
   gridClasses,
-  GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  // GridToolbarExport,
-  GridToolbarDensitySelector,
 } from '@mui/x-data-grid'
 
 import Popper from '@mui/material/Popper'
-import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-import { Link, Typography, Paper, Divider, Button } from '@material-ui/core'
+import { Typography, Paper } from '@material-ui/core'
 
-import {
-  CheckCircle as CheckIcon,
-  Cancel as CancelIcon,
-  WatchLater as PendingIcon,
-  PlayCircleFilled as InProgressIcon,
-  Launch as LaunchIcon,
-} from '@material-ui/icons'
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
-import { green, red, amber, indigo } from '@material-ui/core/colors'
 
-import FileUpload from './FileUpload'
 import PreviewModal from 'modules/preview/components/PreviewModal'
 
 const ODD_OPACITY = 0.07
-// const PATH = process.env.REACT_APP_BASE_PATH
 
 interface DataTableProps {
   data: any
   loading: boolean
-  currentSearchQuery: any
   openModal: any
 }
 
@@ -198,7 +180,6 @@ const parseLinkToDefaultColor = (text: string) => {
 export default function DataTable({
   data,
   loading,
-  currentSearchQuery,
   openModal,
 }: DataTableProps) {
   const [open, setOpen] = useState(false)
@@ -208,314 +189,91 @@ export default function DataTable({
     setOpen(true)
     setCurrentFilePath(filePath)
   }
+
   const handleClose = () => {
     setOpen(false)
   }
 
   const columns: GridColDef[] = [
     {
-      field: 'order',
-      headerName: 'ลำดับ',
-      width: 80,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'letterNo',
-      headerName: 'เลขที่',
-      width: 150,
-      headerAlign: 'center',
-      renderCell: (params) => {
-        const value = get(params, 'value', '')
-        return (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: parseLinkToDefaultColor(value),
-            }}
-          ></div>
-        )
-      },
-    },
-    {
-      field: 'letterDatePrint',
-      headerName: 'วันที่',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'letterAgency',
-      headerName: 'หน่วยงาน',
-      width: 250,
-      headerAlign: 'center',
-      renderCell: renderCellExpand,
-    },
-    {
-      field: 'numThDegs',
-      headerName: 'ไทย',
-      width: 80,
-      align: 'center',
-      headerAlign: 'center',
-      valueFormatter: (params) => {
-        const value = get(params, 'value', null)
-        if (value === null || value === undefined) {
-          return '-'
-        } else {
-          return value
-        }
-      },
-    },
-    {
-      field: 'numNonThDegs',
-      headerName: 'เทศ',
-      width: 80,
-      align: 'center',
-      headerAlign: 'center',
-      valueFormatter: (params) => {
-        const value = get(params, 'value', null)
-        if (value === null || value === undefined) {
-          return '-'
-        } else {
-          return value
-        }
-      },
-    },
-    {
-      field: 'replyNo',
-      headerName: 'เลขที่',
-      width: 150,
-      headerAlign: 'center',
-      renderCell: renderCellExpand,
-    },
-    {
-      field: 'replyDatePrint',
-      headerName: 'วันที่',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'status',
-      headerName: 'สถานะ',
-      headerAlign: 'center',
+      field: 'nationalId',
+      headerName: 'เลขประจำตัวประชาชน',
       width: 180,
-      renderCell: (params) => {
-        const value = get(params, 'value', '')
-
-        switch (value) {
-          case 'อยู่ระหว่างดำเนินการ':
-            return (
-              <Stack direction='row' alignItems='center' spacing={1}>
-                <InProgressIcon
-                  style={{
-                    color: indigo[800],
-                  }}
-                />
-                <Typography
-                  variant='body2'
-                  style={{ color: indigo[800], fontWeight: 600 }}
-                >
-                  อยู่ระหว่างดำเนินการ
-                </Typography>
-              </Stack>
-            )
-          case 'รออนุมัติ':
-            return (
-              <Stack direction='row' alignItems='center' spacing={1}>
-                <PendingIcon
-                  style={{
-                    color: amber[800],
-                  }}
-                />
-                <Typography
-                  variant='body2'
-                  style={{ color: amber[800], fontWeight: 600 }}
-                >
-                  รออนุมัติ
-                </Typography>
-              </Stack>
-            )
-          case 'เสร็จสิ้น':
-            return (
-              <Stack direction='row' alignItems='center' spacing={1}>
-                <CheckIcon
-                  style={{
-                    color: green[800],
-                  }}
-                />
-                <Typography
-                  variant='body2'
-                  style={{ color: green[800], fontWeight: 600 }}
-                >
-                  เสร็จสิ้น
-                </Typography>
-              </Stack>
-            )
-          case 'ยกเลิก':
-            return (
-              <Stack direction='row' alignItems='center' spacing={1}>
-                <CancelIcon
-                  style={{
-                    color: red[800],
-                  }}
-                />
-                <Typography
-                  variant='body2'
-                  style={{ color: red[800], fontWeight: 600 }}
-                >
-                  ยกเลิก
-                </Typography>
-              </Stack>
-            )
-          default:
-            return <></>
-        }
-      },
+    },
+    {
+      field: 'title',
+      headerName: 'คำนำหน้าชื่อ',
+      width: 120,
+    },
+    {
+      field: 'firstName',
+      headerName: 'ชื่อ',
+      width: 120,
+    },
+    {
+      field: 'lastName',
+      headerName: 'นามสกุล',
+      width: 120,
+    },
+    {
+      field: 'cntryId',
+      headerName: 'ประเทศ',
+      width: 120,
+      align: 'center',
+    },
+    {
+      field: 'eduLevId',
+      headerName: 'ระดับการศึกษา',
+      width: 120,
+      align: 'center',
+    },
+    {
+      field: 'university',
+      headerName: 'มหาวิทยาลัย/สถาบันการศึกษา',
+      width: 250,
+    },
+    {
+      field: 'faculty',
+      headerName: 'คณะ/หน่วยงานที่เทียบเท่าคณะ',
+      width: 250,
+    },
+    {
+      field: 'degree',
+      headerName: 'ชื่อปริญญา/ประกาศนียบัตร',
+      width: 250,
+    },
+    {
+      field: 'branch',
+      headerName: 'สาขาวิชา/วิชาเอก',
+      width: 180,
+    },
+    {
+      field: 'thesis',
+      headerName: 'หัวข้อวิทยานิพนธ์',
+      width: 180,
+    },
+    {
+      field: 'appro',
+      headerName: 'ผลการรับรอง',
+      width: 300,
     },
     {
       field: 'note',
       headerName: 'หมายเหตุ',
-      width: 250,
-      headerAlign: 'center',
-      renderCell: renderCellExpand,
-    },
-
-    {
-      field: 'uploadFile',
-      headerName: 'ลิงก์',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-      disableColumnMenu: true,
-      disableReorder: true,
-      disableExport: true,
-      filterable: false,
-      sortable: false,
-      renderCell: (params) => {
-        const filePath = get(params, 'value', null)
-
-        if (filePath === null || filePath === undefined) {
-          return <></>
-        } else {
-          return (
-            <Stack direction='row' alignItems='center' spacing={1}>
-              <Link
-                // href={`${PATH}/preview?file=${filePath}`}
-                // target='_blank'
-                color='primary'
-                underline='hover'
-                onClick={() => handleClickOpen(filePath)}
-                style={{ cursor: 'pointer' }}
-              >
-                <Stack direction='row' alignItems='center' spacing={1}>
-                  <LaunchIcon fontSize='small' />
-                  <div>เปิดไฟล์</div>
-                </Stack>
-              </Link>
-            </Stack>
-          )
-        }
-      },
-    },
-    {
-      field: 'uploadDate',
-      headerName: 'วันที่อัปโหลด',
-      width: 180,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'upload',
-      headerName: 'อัปโหลด',
       width: 300,
-      align: 'center',
-      headerAlign: 'center',
-      disableColumnMenu: true,
-      disableReorder: true,
-      disableExport: true,
-      filterable: false,
-      sortable: false,
-      renderCell: (params) => {
-        const id = get(params, 'row.id', '')
-        const statusId = get(params, 'row.statusId', '')
-
-        if (statusId === 1 || statusId === 2) {
-          return <FileUpload id={id} currentSearchQuery={currentSearchQuery} />
-        } else {
-          return <></>
-        }
-      },
     },
     {
-      field: 'recommendation',
-      headerName: 'แนะนำ',
+      field: 'salGrpId',
+      headerName: 'กลุ่มเงินเดือน',
       width: 120,
       align: 'center',
-      headerAlign: 'center',
-      disableColumnMenu: true,
-      disableReorder: true,
-      disableExport: true,
-      filterable: false,
-      sortable: false,
-      renderCell: (params) => {
-        const statusId = get(params, 'row.statusId', '')
-        const letterId = get(params, 'row.id', '')
-
-        if (statusId === 2) {
-          return (
-            <Button
-              variant='contained'
-              color='secondary'
-              size='small'
-              style={{ padding: '4px 16px' }}
-              onClick={() => openModal(letterId)}
-            >
-              แนะนำ
-            </Button>
-          )
-        } else {
-          return <></>
-        }
-      },
     },
-    // {
-    //   field: 'id',
-    //   headerName: 'เลขที่อ้างอิง',
-    //   width: 120,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    // },
+    {
+      field: 'circLetrId',
+      headerName: 'หนังสือเวียน',
+      width: 120,
+    },
   ]
-
-  function CustomToolbar() {
-    return (
-      <GridToolbarContainer
-        sx={{
-          paddingLeft: '6px',
-          // paddingBottom: '4px',
-          // borderBottom: '1px solid rgba(224, 224, 224, 1)',
-        }}
-      >
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
-          {/* <Divider orientation='vertical' light flexItem />
-          <GridToolbarExport
-            printOptions={{ disableToolbarButton: true }}
-            csvOptions={{
-              delimiter: ',',
-              utf8WithBom: true,
-              fileName: 'test',
-            }}
-            sx={{ lineHeight: '1.2' }}
-          /> */}
-        </Stack>
-      </GridToolbarContainer>
-    )
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -523,80 +281,6 @@ export default function DataTable({
         <StripedDataGrid
           autoHeight
           experimentalFeatures={{ columnGrouping: true }}
-          columnGroupingModel={[
-            {
-              groupId: 'letter',
-              headerName: 'หนังสือเข้า',
-              headerAlign: 'center',
-              children: [
-                { field: 'letterNo' },
-                { field: 'letterDatePrint' },
-                { field: 'letterAgency' },
-              ],
-              renderHeaderGroup: () => (
-                <Typography
-                  style={{
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
-                >
-                  หนังสือเข้า
-                </Typography>
-              ),
-            },
-            {
-              groupId: 'numDegs',
-              headerName: 'จำนวนคุณวุฒิ',
-              headerAlign: 'center',
-              children: [{ field: 'numThDegs' }, { field: 'numNonThDegs' }],
-              renderHeaderGroup: () => (
-                <Typography
-                  style={{
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
-                >
-                  จำนวนคุณวุฒิ
-                </Typography>
-              ),
-            },
-            {
-              groupId: 'reply',
-              headerName: 'หนังสือออก',
-              headerAlign: 'center',
-              children: [{ field: 'replyNo' }, { field: 'replyDatePrint' }],
-              renderHeaderGroup: () => (
-                <Typography
-                  style={{
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
-                >
-                  หนังสือออก
-                </Typography>
-              ),
-            },
-            {
-              groupId: 'upload',
-              headerName: 'ไฟล์งาน',
-              headerAlign: 'center',
-              children: [
-                { field: 'uploadFile' },
-                { field: 'uploadDate' },
-                { field: 'upload' },
-              ],
-              renderHeaderGroup: () => (
-                <Typography
-                  style={{
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
-                >
-                  ไฟล์งาน
-                </Typography>
-              ),
-            },
-          ]}
           initialState={{
             pagination: {
               pageSize: 100,
@@ -610,7 +294,6 @@ export default function DataTable({
           columns={columns}
           disableSelectionOnClick
           rowsPerPageOptions={[25, 50, 100, 250, 500, 1000]}
-          components={{ Toolbar: CustomToolbar }}
           localeText={{
             // Root
             noRowsLabel: 'ไม่มีข้อมูล',

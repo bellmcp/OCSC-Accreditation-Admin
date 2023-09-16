@@ -44,6 +44,7 @@ import * as personLetterActions from 'modules/personLetter/actions'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
+import DetailModal from './DetailModal/DetailModal'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -187,8 +188,12 @@ export default function PersonLetterWorker() {
     else setTableMaxWidth('lg')
   }
 
-  const { searchResults: initialSearchResults = [], isSearching = false } =
-    useSelector((state: any) => state.personLetter)
+  const {
+    searchResults: initialSearchResults = [],
+    isSearching = false,
+    personLetterDegrees: initialPersonLetterDegrees = [],
+    isLoadingDegrees = false,
+  } = useSelector((state: any) => state.personLetter)
 
   useEffect(() => {
     const parsed = initialSearchResults.map((item: any, index: number) => {
@@ -200,6 +205,31 @@ export default function PersonLetterWorker() {
     })
     setSearchResults(parsed)
   }, [initialSearchResults])
+
+  useEffect(() => {
+    const parsed = initialPersonLetterDegrees.map(
+      (item: any, index: number) => {
+        return {
+          id: index + 1,
+          ...item,
+        }
+      }
+    )
+    setPersonLetterDegrees(parsed)
+  }, [initialPersonLetterDegrees])
+
+  const [personLetterDegrees, setPersonLetterDegrees] = useState([])
+  const [isOpenDetailModal, setIsOpenDetailModal] = useState(false)
+
+  const openModal = (letterId: string) => {
+    dispatch(personLetterActions.loadPersonLetterDegrees(letterId))
+    setPersonLetterDegrees()
+
+    setIsOpenDetailModal(true)
+  }
+  const closeModal = () => {
+    setIsOpenDetailModal(false)
+  }
 
   const renderSearchResult = () => {
     if (isSearching) {
@@ -263,6 +293,7 @@ export default function PersonLetterWorker() {
                 data={searchResults}
                 loading={isSearching}
                 currentSearchQuery={currentSearchQuery}
+                openModal={openModal}
               />
             </Paper>
           </Box>
@@ -445,6 +476,12 @@ export default function PersonLetterWorker() {
           <KeyboardArrowUpIcon style={{ color: 'white' }} />
         </Fab>
       </ScrollTop>
+      <DetailModal
+        isOpen={isOpenDetailModal}
+        onClose={closeModal}
+        data={personLetterDegrees}
+        isLoading={isLoadingDegrees}
+      />
     </>
   )
 }
