@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { get } from 'lodash'
 
 import {
   DataGrid,
@@ -22,6 +23,10 @@ interface DataTableProps {
   data: any
   loading: boolean
   openModal: any
+  countries: any
+  salaryGroups: any
+  educationLevels: any
+  circularLetters: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -181,6 +186,10 @@ export default function DataTable({
   data,
   loading,
   openModal,
+  countries = [],
+  salaryGroups = [],
+  educationLevels = [],
+  circularLetters = [],
 }: DataTableProps) {
   const [open, setOpen] = useState(false)
   const [currentFilePath, setCurrentFilePath] = useState('')
@@ -218,14 +227,24 @@ export default function DataTable({
     {
       field: 'cntryId',
       headerName: 'ประเทศ',
-      width: 120,
-      align: 'center',
+      width: 180,
+      renderCell: (params) => {
+        const value = get(params, 'row.cntryId', 0)
+        const result = countries.find((country: any) => country.id === value)
+        return result.thainame ? result.thainame : ''
+      },
     },
     {
       field: 'eduLevId',
       headerName: 'ระดับการศึกษา',
       width: 120,
-      align: 'center',
+      renderCell: (params) => {
+        const value = get(params, 'row.eduLevId', 0)
+        const result = educationLevels.find(
+          (educationLevel: any) => educationLevel.id === value
+        )
+        return result.level ? result.level : ''
+      },
     },
     {
       field: 'university',
@@ -265,13 +284,29 @@ export default function DataTable({
     {
       field: 'salGrpId',
       headerName: 'กลุ่มเงินเดือน',
-      width: 120,
-      align: 'center',
+      width: 180,
+      renderCell: (params) => {
+        const value = get(params, 'row.salGrpId', 0)
+        const result = salaryGroups.find(
+          (salaryGroup: any) => salaryGroup.id === value
+        )
+        return result.salarygroup ? result.salarygroup : ''
+      },
     },
     {
       field: 'circLetrId',
       headerName: 'หนังสือเวียน',
-      width: 120,
+      width: 180,
+      renderCell: (params) => {
+        const value = get(params, 'row.salGrpId', 0)
+        const result = circularLetters.find(
+          (circularLetter: any) => circularLetter.id === value
+        )
+        const no = result.no ? result.no : ''
+        const year = result.year ? result.year : ''
+
+        return `${no} (${year})`
+      },
     },
   ]
 

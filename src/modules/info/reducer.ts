@@ -11,6 +11,9 @@ import {
   LOAD_UNIVERSITIES_REQUEST,
   LOAD_UNIVERSITIES_SUCCESS,
   LOAD_UNIVERSITIES_FAILURE,
+  LOAD_CIRCULAR_LETTERS_REQUEST,
+  LOAD_CIRCULAR_LETTERS_SUCCESS,
+  LOAD_CIRCULAR_LETTERS_FAILURE,
 } from './actions'
 
 const initialState = {
@@ -20,6 +23,7 @@ const initialState = {
   salaryGroups: [],
   educationLevels: [],
   universities: [],
+  circularLetters: [],
 }
 
 export default function (state = initialState, action: any) {
@@ -32,6 +36,8 @@ export default function (state = initialState, action: any) {
       return { ...state, isLoading: true, educationLevels: [] }
     case LOAD_UNIVERSITIES_REQUEST:
       return { ...state, isUniversitiesLoading: true, universities: [] }
+    case LOAD_CIRCULAR_LETTERS_REQUEST:
+      return { ...state, isLoading: true, circularLetters: [] }
     case LOAD_COUNTRIES_SUCCESS:
       return {
         ...state,
@@ -56,9 +62,16 @@ export default function (state = initialState, action: any) {
         isUniversitiesLoading: false,
         universities: action.payload.universities,
       }
+    case LOAD_CIRCULAR_LETTERS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        circularLetters: action.payload.circularLetters,
+      }
     case LOAD_COUNTRIES_FAILURE:
     case LOAD_SALARY_GROUPS_FAILURE:
     case LOAD_EDUCATION_LEVELS_FAILURE:
+    case LOAD_CIRCULAR_LETTERS_FAILURE:
       return { ...state, isLoading: false }
     case LOAD_UNIVERSITIES_FAILURE:
       return { ...state, isUniversitiesLoading: false }

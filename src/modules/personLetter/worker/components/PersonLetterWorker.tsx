@@ -41,6 +41,7 @@ import {
 } from '@material-ui/icons'
 
 import * as personLetterActions from 'modules/personLetter/actions'
+import * as infoActions from 'modules/info/actions'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
@@ -230,6 +231,20 @@ export default function PersonLetterWorker() {
   const closeModal = () => {
     setIsOpenDetailModal(false)
   }
+
+  const {
+    countries = [],
+    salaryGroups = [],
+    educationLevels = [],
+    circularLetters = [],
+  } = useSelector((state: any) => state.info)
+
+  useEffect(() => {
+    dispatch(infoActions.loadCountries())
+    dispatch(infoActions.loadSalaryGroups())
+    dispatch(infoActions.loadEducationLevels())
+    dispatch(infoActions.loadCircularLetters())
+  }, [dispatch])
 
   const renderSearchResult = () => {
     if (isSearching) {
@@ -481,6 +496,10 @@ export default function PersonLetterWorker() {
         onClose={closeModal}
         data={personLetterDegrees}
         isLoading={isLoadingDegrees}
+        countries={countries}
+        salaryGroups={salaryGroups}
+        educationLevels={educationLevels}
+        circularLetters={circularLetters}
       />
     </>
   )

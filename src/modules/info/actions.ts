@@ -24,11 +24,18 @@ const LOAD_EDUCATION_LEVELS_FAILURE =
   'ocsc-person-accredit/info/salary-group/LOAD_EDUCATION_LEVELS_FAILURE'
 
 const LOAD_UNIVERSITIES_REQUEST =
-  'ocsc-person-accredit/info/country/LOAD_UNIVERSITIES_REQUEST'
+  'ocsc-person-accredit/info/university/LOAD_UNIVERSITIES_REQUEST'
 const LOAD_UNIVERSITIES_SUCCESS =
-  'ocsc-person-accredit/info/country/LOAD_UNIVERSITIES_SUCCESS'
+  'ocsc-person-accredit/info/university/LOAD_UNIVERSITIES_SUCCESS'
 const LOAD_UNIVERSITIES_FAILURE =
-  'ocsc-person-accredit/info/country/LOAD_UNIVERSITIES_FAILURE'
+  'ocsc-person-accredit/info/university/LOAD_UNIVERSITIES_FAILURE'
+
+const LOAD_CIRCULAR_LETTERS_REQUEST =
+  'ocsc-person-accredit/info/circular-letters/LOAD_CIRCULAR_LETTERS_REQUEST'
+const LOAD_CIRCULAR_LETTERS_SUCCESS =
+  'ocsc-person-accredit/info/circular-letters/LOAD_CIRCULAR_LETTERS_SUCCESS'
+const LOAD_CIRCULAR_LETTERS_FAILURE =
+  'ocsc-person-accredit/info/circular-letters/LOAD_CIRCULAR_LETTERS_FAILURE'
 
 function loadCountries() {
   return async (dispatch: any) => {
@@ -152,6 +159,36 @@ function loadUniversities(countryId: number) {
   }
 }
 
+function loadCircularLetters() {
+  return async (dispatch: any) => {
+    dispatch({ type: LOAD_CIRCULAR_LETTERS_REQUEST })
+    try {
+      var { data } = await axios.get('/CircularLetters')
+      if (data.length === 0) {
+        data = []
+      }
+      dispatch({
+        type: LOAD_CIRCULAR_LETTERS_SUCCESS,
+        payload: {
+          circularLetters: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_CIRCULAR_LETTERS_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดข้อมูลหนังสือเวียนไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   LOAD_COUNTRIES_REQUEST,
   LOAD_COUNTRIES_SUCCESS,
@@ -165,8 +202,12 @@ export {
   LOAD_UNIVERSITIES_REQUEST,
   LOAD_UNIVERSITIES_SUCCESS,
   LOAD_UNIVERSITIES_FAILURE,
+  LOAD_CIRCULAR_LETTERS_REQUEST,
+  LOAD_CIRCULAR_LETTERS_SUCCESS,
+  LOAD_CIRCULAR_LETTERS_FAILURE,
   loadSalaryGroups,
   loadEducationLevels,
   loadCountries,
   loadUniversities,
+  loadCircularLetters,
 }

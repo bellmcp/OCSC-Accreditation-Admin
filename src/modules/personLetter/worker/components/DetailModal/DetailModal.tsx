@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react'
 
 import {
   Dialog,
@@ -29,25 +28,11 @@ export default function RecommendationModal({
   onClose,
   data = [],
   isLoading = false,
+  countries = [],
+  salaryGroups = [],
+  educationLevels = [],
+  circularLetters = [],
 }: any) {
-  const [recommendationList, setRecommendationList] = useState([])
-
-  const {
-    isRecommending = false,
-    recommendations: initialRecommendations = [],
-  } = useSelector((state: any) => state.curriculum)
-
-  useEffect(() => {
-    const parsed = initialRecommendations.map((item: any, index: number) => {
-      return {
-        id: index,
-        order: index + 1,
-        ...item,
-      }
-    })
-    setRecommendationList(parsed)
-  }, [initialRecommendations])
-
   const onCancel = () => {
     onClose()
   }
@@ -94,7 +79,15 @@ export default function RecommendationModal({
           </Toolbar>
         </AppBar>
         <DialogContent>
-          <DataTable data={data} loading={isLoading} openModal={() => {}} />
+          <DataTable
+            data={data}
+            loading={isLoading}
+            openModal={() => {}}
+            countries={countries}
+            educationLevels={educationLevels}
+            salaryGroups={salaryGroups}
+            circularLetters={circularLetters}
+          />
         </DialogContent>
       </Dialog>
     </div>
