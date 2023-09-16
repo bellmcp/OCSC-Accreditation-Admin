@@ -18,15 +18,20 @@ import {
   UPLOAD_FILE_SUCCESS,
   UPLOAD_FILE_FAILURE,
   CLEAR_SEARCH_RESULT,
+  LOAD_PERSON_LETTER_DEGREES_REQUEST,
+  LOAD_PERSON_LETTER_DEGREES_SUCCESS,
+  LOAD_PERSON_LETTER_DEGREES_FAILURE,
 } from './actions'
 
 const initialState = {
   isSearching: false,
   isSubmitting: false,
+  isLoadingDegrees: false,
   searchResults: [],
   submitResponse: [],
   workers: [],
   workStatus: [],
+  personLetterDegrees: [],
 }
 
 export default function (state = initialState, action: any) {
@@ -91,6 +96,19 @@ export default function (state = initialState, action: any) {
       return { ...state, isSubmitting: false }
     case CLEAR_SEARCH_RESULT:
       return { ...state, searchResults: [] }
+    case LOAD_PERSON_LETTER_DEGREES_REQUEST:
+      return { ...state, personLetterDegrees: [], isLoadingDegrees: true }
+    case LOAD_PERSON_LETTER_DEGREES_SUCCESS:
+      return {
+        ...state,
+        personLetterDegrees: action.payload.personLetterDegrees,
+        isLoadingDegrees: false,
+      }
+    case LOAD_PERSON_LETTER_DEGREES_FAILURE:
+      return {
+        ...state,
+        isLoadingDegrees: false,
+      }
     default:
       return state
   }

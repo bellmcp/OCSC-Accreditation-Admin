@@ -4,8 +4,6 @@ import { getCookie } from 'utils/cookies'
 
 import * as uiActions from 'modules/ui/actions'
 
-// import { mockPersonLetterItem } from './mock'
-
 const GET_PERSON_LETTER_REQUEST =
   'ocsc-person-accredit/search/GET_PERSON_LETTER_REQUEST'
 const GET_PERSON_LETTER_SUCCESS =
@@ -43,6 +41,13 @@ const UPLOAD_FILE_SUCCESS = 'ocsc-person-accredit/search/UPLOAD_FILE_SUCCESS'
 const UPLOAD_FILE_FAILURE = 'ocsc-person-accredit/search/UPLOAD_FILE_FAILURE'
 
 const CLEAR_SEARCH_RESULT = 'ocsc-person-accredit/search/CLEAR_SEARCH_RESULT'
+
+const LOAD_PERSON_LETTER_DEGREES_REQUEST =
+  'ocsc-person-accredit/search/LOAD_PERSON_LETTER_DEGREES_REQUEST'
+const LOAD_PERSON_LETTER_DEGREES_SUCCESS =
+  'ocsc-person-accredit/search/LOAD_PERSON_LETTER_DEGREES_SUCCESS'
+const LOAD_PERSON_LETTER_DEGREES_FAILURE =
+  'ocsc-person-accredit/search/LOAD_PERSON_LETTER_DEGREES_FAILURE'
 
 function getPersonLetter({
   letterNo,
@@ -422,6 +427,48 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
   }
 }
 
+function loadPersonLetterDegrees(letterId: string) {
+  return async (dispatch: any) => {
+    const token = getCookie('token')
+
+    dispatch({ type: LOAD_PERSON_LETTER_DEGREES_REQUEST })
+    try {
+      var { data } = await axios.get(`/PersonLetters/${letterId}/Degrees`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if (data.length === 0) {
+        data = []
+        dispatch(
+          uiActions.setFlashMessage(
+            `ไม่พบข้อมูลหนังสือเข้าเลขที่ ${letterId}`,
+            'error'
+          )
+        )
+      }
+      dispatch({
+        type: LOAD_PERSON_LETTER_DEGREES_SUCCESS,
+        payload: {
+          personLetterDegrees: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_PERSON_LETTER_DEGREES_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดข้อมูลหนังสือเข้าเลขที่ ${letterId} ไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   GET_PERSON_LETTER_REQUEST,
   GET_PERSON_LETTER_SUCCESS,
@@ -442,6 +489,9 @@ export {
   UPLOAD_FILE_SUCCESS,
   UPLOAD_FILE_FAILURE,
   CLEAR_SEARCH_RESULT,
+  LOAD_PERSON_LETTER_DEGREES_REQUEST,
+  LOAD_PERSON_LETTER_DEGREES_SUCCESS,
+  LOAD_PERSON_LETTER_DEGREES_FAILURE,
   getPersonLetter,
   getPersonLetterAdmin,
   loadWorkers,
@@ -450,4 +500,5 @@ export {
   editPersonLetter,
   uploadFile,
   clearSearchResult,
+  loadPersonLetterDegrees,
 }
