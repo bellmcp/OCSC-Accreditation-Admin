@@ -21,6 +21,9 @@ import {
   LOAD_PERSON_LETTER_DEGREES_REQUEST,
   LOAD_PERSON_LETTER_DEGREES_SUCCESS,
   LOAD_PERSON_LETTER_DEGREES_FAILURE,
+  EDIT_PERSON_LETTER_DEGREE_REQUEST,
+  EDIT_PERSON_LETTER_DEGREE_SUCCESS,
+  EDIT_PERSON_LETTER_DEGREE_FAILURE,
 } from './actions'
 
 const initialState = {
@@ -109,6 +112,16 @@ export default function (state = initialState, action: any) {
         ...state,
         isLoadingDegrees: false,
       }
+    case EDIT_PERSON_LETTER_DEGREE_REQUEST:
+      return { ...state, isSubmitting: true, submitResponse: [] }
+    case EDIT_PERSON_LETTER_DEGREE_SUCCESS:
+      return {
+        ...state,
+        isSubmitting: false,
+        submitResponse: action.payload.submitResponse,
+      }
+    case EDIT_PERSON_LETTER_DEGREE_FAILURE:
+      return { ...state, isSubmitting: false }
     default:
       return state
   }

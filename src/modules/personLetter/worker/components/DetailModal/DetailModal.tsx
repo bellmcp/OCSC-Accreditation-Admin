@@ -193,6 +193,7 @@ export default function DetailModal({
       </Dialog>
       <EditModal
         data={currentEditRowData}
+        letterId={get(currentRowData, 'id', '')}
         open={isOpenEditModal}
         handleClose={handleCloseEditModal}
         countries={countries}

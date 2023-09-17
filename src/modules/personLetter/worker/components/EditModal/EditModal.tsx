@@ -2,6 +2,7 @@ import React from 'react'
 import { get } from 'lodash'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { useDispatch } from 'react-redux'
 
 import { useTheme } from '@material-ui/core/styles'
 import {
@@ -19,8 +20,11 @@ import {
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 
+import * as personLetterActions from 'modules/personLetter/actions'
+
 interface EditModalProps {
   data: any
+  letterId: any
   open: boolean
   handleClose: () => void
   countries: any
@@ -31,6 +35,7 @@ interface EditModalProps {
 
 export default function EditModal({
   data,
+  letterId,
   open,
   handleClose,
   countries,
@@ -39,7 +44,7 @@ export default function EditModal({
   circularLetters,
 }: EditModalProps) {
   const theme = useTheme()
-
+  const dispatch = useDispatch()
   const getCountryById = (id: any) => {
     const result = countries.find((country: any) => country.id === id)
     return get(result, 'thainame', '')
@@ -88,22 +93,17 @@ export default function EditModal({
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      //   dispatch(
-      //     personLetterActions.editPersonLetter({
-      //       letterid: get(data, 'id', ''),
-      //       letterno: get(values, 'letterno', ''),
-      //       letterdate: date,
-      //       nationalId: get(values, 'nationalId', ''),
-      //       note: get(values, 'note', ''),
-      //       workerid: get(values, 'workerid', ''),
-      //       replyno: get(values, 'replyno', ''),
-      //       replydate: replyDate,
-      //       statusid: get(values, 'status', ''),
-      //       currentSearchQuery,
-      //     })
-      //   )
+      dispatch(
+        personLetterActions.editPersonLetterDegree({
+          letterId: letterId,
+          degreeId: get(data, 'id', ''),
+          appro: get(values, 'appro', ''),
+          note: get(values, 'note', ''),
+          salGrpId: get(values, 'salGrpId', ''),
+          circLetrId: get(values, 'circLetrId', ''),
+        })
+      )
       onCloseModal()
-      // dispatch(personLetterActions.clearSearchResult())
     },
   })
 

@@ -49,6 +49,13 @@ const LOAD_PERSON_LETTER_DEGREES_SUCCESS =
 const LOAD_PERSON_LETTER_DEGREES_FAILURE =
   'ocsc-person-accredit/search/LOAD_PERSON_LETTER_DEGREES_FAILURE'
 
+const EDIT_PERSON_LETTER_DEGREE_REQUEST =
+  'ocsc-person-accredit/search/EDIT_PERSON_LETTER_DEGREE_REQUEST'
+const EDIT_PERSON_LETTER_DEGREE_SUCCESS =
+  'ocsc-person-accredit/search/EDIT_PERSON_LETTER_DEGREE_SUCCESS'
+const EDIT_PERSON_LETTER_DEGREE_FAILURE =
+  'ocsc-person-accredit/search/EDIT_PERSON_LETTER_DEGREE_FAILURE'
+
 function getPersonLetter({
   letterNo,
   letterDate,
@@ -469,6 +476,56 @@ function loadPersonLetterDegrees(letterId: string) {
   }
 }
 
+function editPersonLetterDegree({
+  letterId,
+  degreeId,
+  appro,
+  note,
+  salGrpId,
+  circLetrId,
+}: any) {
+  return async (dispatch: any) => {
+    const token = getCookie('token')
+
+    dispatch({ type: EDIT_PERSON_LETTER_DEGREE_REQUEST })
+    try {
+      var { data } = await axios.put(
+        `/PersonLetters/${letterId}/Degrees/${degreeId}`,
+        {
+          appro,
+          note,
+          salGrpId,
+          circLetrId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      dispatch({
+        type: EDIT_PERSON_LETTER_DEGREE_SUCCESS,
+        payload: {
+          submitResponse: data,
+        },
+      })
+      dispatch(
+        uiActions.setFlashMessage(`แก้ไขข้อมูล '${degreeId}' สำเร็จ`, 'success')
+      )
+      dispatch(loadPersonLetterDegrees(letterId))
+    } catch (err) {
+      const responseMessage = get(err, 'response.data.mesg', '')
+      dispatch({ type: EDIT_PERSON_LETTER_DEGREE_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `แก้ไขข้อมูลไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   GET_PERSON_LETTER_REQUEST,
   GET_PERSON_LETTER_SUCCESS,
@@ -492,6 +549,9 @@ export {
   LOAD_PERSON_LETTER_DEGREES_REQUEST,
   LOAD_PERSON_LETTER_DEGREES_SUCCESS,
   LOAD_PERSON_LETTER_DEGREES_FAILURE,
+  EDIT_PERSON_LETTER_DEGREE_REQUEST,
+  EDIT_PERSON_LETTER_DEGREE_SUCCESS,
+  EDIT_PERSON_LETTER_DEGREE_FAILURE,
   getPersonLetter,
   getPersonLetterAdmin,
   loadWorkers,
@@ -501,4 +561,5 @@ export {
   uploadFile,
   clearSearchResult,
   loadPersonLetterDegrees,
+  editPersonLetterDegree,
 }
