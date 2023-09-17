@@ -11,7 +11,8 @@ import {
 
 import Popper from '@mui/material/Popper'
 import Box from '@mui/material/Box'
-import { Typography, Paper } from '@material-ui/core'
+import Stack from '@mui/material/Stack'
+import { Typography, Paper, Button } from '@material-ui/core'
 
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 
@@ -271,25 +272,60 @@ export default function DataTable({
     {
       field: 'thesis',
       headerName: 'หัวข้อวิทยานิพนธ์',
-      width: 180,
+      width: 250,
       renderCell: renderCellExpand,
     },
     {
       field: 'appro',
       headerName: 'ผลการรับรอง',
       width: 300,
+      cellClassName: 'blue',
       renderCell: renderCellExpand,
+      renderHeader: () => {
+        return (
+          <Stack direction='row' alignItems='center' gap={0.5}>
+            <Typography
+              variant='body2'
+              color='textPrimary'
+              style={{ fontWeight: 500 }}
+            >
+              ผลการรับรอง
+            </Typography>
+            <Typography variant='body2' color='primary'>
+              <b>*</b>
+            </Typography>
+          </Stack>
+        )
+      },
     },
     {
       field: 'note',
       headerName: 'หมายเหตุ',
       width: 300,
+      cellClassName: 'blue',
       renderCell: renderCellExpand,
+      renderHeader: () => {
+        return (
+          <Stack direction='row' alignItems='center' gap={0.5}>
+            <Typography
+              variant='body2'
+              color='textPrimary'
+              style={{ fontWeight: 500 }}
+            >
+              หมายเหตุ
+            </Typography>
+            <Typography variant='body2' color='primary'>
+              <b>*</b>
+            </Typography>
+          </Stack>
+        )
+      },
     },
     {
       field: 'salGrpId',
       headerName: 'กลุ่มเงินเดือน',
       width: 180,
+      cellClassName: 'blue',
       renderCell: (params) => {
         const value = get(params, 'row.salGrpId', 0)
         const result = salaryGroups.find(
@@ -297,11 +333,28 @@ export default function DataTable({
         )
         return result.salarygroup ? result.salarygroup : ''
       },
+      renderHeader: () => {
+        return (
+          <Stack direction='row' alignItems='center' gap={0.5}>
+            <Typography
+              variant='body2'
+              color='textPrimary'
+              style={{ fontWeight: 500 }}
+            >
+              กลุ่มเงินเดือน
+            </Typography>
+            <Typography variant='body2' color='primary'>
+              <b>*</b>
+            </Typography>
+          </Stack>
+        )
+      },
     },
     {
       field: 'circLetrId',
       headerName: 'หนังสือเวียน',
       width: 180,
+      cellClassName: 'blue',
       renderCell: (params) => {
         const value = get(params, 'row.salGrpId', 0)
         const result = circularLetters.find(
@@ -312,6 +365,46 @@ export default function DataTable({
 
         return `${no} (${year})`
       },
+      renderHeader: () => {
+        return (
+          <Stack direction='row' alignItems='center' gap={0.5}>
+            <Typography
+              variant='body2'
+              color='textPrimary'
+              style={{ fontWeight: 500 }}
+            >
+              หนังสือเวียน
+            </Typography>
+            <Typography variant='body2' color='primary'>
+              <b>*</b>
+            </Typography>
+          </Stack>
+        )
+      },
+    },
+    {
+      field: 'edit',
+      headerName: 'แก้ไข',
+      width: 120,
+      align: 'center',
+      headerAlign: 'center',
+      disableColumnMenu: true,
+      disableReorder: true,
+      disableExport: true,
+      filterable: false,
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Button
+            variant='contained'
+            color='secondary'
+            size='small'
+            style={{ padding: '4px 16px' }}
+          >
+            แก้ไข
+          </Button>
+        )
+      },
     },
   ]
 
@@ -320,6 +413,12 @@ export default function DataTable({
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
           autoHeight
+          sx={{
+            '& .blue': {
+              backgroundColor: alpha('#09348b', ODD_OPACITY),
+              color: '#09348b',
+            },
+          }}
           experimentalFeatures={{ columnGrouping: true }}
           initialState={{
             pagination: {

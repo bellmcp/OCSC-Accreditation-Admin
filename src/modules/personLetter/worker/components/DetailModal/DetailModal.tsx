@@ -64,7 +64,7 @@ export default function RecommendationModal({
               variant='h6'
               component='div'
             >
-              หนังสือเข้า
+              แนะนำหนังสือเข้า
             </Typography>
             <Stack direction='row' spacing={1}>
               <Button
@@ -80,17 +80,22 @@ export default function RecommendationModal({
           </Toolbar>
         </AppBar>
         <DialogContent>
-          <Box style={{ margin: '18px 0' }}>
-            <DataTable
-              data={data}
-              loading={isLoading}
-              openModal={() => {}}
-              countries={countries}
-              educationLevels={educationLevels}
-              salaryGroups={salaryGroups}
-              circularLetters={circularLetters}
-            />
-          </Box>
+          <Typography
+            variant='body2'
+            color='primary'
+            style={{ fontWeight: 500, paddingTop: 16, paddingBottom: 24 }}
+          >
+            <b>*</b> คอลัมน์ที่แก้ไขข้อมูลได้
+          </Typography>
+          <DataTable
+            data={data}
+            loading={isLoading}
+            openModal={() => {}}
+            countries={countries}
+            educationLevels={educationLevels}
+            salaryGroups={salaryGroups}
+            circularLetters={circularLetters}
+          />
         </DialogContent>
       </Dialog>
     </div>
