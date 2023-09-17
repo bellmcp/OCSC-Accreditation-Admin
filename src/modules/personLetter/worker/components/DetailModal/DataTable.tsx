@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { get } from 'lodash'
 
 import {
@@ -16,18 +16,16 @@ import { Typography, Paper, Button } from '@material-ui/core'
 
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 
-import PreviewModal from 'modules/preview/components/PreviewModal'
-
 const ODD_OPACITY = 0.07
 
 interface DataTableProps {
   data: any
   loading: boolean
-  openModal: any
   countries: any
   salaryGroups: any
   educationLevels: any
   circularLetters: any
+  handleOpenEditModal: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -182,24 +180,12 @@ function renderCellExpand(params: GridRenderCellParams<string>) {
 export default function DataTable({
   data,
   loading,
-  openModal,
   countries = [],
   salaryGroups = [],
   educationLevels = [],
   circularLetters = [],
+  handleOpenEditModal,
 }: DataTableProps) {
-  const [open, setOpen] = useState(false)
-  const [currentFilePath, setCurrentFilePath] = useState('')
-
-  const handleClickOpen = (filePath: string) => {
-    setOpen(true)
-    setCurrentFilePath(filePath)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
   const columns: GridColDef[] = [
     {
       field: 'nationalId',
@@ -394,12 +380,14 @@ export default function DataTable({
       filterable: false,
       sortable: false,
       renderCell: (params) => {
+        const currentRowData = get(params, 'row', {})
         return (
           <Button
             variant='contained'
             color='secondary'
             size='small'
             style={{ padding: '4px 16px' }}
+            onClick={() => handleOpenEditModal(currentRowData)}
           >
             แก้ไข
           </Button>
@@ -585,11 +573,6 @@ export default function DataTable({
           }}
         />
       </div>
-      <PreviewModal
-        open={open}
-        handleClose={handleClose}
-        filePath={currentFilePath}
-      />
     </ThemeProvider>
   )
 }

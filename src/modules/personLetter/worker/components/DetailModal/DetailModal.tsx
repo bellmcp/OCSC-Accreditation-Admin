@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { get } from 'lodash'
 
 import {
@@ -17,6 +17,7 @@ import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import DataTable from './DataTable'
+import EditModal from '../EditModal/EditModal'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -87,8 +88,19 @@ export default function DetailModal({
     },
   ]
 
+  const [isOpenEditModal, setIsOpenEditModal] = useState<boolean>(false)
+  const [currentEditRowData, setCurrentEditRowData] = useState<boolean>(false)
+
+  const handleOpenEditModal = (currentRowData: any) => {
+    setCurrentEditRowData(currentRowData)
+    setIsOpenEditModal(true)
+  }
+  const handleCloseEditModal = () => {
+    setIsOpenEditModal(false)
+  }
+
   return (
-    <div>
+    <>
       <Dialog
         open={isOpen}
         onClose={onCancel}
@@ -171,14 +183,23 @@ export default function DetailModal({
           <DataTable
             data={data}
             loading={isLoading}
-            openModal={() => {}}
             countries={countries}
             educationLevels={educationLevels}
             salaryGroups={salaryGroups}
             circularLetters={circularLetters}
+            handleOpenEditModal={handleOpenEditModal}
           />
         </DialogContent>
       </Dialog>
-    </div>
+      <EditModal
+        data={currentEditRowData}
+        open={isOpenEditModal}
+        handleClose={handleCloseEditModal}
+        countries={countries}
+        educationLevels={educationLevels}
+        salaryGroups={salaryGroups}
+        circularLetters={circularLetters}
+      />
+    </>
   )
 }
