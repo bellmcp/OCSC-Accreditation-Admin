@@ -40,6 +40,7 @@ interface DataTableProps {
   loading: boolean
   currentSearchQuery: any
   openModal: any
+  setCurrentRowData: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -200,6 +201,7 @@ export default function DataTable({
   loading,
   currentSearchQuery,
   openModal,
+  setCurrentRowData,
 }: DataTableProps) {
   const [open, setOpen] = useState(false)
   const [currentFilePath, setCurrentFilePath] = useState('')
@@ -460,6 +462,7 @@ export default function DataTable({
       renderCell: (params) => {
         const statusId = get(params, 'row.statusId', '')
         const letterId = get(params, 'row.id', '')
+        const currentRow = get(params, 'row', {})
 
         if (statusId === 2) {
           return (
@@ -468,7 +471,10 @@ export default function DataTable({
               color='secondary'
               size='small'
               style={{ padding: '4px 16px' }}
-              onClick={() => openModal(letterId)}
+              onClick={() => {
+                openModal(letterId)
+                setCurrentRowData(currentRow)
+              }}
             >
               แนะนำ
             </Button>

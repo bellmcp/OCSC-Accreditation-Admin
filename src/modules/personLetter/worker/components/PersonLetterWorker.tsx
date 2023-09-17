@@ -221,6 +221,7 @@ export default function PersonLetterWorker() {
 
   const [personLetterDegrees, setPersonLetterDegrees] = useState([])
   const [isOpenDetailModal, setIsOpenDetailModal] = useState(false)
+  const [currentRowData, setCurrentRowData] = useState({})
 
   const openModal = (letterId: string) => {
     dispatch(personLetterActions.loadPersonLetterDegrees(letterId))
@@ -309,6 +310,7 @@ export default function PersonLetterWorker() {
                 loading={isSearching}
                 currentSearchQuery={currentSearchQuery}
                 openModal={openModal}
+                setCurrentRowData={setCurrentRowData}
               />
             </Paper>
           </Box>
@@ -500,6 +502,7 @@ export default function PersonLetterWorker() {
         salaryGroups={salaryGroups}
         educationLevels={educationLevels}
         circularLetters={circularLetters}
+        currentRowData={currentRowData}
       />
     </>
   )
