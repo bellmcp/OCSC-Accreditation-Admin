@@ -29,13 +29,10 @@ const Transition = React.forwardRef(function Transition(
 export default function RecommendationModal({
   isOpen,
   onClose,
-  selectionModel,
-  setSelectionModel,
   currentEditRowData,
   setCurrentEditRowData,
 }: any) {
   const [recommendationList, setRecommendationList] = useState([])
-  const [selectionModelTemp, setSelectionModelTemp] = useState<any>([])
 
   const {
     isRecommending = false,
@@ -54,15 +51,11 @@ export default function RecommendationModal({
   }, [initialRecommendations])
 
   const onCancel = () => {
-    setSelectionModel([])
-    setSelectionModelTemp([])
     setCurrentEditRowData(null)
     onClose()
   }
 
   const onSave = () => {
-    setSelectionModel(selectionModelTemp)
-    setSelectionModelTemp([])
     setCurrentEditRowData(null)
     onClose()
   }
@@ -144,7 +137,6 @@ export default function RecommendationModal({
                 autoFocus
                 color='inherit'
                 onClick={onSave}
-                disabled={size(selectionModelTemp) === 0}
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               >
                 บันทึก
@@ -189,12 +181,10 @@ export default function RecommendationModal({
             <b>*</b> โปรดเลือกข้อมูล 'ผลการรับรอง' ที่ต้องการจะเติมค่าลงในช่อง
             'ผลการรับรอง' ของตารางก่อนหน้า และกดปุ่ม 'บันทึก'
           </Typography>
-          <RecommendationTable
+          {/* <RecommendationTable
             data={recommendationList}
             loading={isRecommending}
-            selectionModel={selectionModelTemp}
-            setSelectionModel={setSelectionModelTemp}
-          />
+          /> */}
         </DialogContent>
       </Dialog>
     </div>

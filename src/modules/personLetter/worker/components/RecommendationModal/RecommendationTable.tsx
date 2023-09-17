@@ -21,8 +21,6 @@ const ODD_OPACITY = 0.07
 interface DataTableProps {
   data: any
   loading: boolean
-  selectionModel: any
-  setSelectionModel: any
 }
 
 interface GridAccreditationCellExpandProps {
@@ -368,24 +366,19 @@ const columns: GridColDef[] = [
   { field: 'letterDate', headerName: 'ลงวันที่', width: 120 },
 ]
 
-export default function RecommendationTable({
-  data,
-  loading,
-  selectionModel,
-  setSelectionModel,
-}: DataTableProps) {
+export default function RecommendationTable({ data, loading }: DataTableProps) {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
           checkboxSelection
-          onSelectionModelChange={(newSelectionModel: any) => {
-            const old = selectionModel
-            const current = newSelectionModel
-            const res = current.filter((item: number) => !old.includes(item))
-            setSelectionModel(res)
-          }}
-          selectionModel={selectionModel}
+          // onSelectionModelChange={(newSelectionModel: any) => {
+          //   const old = selectionModel
+          //   const current = newSelectionModel
+          //   const res = current.filter((item: number) => !old.includes(item))
+          //   setSelectionModel(res)
+          // }}
+          // selectionModel={selectionModel}
           autoHeight
           sx={{
             '& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer':
