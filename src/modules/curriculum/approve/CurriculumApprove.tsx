@@ -68,7 +68,7 @@ export default function CurriculumApprove() {
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
 
-  const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
+  const [tableMaxWidth, setTableMaxWidth] = useState<any>(false)
   const [searchResults, setSearchResults] = useState([])
   const [educationLevels, setEducationLevels] = useState([])
   const [isInEditMode, setIsInEditMode] = useState(false)

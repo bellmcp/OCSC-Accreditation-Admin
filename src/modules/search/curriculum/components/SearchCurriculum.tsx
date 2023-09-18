@@ -158,7 +158,7 @@ export default function SearchCurriculum() {
 
   const [educationLevels, setEducationLevels] = useState([])
   const [searchResults, setSearchResults] = useState([])
-  const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
+  const [tableMaxWidth, setTableMaxWidth] = useState<any>(false)
 
   const handleSwitchTableMaxWidth = () => {
     if (tableMaxWidth === 'lg') setTableMaxWidth(false)

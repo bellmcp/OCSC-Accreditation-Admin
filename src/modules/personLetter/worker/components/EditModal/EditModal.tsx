@@ -131,7 +131,7 @@ export default function EditModal({
         style: { borderRadius: 16, padding: 8 },
       }}
       fullWidth
-      maxWidth='sm'
+      maxWidth='md'
     >
       <form onSubmit={formik.handleSubmit}>
         <DialogTitle>

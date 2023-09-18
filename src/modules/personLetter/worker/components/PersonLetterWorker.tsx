@@ -105,7 +105,7 @@ export default function PersonLetterWorker() {
   const dispatch = useDispatch()
 
   const [searchResults, setSearchResults] = useState([])
-  const [tableMaxWidth, setTableMaxWidth] = useState<any>('lg')
+  const [tableMaxWidth, setTableMaxWidth] = useState<any>(false)
   const [startDate, setStartDate] = useState<string>(
     format(subMonths(new Date(), 6), 'yyyy-MM-dd').toString()
   )
