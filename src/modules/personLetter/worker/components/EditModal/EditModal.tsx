@@ -17,8 +17,19 @@ import {
   FormControl,
   Select,
   MenuItem,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+  Tooltip,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
+
+import { deepOrange, deepPurple } from '@material-ui/core/colors'
+
+import {
+  Filter1 as Filter1Icon,
+  Filter2 as Filter2Icon,
+} from '@material-ui/icons'
 
 import * as personLetterActions from 'modules/personLetter/actions'
 
@@ -387,16 +398,34 @@ export default function EditModal({
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
+                <OutlinedInput
                   id='appro'
                   name='appro'
                   value={formik.values.appro}
                   onChange={formik.handleChange}
-                  variant='outlined'
-                  size='small'
                   fullWidth
                   multiline
                   rows={3}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <Stack direction='column' justifyContent='center' gap={1}>
+                        <Tooltip title='ขอคำแนะนำ (หลักสูตร)'>
+                          <IconButton size='small'>
+                            <Filter1Icon
+                              style={{ color: deepOrange[500], fontSize: 24 }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title='ขอคำแนะนำ (บุคคล)'>
+                          <IconButton size='small'>
+                            <Filter2Icon
+                              style={{ color: deepPurple[500], fontSize: 24 }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
+                    </InputAdornment>
+                  }
                 />
               </Grid>
             </Grid>
