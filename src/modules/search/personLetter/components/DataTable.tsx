@@ -302,7 +302,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
         <Popper
           open={showFullCell && anchorEl !== null}
           anchorEl={anchorEl}
-          style={{ width, marginLeft: -17 }}
+          style={{ width, marginLeft: -17, zIndex: 9999999 }}
         >
           <Paper
             elevation={1}
