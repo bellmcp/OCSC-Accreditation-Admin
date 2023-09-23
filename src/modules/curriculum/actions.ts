@@ -48,6 +48,13 @@ const LOAD_RECOMMENDATION_SUCCESS =
 const LOAD_RECOMMENDATION_FAILURE =
   'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_FAILURE'
 
+const LOAD_RECOMMENDATION_2_REQUEST =
+  'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_2_REQUEST'
+const LOAD_RECOMMENDATION_2_SUCCESS =
+  'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_2_SUCCESS'
+const LOAD_RECOMMENDATION_2_FAILURE =
+  'ocsc-person-accredit/curriculum/approve/LOAD_RECOMMENDATION_2_FAILURE'
+
 const UPDATE_ROW_REQUEST =
   'ocsc-person-accredit/curriculum/approve/UPDATE_ROW_REQUEST'
 const UPDATE_ROW_SUCCESS =
@@ -300,6 +307,44 @@ function loadRecommendation(
   }
 }
 
+function loadRecommendation2(
+  university: string = '',
+  faculty: string = '',
+  degree: string = '',
+  branch: string = ''
+) {
+  const token = getCookie('token')
+  return async (dispatch: any) => {
+    dispatch({ type: LOAD_RECOMMENDATION_2_REQUEST })
+    try {
+      var { data } = await axios.get(
+        `/recommendation2?university=${encodeURIComponent(
+          university
+        )}&faculty=${encodeURIComponent(faculty)}&degree=${encodeURIComponent(
+          degree
+        )}&branch=${encodeURIComponent(branch)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      if (data.length === 0) {
+        data = []
+      }
+      dispatch({
+        type: LOAD_RECOMMENDATION_2_SUCCESS,
+        payload: {
+          recommendations2: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_RECOMMENDATION_2_FAILURE })
+      handleApiError(err, dispatch)
+    }
+  }
+}
+
 function updateRow(
   id: number,
   isDeleted: boolean,
@@ -489,6 +534,9 @@ export {
   LOAD_RECOMMENDATION_REQUEST,
   LOAD_RECOMMENDATION_SUCCESS,
   LOAD_RECOMMENDATION_FAILURE,
+  LOAD_RECOMMENDATION_2_REQUEST,
+  LOAD_RECOMMENDATION_2_SUCCESS,
+  LOAD_RECOMMENDATION_2_FAILURE,
   LOCK_REQUEST,
   LOCK_SUCCESS,
   LOCK_FAILURE,
@@ -515,6 +563,7 @@ export {
   unlockRequest,
   loadWaitCurriculum,
   loadRecommendation,
+  loadRecommendation2,
   updateRow,
   importFile,
   deleteWaitCurriculum,

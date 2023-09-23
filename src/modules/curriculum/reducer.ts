@@ -14,6 +14,9 @@ import {
   LOAD_RECOMMENDATION_REQUEST,
   LOAD_RECOMMENDATION_SUCCESS,
   LOAD_RECOMMENDATION_FAILURE,
+  LOAD_RECOMMENDATION_2_REQUEST,
+  LOAD_RECOMMENDATION_2_SUCCESS,
+  LOAD_RECOMMENDATION_2_FAILURE,
   LOAD_CIRCULAR_LETTER_REQUEST,
   LOAD_CIRCULAR_LETTER_SUCCESS,
   LOAD_CIRCULAR_LETTER_FAILURE,
@@ -32,6 +35,7 @@ const initialState = {
   lockMessage: '',
   waitCurriculums: [],
   recommendations: [],
+  recommendations2: [],
   curricularLetters: [],
 }
 
@@ -47,6 +51,8 @@ export default function (state = initialState, action: any) {
       return { ...state, isSearching: true, waitCurriculums: [] }
     case LOAD_RECOMMENDATION_REQUEST:
       return { ...state, isRecommending: true, recommendations: [] }
+    case LOAD_RECOMMENDATION_2_REQUEST:
+      return { ...state, isRecommending: true, recommendations2: [] }
     case LOAD_CIRCULAR_LETTER_REQUEST:
       return { ...state, isLoading: true, curricularLetters: [] }
     case LOAD_PROGRESS_GOVERNMENT_SUCCESS:
@@ -80,6 +86,12 @@ export default function (state = initialState, action: any) {
         isRecommending: false,
         recommendations: action.payload.recommendations,
       }
+    case LOAD_RECOMMENDATION_2_SUCCESS:
+      return {
+        ...state,
+        isRecommending: false,
+        recommendations2: action.payload.recommendations2,
+      }
     case LOAD_CIRCULAR_LETTER_SUCCESS:
       return {
         ...state,
@@ -96,6 +108,8 @@ export default function (state = initialState, action: any) {
     case LOAD_WAIT_CURRICULUM_FAILURE:
       return { ...state, isSearching: false }
     case LOAD_RECOMMENDATION_FAILURE:
+      return { ...state, isRecommending: false }
+    case LOAD_RECOMMENDATION_2_FAILURE:
       return { ...state, isRecommending: false }
     case CLEAR_SEARCH_RESULT:
       return { ...state, waitCurriculums: [] }
