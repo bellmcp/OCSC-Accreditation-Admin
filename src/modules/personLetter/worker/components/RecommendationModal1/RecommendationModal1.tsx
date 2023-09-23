@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { get, size } from 'lodash'
+import { get, isEmpty } from 'lodash'
 
 import {
   Dialog,
@@ -18,6 +18,7 @@ import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import RecommendationTable from './RecommendationTable'
+import { deepOrange } from '@material-ui/core/colors'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -26,13 +27,27 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-export default function RecommendationModal({
+export default function RecommendationModal1({
   isOpen,
   onClose,
   currentEditRowData,
-  setCurrentEditRowData,
+  countries,
+  educationLevels,
+  circularLetters,
 }: any) {
   const [recommendationList, setRecommendationList] = useState([])
+
+  const getCountryById = (id: any) => {
+    const result = countries.find((country: any) => country.id === id)
+    return get(result, 'thainame', '')
+  }
+
+  const getEducationLevelById = (id: any) => {
+    const result = educationLevels.find(
+      (educationLevel: any) => educationLevel.id === id
+    )
+    return get(result, 'level', '')
+  }
 
   const {
     isRecommending = false,
@@ -51,30 +66,44 @@ export default function RecommendationModal({
   }, [initialRecommendations])
 
   const onCancel = () => {
-    setCurrentEditRowData(null)
     onClose()
   }
 
   const onSave = () => {
-    setCurrentEditRowData(null)
     onClose()
   }
 
   const currentEditRowDataList = [
     {
-      title: 'รัฐ/เอกชน',
-      value: get(currentEditRowData, 'category', ''),
+      title: 'เลขประจำตัวประชาชน',
+      value: get(currentEditRowData, 'nationalId', ''),
+    },
+    {
+      title: 'คำนำหน้าชื่อ',
+      value: get(currentEditRowData, 'title', ''),
+    },
+    {
+      title: 'ชื่อ',
+      value: get(currentEditRowData, 'firstName', ''),
+    },
+    {
+      title: 'นามสกุล',
+      value: get(currentEditRowData, 'lastName', ''),
+    },
+    {
+      title: 'ประเทศ',
+      value: getCountryById(get(currentEditRowData, 'cntryId', '')),
     },
     {
       title: 'ระดับการศึกษา',
-      value: get(currentEditRowData, 'level', ''),
+      value: getEducationLevelById(get(currentEditRowData, 'eduLevId', '')),
     },
     {
       title: 'มหาวิทยาลัย/สถาบันการศึกษา',
       value: get(currentEditRowData, 'university', ''),
     },
     {
-      title: 'คณะ/หน่วยงาน',
+      title: 'คณะ/หน่วยงานที่เทียบเท่าคณะ',
       value: get(currentEditRowData, 'faculty', ''),
     },
     {
@@ -82,25 +111,35 @@ export default function RecommendationModal({
       value: get(currentEditRowData, 'degree', ''),
     },
     {
-      title: 'สาขา/วิชาเอก',
+      title: 'สาขาวิชา/วิชาเอก',
       value: get(currentEditRowData, 'branch', ''),
     },
     {
-      title: 'หมายเหตุ',
-      value: get(currentEditRowData, 'note', ''),
+      title: 'หัวข้อวิทยานิพนธ์',
+      value: get(currentEditRowData, 'thesis', ''),
     },
   ]
+
+  const [selectionModel, setSelectionModel] = useState<any>([])
 
   return (
     <div>
       <Dialog
         open={isOpen}
         onClose={onCancel}
-        fullScreen
         TransitionComponent={Transition}
+        PaperProps={{
+          style: { borderRadius: 16 },
+        }}
+        maxWidth='lg'
       >
         <AppBar
-          style={{ position: 'relative', paddingLeft: 24, paddingRight: 24 }}
+          style={{
+            position: 'relative',
+            paddingLeft: 24,
+            paddingRight: 24,
+            backgroundColor: deepOrange[500],
+          }}
           color='secondary'
         >
           <Toolbar>
@@ -117,7 +156,7 @@ export default function RecommendationModal({
               variant='h6'
               component='div'
             >
-              คำแนะนำผลการรับรอง
+              คำแนะนำผลการรับรองคุณวุฒิ (หลักสูตร)
             </Typography>
             <Stack direction='row' spacing={1}>
               <Button
@@ -137,6 +176,7 @@ export default function RecommendationModal({
                 autoFocus
                 color='inherit'
                 onClick={onSave}
+                disabled={isEmpty(selectionModel)}
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               >
                 บันทึก
@@ -175,16 +215,22 @@ export default function RecommendationModal({
           </Grid>
           <Typography
             variant='body2'
-            color='primary'
-            style={{ fontWeight: 500, paddingTop: 16, paddingBottom: 24 }}
+            style={{
+              color: deepOrange[500],
+              fontWeight: 500,
+              paddingTop: 16,
+              paddingBottom: 24,
+            }}
           >
             <b>*</b> โปรดเลือกข้อมูล 'ผลการรับรอง' ที่ต้องการจะเติมค่าลงในช่อง
             'ผลการรับรอง' ของตารางก่อนหน้า และกดปุ่ม 'บันทึก'
           </Typography>
-          {/* <RecommendationTable
+          <RecommendationTable
             data={recommendationList}
             loading={isRecommending}
-          /> */}
+            selectionModel={selectionModel}
+            setSelectionModel={setSelectionModel}
+          />
         </DialogContent>
       </Dialog>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { get } from 'lodash'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -31,7 +31,9 @@ import {
   Filter2 as Filter2Icon,
 } from '@material-ui/icons'
 
+import RecommendationModal1 from '../RecommendationModal1/RecommendationModal1'
 import * as personLetterActions from 'modules/personLetter/actions'
+import * as curriculumActions from 'modules/curriculum/actions'
 
 interface EditModalProps {
   data: any
@@ -56,6 +58,7 @@ export default function EditModal({
 }: EditModalProps) {
   const theme = useTheme()
   const dispatch = useDispatch()
+
   const getCountryById = (id: any) => {
     const result = countries.find((country: any) => country.id === id)
     return get(result, 'thainame', '')
@@ -121,6 +124,24 @@ export default function EditModal({
   const onCloseModal = () => {
     handleClose()
     formik.resetForm()
+  }
+
+  const [isOpenRecommendation1Modal, setIsOpenRecommendation1Modal] =
+    useState(false)
+
+  const onOpenRecommendation1Modal = () => {
+    dispatch(
+      curriculumActions.loadRecommendation(
+        get(data, 'university', ''),
+        get(data, 'faculty', ''),
+        get(data, 'degree', ''),
+        get(data, 'branch', '')
+      )
+    )
+    setIsOpenRecommendation1Modal(true)
+  }
+  const onCloseRecommendation1Modal = () => {
+    setIsOpenRecommendation1Modal(false)
   }
 
   return (
@@ -409,14 +430,17 @@ export default function EditModal({
                   endAdornment={
                     <InputAdornment position='end'>
                       <Stack direction='column' justifyContent='center' gap={1}>
-                        <Tooltip title='ขอคำแนะนำ (หลักสูตร)'>
-                          <IconButton size='small'>
+                        <Tooltip title='ขอคำแนะนำผลการรับรองคุณวุฒิ (หลักสูตร)'>
+                          <IconButton
+                            size='small'
+                            onClick={() => onOpenRecommendation1Modal()}
+                          >
                             <Filter1Icon
                               style={{ color: deepOrange[500], fontSize: 24 }}
                             />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title='ขอคำแนะนำ (บุคคล)'>
+                        <Tooltip title='ขอคำแนะนำผลการรับรองคุณวุฒิ (บุคคล)'>
                           <IconButton size='small'>
                             <Filter2Icon
                               style={{ color: deepPurple[500], fontSize: 24 }}
@@ -570,6 +594,14 @@ export default function EditModal({
           </Button>
         </DialogActions>
       </form>
+      <RecommendationModal1
+        isOpen={isOpenRecommendation1Modal}
+        onClose={onCloseRecommendation1Modal}
+        currentEditRowData={data}
+        countries={countries}
+        educationLevels={educationLevels}
+        circularLetters={circularLetters}
+      />
     </Dialog>
   )
 }
