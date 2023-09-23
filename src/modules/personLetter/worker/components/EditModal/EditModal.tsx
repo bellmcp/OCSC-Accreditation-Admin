@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { get } from 'lodash'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useTheme } from '@material-ui/core/styles'
 import {
@@ -163,6 +163,31 @@ export default function EditModal({
   const onCloseRecommendation2Modal = () => {
     setIsOpenRecommendation2Modal(false)
   }
+
+  const [selectionModel1, setSelectionModel1] = useState<any>([])
+  const [selectionModel2, setSelectionModel2] = useState<any>([])
+
+  const { recommendations = [], recommendations2 = [] } = useSelector(
+    (state: any) => state.curriculum
+  )
+
+  useEffect(() => {
+    const selectedApproId = selectionModel1[0]
+    const selectedAppro = get(recommendations, `[${selectedApproId}]`, {})
+    const value = get(selectedAppro, 'accreditation', '')
+    const letterId = get(selectedAppro, 'letterId', 0)
+
+    formik.setFieldValue('appro', value)
+    formik.setFieldValue('circLetrId', letterId)
+  }, [selectionModel1]) //eslint-disable-line
+
+  useEffect(() => {
+    const selectedApproId = selectionModel2[0]
+    const selectedAppro = get(recommendations2, `[${selectedApproId}]`, {})
+    const value = get(selectedAppro, 'accreditation', '')
+
+    formik.setFieldValue('appro', value)
+  }, [selectionModel2]) //eslint-disable-line
 
   return (
     <Dialog
@@ -623,6 +648,8 @@ export default function EditModal({
         currentEditRowData={data}
         countries={countries}
         educationLevels={educationLevels}
+        selectionModel={selectionModel1}
+        setSelectionModel={setSelectionModel1}
       />
       <RecommendationModal2
         isOpen={isOpenRecommendation2Modal}
@@ -630,6 +657,8 @@ export default function EditModal({
         currentEditRowData={data}
         countries={countries}
         educationLevels={educationLevels}
+        selectionModel={selectionModel2}
+        setSelectionModel={setSelectionModel2}
       />
     </Dialog>
   )

@@ -33,6 +33,8 @@ export default function RecommendationModal2({
   currentEditRowData,
   countries,
   educationLevels,
+  selectionModel,
+  setSelectionModel,
 }: any) {
   const [recommendationList, setRecommendationList] = useState([])
 
@@ -118,8 +120,6 @@ export default function RecommendationModal2({
       value: get(currentEditRowData, 'thesis', ''),
     },
   ]
-
-  const [selectionModel, setSelectionModel] = useState<any>([])
 
   return (
     <div>
