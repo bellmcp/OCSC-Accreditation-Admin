@@ -32,6 +32,8 @@ import {
 } from '@material-ui/icons'
 
 import RecommendationModal1 from '../RecommendationModal1/RecommendationModal1'
+import RecommendationModal2 from '../RecommendationModal2/RecommendationModal2'
+
 import * as personLetterActions from 'modules/personLetter/actions'
 import * as curriculumActions from 'modules/curriculum/actions'
 
@@ -142,6 +144,24 @@ export default function EditModal({
   }
   const onCloseRecommendation1Modal = () => {
     setIsOpenRecommendation1Modal(false)
+  }
+
+  const [isOpenRecommendation2Modal, setIsOpenRecommendation2Modal] =
+    useState(false)
+
+  const onOpenRecommendation2Modal = () => {
+    dispatch(
+      curriculumActions.loadRecommendation2(
+        get(data, 'university', ''),
+        get(data, 'faculty', ''),
+        get(data, 'degree', ''),
+        get(data, 'branch', '')
+      )
+    )
+    setIsOpenRecommendation2Modal(true)
+  }
+  const onCloseRecommendation2Modal = () => {
+    setIsOpenRecommendation2Modal(false)
   }
 
   return (
@@ -441,7 +461,10 @@ export default function EditModal({
                           </IconButton>
                         </Tooltip>
                         <Tooltip title='ขอคำแนะนำผลการรับรองคุณวุฒิ (บุคคล)'>
-                          <IconButton size='small'>
+                          <IconButton
+                            size='small'
+                            onClick={() => onOpenRecommendation2Modal()}
+                          >
                             <Filter2Icon
                               style={{ color: deepPurple[500], fontSize: 24 }}
                             />
@@ -600,7 +623,13 @@ export default function EditModal({
         currentEditRowData={data}
         countries={countries}
         educationLevels={educationLevels}
-        circularLetters={circularLetters}
+      />
+      <RecommendationModal2
+        isOpen={isOpenRecommendation2Modal}
+        onClose={onCloseRecommendation2Modal}
+        currentEditRowData={data}
+        countries={countries}
+        educationLevels={educationLevels}
       />
     </Dialog>
   )

@@ -18,7 +18,7 @@ import { Close as CloseIcon } from '@material-ui/icons'
 import { TransitionProps } from '@material-ui/core/transitions'
 
 import RecommendationTable from './RecommendationTable'
-import { deepOrange } from '@material-ui/core/colors'
+import { deepPurple } from '@material-ui/core/colors'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -27,7 +27,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction='up' ref={ref} {...props} />
 })
 
-export default function RecommendationModal1({
+export default function RecommendationModal2({
   isOpen,
   onClose,
   currentEditRowData,
@@ -50,7 +50,7 @@ export default function RecommendationModal1({
 
   const {
     isRecommending = false,
-    recommendations: initialRecommendations = [],
+    recommendations2: initialRecommendations = [],
   } = useSelector((state: any) => state.curriculum)
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function RecommendationModal1({
             position: 'relative',
             paddingLeft: 24,
             paddingRight: 24,
-            backgroundColor: deepOrange[500],
+            backgroundColor: deepPurple[500],
           }}
           color='secondary'
         >
@@ -155,7 +155,7 @@ export default function RecommendationModal1({
               variant='h6'
               component='div'
             >
-              คำแนะนำผลการรับรองคุณวุฒิ (หลักสูตร)
+              คำแนะนำผลการรับรองคุณวุฒิ (บุคคล)
             </Typography>
             <Stack direction='row' spacing={1}>
               <Button
@@ -215,7 +215,7 @@ export default function RecommendationModal1({
           <Typography
             variant='body2'
             style={{
-              color: deepOrange[500],
+              color: deepPurple[500],
               fontWeight: 500,
               paddingTop: 16,
               paddingBottom: 24,
