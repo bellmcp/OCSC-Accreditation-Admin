@@ -37,6 +37,7 @@ export default function RecommendationModal2({
   setSelectionModel,
 }: any) {
   const [recommendationList, setRecommendationList] = useState([])
+  const [tempSelectionModel, setTempSelectionModel] = useState([])
 
   const getCountryById = (id: any) => {
     const result = countries.find((country: any) => country.id === id)
@@ -67,10 +68,14 @@ export default function RecommendationModal2({
   }, [initialRecommendations])
 
   const onCancel = () => {
+    setSelectionModel([])
+    setTempSelectionModel([])
     onClose()
   }
 
   const onSave = () => {
+    setSelectionModel(tempSelectionModel)
+    setTempSelectionModel([])
     onClose()
   }
 
@@ -180,7 +185,7 @@ export default function RecommendationModal2({
                 autoFocus
                 color='inherit'
                 onClick={onSave}
-                disabled={isEmpty(selectionModel)}
+                disabled={isEmpty(tempSelectionModel)}
                 style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
               >
                 บันทึก
@@ -232,8 +237,8 @@ export default function RecommendationModal2({
           <RecommendationTable
             data={recommendationList}
             loading={isRecommending}
-            selectionModel={selectionModel}
-            setSelectionModel={setSelectionModel}
+            selectionModel={tempSelectionModel}
+            setSelectionModel={setTempSelectionModel}
           />
         </DialogContent>
       </Dialog>
