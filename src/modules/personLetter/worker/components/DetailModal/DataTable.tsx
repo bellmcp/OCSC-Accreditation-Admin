@@ -342,14 +342,14 @@ export default function DataTable({
       width: 180,
       cellClassName: 'blue',
       renderCell: (params) => {
-        const value = get(params, 'row.salGrpId', 0)
+        const value = get(params, 'row.circLetrId', 0)
         const result = circularLetters.find(
           (circularLetter: any) => circularLetter.id === value
         )
-        const no = result.no ? result.no : ''
-        const year = result.year ? result.year : ''
+        const no = get(result, 'no', '')
+        const year = get(result, 'year', '')
 
-        return `${no} (${year})`
+        return `${no}${year ? ` (${year})` : ''}`
       },
       renderHeader: () => {
         return (
