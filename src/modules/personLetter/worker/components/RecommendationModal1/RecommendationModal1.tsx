@@ -125,7 +125,12 @@ export default function RecommendationModal1({
     <div>
       <Dialog
         open={isOpen}
-        onClose={onCancel}
+        onClose={(_, reason) => {
+          if (reason && reason === 'backdropClick') {
+            return
+          }
+          onCancel()
+        }}
         TransitionComponent={Transition}
         PaperProps={{
           style: { borderRadius: 16 },

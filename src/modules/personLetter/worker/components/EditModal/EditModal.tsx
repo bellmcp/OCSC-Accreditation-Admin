@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
@@ -177,8 +177,10 @@ export default function EditModal({
     const value = get(selectedAppro, 'accreditation', '')
     const letterId = get(selectedAppro, 'letterId', 0)
 
-    formik.setFieldValue('appro', value)
-    formik.setFieldValue('circLetrId', letterId)
+    if (!isEmpty(selectionModel1)) {
+      formik.setFieldValue('appro', value)
+      formik.setFieldValue('circLetrId', letterId)
+    }
   }, [selectionModel1]) //eslint-disable-line
 
   useEffect(() => {
@@ -186,13 +188,20 @@ export default function EditModal({
     const selectedAppro = get(recommendations2, `[${selectedApproId}]`, {})
     const value = get(selectedAppro, 'accreditation', '')
 
-    formik.setFieldValue('appro', value)
+    if (!isEmpty(selectionModel2)) {
+      formik.setFieldValue('appro', value)
+    }
   }, [selectionModel2]) //eslint-disable-line
 
   return (
     <Dialog
       open={open}
-      onClose={onCloseModal}
+      onClose={(_, reason) => {
+        if (reason && reason === 'backdropClick') {
+          return
+        }
+        onCloseModal()
+      }}
       PaperProps={{
         style: { borderRadius: 16, padding: 8 },
       }}
