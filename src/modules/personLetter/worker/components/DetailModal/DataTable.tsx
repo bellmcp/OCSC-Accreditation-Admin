@@ -310,7 +310,7 @@ export default function DataTable({
     {
       field: 'salGrpId',
       headerName: 'กลุ่มเงินเดือน',
-      width: 180,
+      width: 220,
       cellClassName: 'blue',
       renderCell: (params) => {
         const value = get(params, 'row.salGrpId', 0)
