@@ -24,6 +24,9 @@ import {
   EDIT_PERSON_LETTER_DEGREE_REQUEST,
   EDIT_PERSON_LETTER_DEGREE_SUCCESS,
   EDIT_PERSON_LETTER_DEGREE_FAILURE,
+  LOAD_PERSON_LETTER_CATEGORIES_REQUEST,
+  LOAD_PERSON_LETTER_CATEGORIES_SUCCESS,
+  LOAD_PERSON_LETTER_CATEGORIES_FAILURE,
 } from './actions'
 
 const initialState = {
@@ -35,6 +38,7 @@ const initialState = {
   workers: [],
   workStatus: [],
   personLetterDegrees: [],
+  personLetterCategories: [],
 }
 
 export default function (state = initialState, action: any) {
@@ -122,6 +126,17 @@ export default function (state = initialState, action: any) {
       }
     case EDIT_PERSON_LETTER_DEGREE_FAILURE:
       return { ...state, isSubmitting: false }
+    case LOAD_PERSON_LETTER_CATEGORIES_REQUEST:
+      return { ...state, personLetterCategories: [] }
+    case LOAD_PERSON_LETTER_CATEGORIES_SUCCESS:
+      return {
+        ...state,
+        personLetterCategories: action.payload.personLetterCategories,
+      }
+    case LOAD_PERSON_LETTER_CATEGORIES_FAILURE:
+      return {
+        ...state,
+      }
     default:
       return state
   }

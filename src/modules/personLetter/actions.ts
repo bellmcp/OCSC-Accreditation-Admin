@@ -56,6 +56,13 @@ const EDIT_PERSON_LETTER_DEGREE_SUCCESS =
 const EDIT_PERSON_LETTER_DEGREE_FAILURE =
   'ocsc-person-accredit/search/EDIT_PERSON_LETTER_DEGREE_FAILURE'
 
+const LOAD_PERSON_LETTER_CATEGORIES_REQUEST =
+  'ocsc-person-accredit/search/LOAD_PERSON_LETTER_CATEGORIES_REQUEST'
+const LOAD_PERSON_LETTER_CATEGORIES_SUCCESS =
+  'ocsc-person-accredit/search/LOAD_PERSON_LETTER_CATEGORIES_SUCCESS'
+const LOAD_PERSON_LETTER_CATEGORIES_FAILURE =
+  'ocsc-person-accredit/search/LOAD_PERSON_LETTER_CATEGORIES_FAILURE'
+
 function getPersonLetter({
   letterNo,
   letterDate,
@@ -526,6 +533,39 @@ function editPersonLetterDegree({
   }
 }
 
+function loadPersonLetterCategories() {
+  return async (dispatch: any) => {
+    const token = getCookie('token')
+
+    dispatch({ type: LOAD_PERSON_LETTER_CATEGORIES_REQUEST })
+    try {
+      var { data } = await axios.get('/PersonLetterCategories', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      dispatch({
+        type: LOAD_PERSON_LETTER_CATEGORIES_SUCCESS,
+        payload: {
+          personLetterCategories: data,
+        },
+      })
+    } catch (err) {
+      dispatch({ type: LOAD_PERSON_LETTER_CATEGORIES_FAILURE })
+      dispatch(
+        uiActions.setFlashMessage(
+          `โหลดประเภทคำร้องไม่สำเร็จ เกิดข้อผิดพลาด ${get(
+            err,
+            'response.status',
+            'บางอย่าง'
+          )}`,
+          'error'
+        )
+      )
+    }
+  }
+}
+
 export {
   GET_PERSON_LETTER_REQUEST,
   GET_PERSON_LETTER_SUCCESS,
@@ -552,6 +592,9 @@ export {
   EDIT_PERSON_LETTER_DEGREE_REQUEST,
   EDIT_PERSON_LETTER_DEGREE_SUCCESS,
   EDIT_PERSON_LETTER_DEGREE_FAILURE,
+  LOAD_PERSON_LETTER_CATEGORIES_REQUEST,
+  LOAD_PERSON_LETTER_CATEGORIES_SUCCESS,
+  LOAD_PERSON_LETTER_CATEGORIES_FAILURE,
   getPersonLetter,
   getPersonLetterAdmin,
   loadWorkers,
@@ -562,4 +605,5 @@ export {
   clearSearchResult,
   loadPersonLetterDegrees,
   editPersonLetterDegree,
+  loadPersonLetterCategories,
 }
