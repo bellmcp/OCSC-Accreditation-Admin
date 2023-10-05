@@ -227,9 +227,10 @@ export default function DataTable({
     {
       field: 'submitDate',
       headerName: 'วันที่ยื่นคำร้อง',
-      width: 150,
+      width: 200,
       align: 'center',
       headerAlign: 'center',
+      renderCell: renderCellExpand,
     },
     {
       field: 'letterNo',
