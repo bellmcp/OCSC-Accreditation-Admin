@@ -43,13 +43,15 @@ export default function AddPersonLetterModal({
   )
 
   const [workers, setWorkers] = useState([])
+  const [personLetterCategories, setPersonLetterCategories] = useState([])
   const [date, setDate] = useState<string>(
     format(new Date(), 'yyyy-MM-dd').toString()
   )
 
-  const { workers: initialWorkers = [] } = useSelector(
-    (state: any) => state.personLetter
-  )
+  const {
+    workers: initialWorkers = [],
+    personLetterCategories: initialPersonLetterCategories = [],
+  } = useSelector((state: any) => state.personLetter)
 
   const getWorkerIdByName = (name: any) => {
     const result = workers.find((item: any) => {
@@ -58,9 +60,20 @@ export default function AddPersonLetterModal({
     return get(result, 'id', null)
   }
 
+  const getCategoryNameById = (id: any) => {
+    const result = personLetterCategories.find(
+      (category: any) => category.id === id
+    )
+    return get(result, 'category', '')
+  }
+
   useEffect(() => {
     setWorkers(initialWorkers)
   }, [initialWorkers])
+
+  useEffect(() => {
+    setPersonLetterCategories(initialPersonLetterCategories)
+  }, [initialPersonLetterCategories])
 
   const validationSchema = yup.object({})
   const formik = useFormik({
@@ -68,6 +81,7 @@ export default function AddPersonLetterModal({
       letterno: '',
       letterdate: date,
       letteragency: '',
+      categoryid: null,
       note: '',
       workerid: null,
     },
@@ -78,6 +92,7 @@ export default function AddPersonLetterModal({
           letterno: get(values, 'letterno', ''),
           letterdate: date,
           letteragency: get(values, 'letteragency', ''),
+          categoryid: get(values, 'categoryid', ''),
           note: get(values, 'note', ''),
           workerid: getWorkerIdByName(get(values, 'workerid', '')),
           currentSearchQuery,
@@ -181,6 +196,56 @@ export default function AddPersonLetterModal({
                   size='small'
                   fullWidth
                 />
+              </Grid>
+            </Grid>
+            <Grid container alignItems='center'>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  variant='body1'
+                  color='textPrimary'
+                  style={{ fontWeight: 600 }}
+                >
+                  ประเภทคำร้อง
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth size='small'>
+                  <Select
+                    id='categoryid'
+                    name='categoryid'
+                    value={formik.values.categoryid}
+                    onChange={formik.handleChange}
+                    variant='outlined'
+                    displayEmpty
+                    MenuProps={{
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
+                      getContentAnchorEl: null,
+                    }}
+                    renderValue={(selected) => {
+                      if (selected === null) {
+                        return (
+                          <span style={{ color: theme.palette.text.secondary }}>
+                            เลือกประเภทคำร้อง
+                          </span>
+                        )
+                      }
+                      return getCategoryNameById(selected)
+                    }}
+                  >
+                    {personLetterCategories.map((category: any) => (
+                      <MenuItem value={get(category, 'id', '')}>
+                        {get(category, 'category', '')}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container alignItems='center'>
