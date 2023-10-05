@@ -87,6 +87,13 @@ export default function EditPersonLetterModal({
     return get(result, 'category', '')
   }
 
+  const getCategoryIdByName = (name: string) => {
+    const result = personLetterCategories.find(
+      (category: any) => category.category === name
+    )
+    return get(result, 'id', '')
+  }
+
   useEffect(() => {
     setWorkers(initialWorkers)
   }, [initialWorkers])
@@ -106,7 +113,7 @@ export default function EditPersonLetterModal({
       letterno: get(data, 'letterNo', ''),
       letterdate: get(data, 'letterDate', ''),
       letteragency: get(data, 'letterAgency', ''),
-      categoryid: get(data, 'categoryid', null),
+      categoryid: getCategoryIdByName(get(data, 'letterCategory', null)),
       note: get(data, 'note', ''),
       workerid: get(data, 'workerId', null),
       numthdegs: get(data, 'numThDegs', null),

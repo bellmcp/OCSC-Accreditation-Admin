@@ -225,6 +225,13 @@ export default function DataTable({
       headerAlign: 'center',
     },
     {
+      field: 'submitDate',
+      headerName: 'วันที่ยื่นคำร้อง',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'letterNo',
       headerName: 'เลขที่',
       width: 150,
@@ -246,11 +253,20 @@ export default function DataTable({
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      renderCell: renderCellExpand,
     },
     {
       field: 'letterAgency',
       headerName: 'หน่วยงาน',
       width: 250,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
+    },
+    {
+      field: 'letterCategory',
+      headerName: 'ประเภทคำร้อง',
+      width: 200,
       align: 'center',
       headerAlign: 'center',
       renderCell: renderCellExpand,
@@ -369,6 +385,14 @@ export default function DataTable({
             return <></>
         }
       },
+    },
+    {
+      field: 'lastUpdate',
+      headerName: 'วันที่อนุมัติ',
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
     },
     {
       field: 'replyNo',
