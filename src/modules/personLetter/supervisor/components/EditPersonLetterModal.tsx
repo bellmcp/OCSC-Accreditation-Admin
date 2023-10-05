@@ -55,6 +55,7 @@ export default function EditPersonLetterModal({
 
   const [workers, setWorkers] = useState([])
   const [workStatus, setWorkStatus] = useState([])
+  const [personLetterCategories, setPersonLetterCategories] = useState([])
 
   const [date, setDate] = useState<string>(
     format(new Date(), 'yyyy-MM-dd').toString()
@@ -63,8 +64,11 @@ export default function EditPersonLetterModal({
     format(new Date(), 'yyyy-MM-dd').toString()
   )
 
-  const { workers: initialWorkers = [], workStatus: initialWorkStatus = [] } =
-    useSelector((state: any) => state.personLetter)
+  const {
+    workers: initialWorkers = [],
+    workStatus: initialWorkStatus = [],
+    personLetterCategories: initialPersonLetterCategories = [],
+  } = useSelector((state: any) => state.personLetter)
 
   const getWorkerNameById = (id: any) => {
     const result = workers.find((worker: any) => worker.id === id)
@@ -76,6 +80,13 @@ export default function EditPersonLetterModal({
     return get(result, 'status', '')
   }
 
+  const getCategoryNameById = (id: any) => {
+    const result = personLetterCategories.find(
+      (category: any) => category.id === id
+    )
+    return get(result, 'category', '')
+  }
+
   useEffect(() => {
     setWorkers(initialWorkers)
   }, [initialWorkers])
@@ -84,6 +95,10 @@ export default function EditPersonLetterModal({
     setWorkStatus(initialWorkStatus)
   }, [initialWorkStatus])
 
+  useEffect(() => {
+    setPersonLetterCategories(initialPersonLetterCategories)
+  }, [initialPersonLetterCategories])
+
   const validationSchema = yup.object({})
   const formik = useFormik({
     enableReinitialize: true,
@@ -91,6 +106,7 @@ export default function EditPersonLetterModal({
       letterno: get(data, 'letterNo', ''),
       letterdate: get(data, 'letterDate', ''),
       letteragency: get(data, 'letterAgency', ''),
+      categoryid: get(data, 'categoryid', null),
       note: get(data, 'note', ''),
       workerid: get(data, 'workerId', null),
       numthdegs: get(data, 'numThDegs', null),
@@ -111,6 +127,7 @@ export default function EditPersonLetterModal({
           letterno: get(values, 'letterno', ''),
           letterdate: date,
           letteragency: get(values, 'letteragency', ''),
+          categoryid: get(values, 'categoryid', ''),
           note: get(values, 'note', ''),
           workerid: get(values, 'workerid', ''),
           replyno: get(values, 'replyno', ''),
@@ -212,8 +229,61 @@ export default function EditPersonLetterModal({
                   onChange={formik.handleChange}
                   variant='outlined'
                   size='small'
+                  placeholder='โปรดใส่ชื่อกรมหรือหน่วยงานที่เทียบเท่ากรม เช่น กรมการแพทย์ เป็นต้น'
+                  multiline
+                  rows={2}
                   fullWidth
                 />
+              </Grid>
+            </Grid>
+            <Grid container alignItems='center'>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  variant='body1'
+                  color='textPrimary'
+                  style={{ fontWeight: 600 }}
+                >
+                  ประเภทคำร้อง
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth size='small'>
+                  <Select
+                    id='categoryid'
+                    name='categoryid'
+                    value={formik.values.categoryid}
+                    onChange={formik.handleChange}
+                    variant='outlined'
+                    displayEmpty
+                    MenuProps={{
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      },
+                      getContentAnchorEl: null,
+                    }}
+                    renderValue={(selected) => {
+                      if (selected === null) {
+                        return (
+                          <span style={{ color: theme.palette.text.secondary }}>
+                            เลือกประเภทคำร้อง
+                          </span>
+                        )
+                      }
+                      return getCategoryNameById(selected)
+                    }}
+                  >
+                    {personLetterCategories.map((category: any) => (
+                      <MenuItem value={get(category, 'id', '')}>
+                        {get(category, 'category', '')}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container alignItems='center'>

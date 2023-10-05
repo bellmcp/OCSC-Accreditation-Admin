@@ -194,6 +194,7 @@ export default function PersonLetterSupervisor() {
   useEffect(() => {
     dispatch(personLetterActions.loadWorkers())
     dispatch(personLetterActions.loadWorkStatus())
+    dispatch(personLetterActions.loadPersonLetterCategories())
     initialSubmitForm()
     return () => {
       dispatch(personLetterActions.clearSearchResult())
