@@ -521,7 +521,10 @@ function editPersonLetterDegree({
         },
       })
       dispatch(
-        uiActions.setFlashMessage(`แก้ไขข้อมูล '${degreeId}' สำเร็จ`, 'success')
+        uiActions.setFlashMessage(
+          `แก้ไขรายการที่ ${degreeId} สำเร็จ`,
+          'success'
+        )
       )
       dispatch(loadPersonLetterDegrees(letterId))
     } catch (err) {
@@ -529,7 +532,7 @@ function editPersonLetterDegree({
       dispatch({ type: EDIT_PERSON_LETTER_DEGREE_FAILURE })
       dispatch(
         uiActions.setFlashMessage(
-          `แก้ไขข้อมูลไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
+          `แก้ไขรายการที่ ${degreeId} ไม่สำเร็จ เกิดข้อผิดพลาด ${responseMessage}`,
           'error'
         )
       )

@@ -188,6 +188,13 @@ export default function DataTable({
 }: DataTableProps) {
   const columns: GridColDef[] = [
     {
+      field: 'id',
+      headerName: 'ลำดับ',
+      width: 80,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
       field: 'nationalId',
       headerName: 'เลขประจำตัวประชาชน',
       width: 180,
