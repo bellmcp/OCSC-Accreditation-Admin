@@ -44,6 +44,7 @@ import {
   searchItems,
   menuItems,
   curriculumItems,
+  reportItems,
   infoItems,
 } from '../navigation'
 
@@ -278,6 +279,10 @@ export default function NavBar({
     variant: 'popover',
     popupId: 'infoPopUp',
   })
+  const reportPopUpState = usePopupState({
+    variant: 'popover',
+    popupId: 'reportPopUp',
+  })
   const curriculumPopUpState = usePopupState({
     variant: 'popover',
     popupId: 'curriculumPopUp',
@@ -367,6 +372,7 @@ export default function NavBar({
                     title='หนังสือเวียน'
                     popUpState={curriculumPopUpState}
                   />
+                  <PopUpMenu title='รายงาน' popUpState={reportPopUpState} />
                   <PopUpMenu
                     title='ข้อมูลพื้นฐาน'
                     popUpState={infoPopUpState}
@@ -456,6 +462,12 @@ export default function NavBar({
       <PopUpMenuDropdown
         popUpState={curriculumPopUpState}
         menuItems={curriculumItems}
+        activePage={activePage}
+        setActivePage={setActivePage}
+      />
+      <PopUpMenuDropdown
+        popUpState={reportPopUpState}
+        menuItems={reportItems}
         activePage={activePage}
         setActivePage={setActivePage}
       />
