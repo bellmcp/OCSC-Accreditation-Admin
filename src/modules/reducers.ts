@@ -9,6 +9,7 @@ import personLetterReducer from 'modules/personLetter/reducer'
 import infoReducer from 'modules/info/reducer'
 import passwordReducer from 'modules/edit/password/reducer'
 import curriculumReducer from 'modules/curriculum/reducer'
+import reportReducer from 'modules/report/reducer'
 
 export default (history: any) =>
   combineReducers({
@@ -21,4 +22,5 @@ export default (history: any) =>
     personLetter: personLetterReducer,
     password: passwordReducer,
     curriculum: curriculumReducer,
+    report: reportReducer,
   })
