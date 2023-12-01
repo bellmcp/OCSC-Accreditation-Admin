@@ -28,6 +28,10 @@ interface DataTableProps {
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+  [`& .${gridClasses.row}.bold`]: {
+    fontWeight: 600,
+    color: theme.palette.primary.main,
+  },
   [`& .${gridClasses.row}.even`]: {
     backgroundColor: 'transparent',
     '&:hover, &.Mui-hovered': {
@@ -119,9 +123,10 @@ export default function DataTable({
             },
           }}
           loading={loading}
-          getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-          }
+          getRowClassName={(params) => {
+            if (params.isLastVisible) return 'bold'
+            return 'even'
+          }}
           rows={data}
           columns={columns}
           disableSelectionOnClick
