@@ -462,11 +462,11 @@ export default function RecommendationTable({
             toolbarQuickFilterDeleteIconLabel: 'ล้าง',
 
             // Export selector toolbar button text
-            toolbarExport: 'ส่งออก',
-            toolbarExportLabel: 'ส่งออก',
-            toolbarExportCSV: 'ส่งออกเป็นไฟล์ CSV',
+            toolbarExport: 'นำออก',
+            toolbarExportLabel: 'นำออก',
+            toolbarExportCSV: 'นำออกเป็นไฟล์ CSV',
             toolbarExportPrint: 'สั่งพิมพ์',
-            toolbarExportExcel: 'ส่งออกเป็นไฟล์ Excel',
+            toolbarExportExcel: 'นำออกเป็นไฟล์ Excel',
 
             // Columns panel text
             columnsPanelTextFieldLabel: 'ค้นหาคอลัมน์',

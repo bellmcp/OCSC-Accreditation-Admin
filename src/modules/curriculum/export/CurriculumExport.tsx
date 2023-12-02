@@ -180,7 +180,7 @@ export default function CurriculumExport() {
                       color='secondary'
                       className={classes.sectionSubtitle}
                     >
-                      ส่งออกผลการรับรองคุณวุฒิ
+                      นำออกผลการรับรองคุณวุฒิ
                     </Typography>
                   </Grid>
                 </Grid>
@@ -192,7 +192,7 @@ export default function CurriculumExport() {
                       color='primary'
                       style={{ fontWeight: 500 }}
                     >
-                      <b>*</b> ส่งออก (Export)
+                      <b>*</b> นำออก (Export)
                       ผลการรับรองคุณวุฒิที่จะนำไปออกหนังสือเวียน
                       เป็นไฟล์สเปรดชีต (.XLS)
                     </Typography>
@@ -239,7 +239,7 @@ export default function CurriculumExport() {
                     style={{ marginTop: 16 }}
                     type='submit'
                   >
-                    ส่งออก
+                    นำออก
                   </Button>
                 </Grid>
               </Grid>
