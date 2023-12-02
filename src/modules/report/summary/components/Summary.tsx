@@ -40,6 +40,7 @@ import * as reportActions from 'modules/report/actions'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
+import Empty from 'modules/ui/components/Empty'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,6 +101,7 @@ export default function Summary() {
 
   const [searchResults, setSearchResults] = useState([])
   const [tableHeader, setTableHeader] = useState([])
+  const [numColumns, setNumColumns] = useState(0)
   const [tableMaxWidth, setTableMaxWidth] = useState<any>(false)
   const [startDate, setStartDate] = useState<string>(
     format(subMonths(new Date(), 6), 'yyyy-MM-dd').toString()
@@ -152,6 +154,7 @@ export default function Summary() {
   useEffect(() => {
     const tableData = get(initialSearchResults, 'tableData', [])
     const tableHeader = get(initialSearchResults, 'tableHeader', [])
+    const numColumns = get(initialSearchResults, 'numColumns', 0)
     const parsed = tableData.map((item: any, index: number) => {
       return {
         id: item.item1,
@@ -160,14 +163,15 @@ export default function Summary() {
     })
     setSearchResults(parsed)
     setTableHeader(tableHeader)
+    setNumColumns(numColumns)
   }, [initialSearchResults])
 
   const renderSearchResult = () => {
     if (isSearching) {
-      return <Loading height={300}></Loading>
+      return <Loading height={500}></Loading>
     } else {
       if (isEmpty(searchResults)) {
-        return <></>
+        return <Empty height={500} />
       } else {
         return (
           <Box mb={4}>
@@ -226,6 +230,7 @@ export default function Summary() {
                 loading={isSearching}
                 startDate={startDate}
                 endDate={endDate}
+                numColumns={numColumns}
               />
             </Paper>
           </Box>

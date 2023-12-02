@@ -27,6 +27,7 @@ interface DataTableProps {
   setCurrentEditData: any
   startDate: any
   endDate: any
+  numColumns: number
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -72,14 +73,9 @@ export default function DataTable({
   loading,
   startDate,
   endDate,
+  numColumns,
 }: DataTableProps) {
-  const dataMaps = data.map((elem: any, index: number) => {
-    if (index === data.length - 1) {
-      return {
-        hide: true,
-      }
-    }
-
+  const dataMaps = data.slice(0, numColumns).map((elem: any, index: number) => {
     return {
       field: `item${index + 1}`,
       headerName: tableHeader[index],
