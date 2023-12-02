@@ -25,7 +25,6 @@ import {
   Zoom,
   useScrollTrigger,
   Toolbar,
-  Hidden,
   Chip,
   FormControl,
   Select,
@@ -34,17 +33,15 @@ import {
 import Stack from '@mui/material/Stack'
 import {
   Search as SearchIcon,
-  UnfoldLess as ShrinkIcon,
-  UnfoldMore as ExpandIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from '@material-ui/icons'
 
 import * as reportActions from 'modules/report/actions'
 import * as personLetterActions from 'modules/personLetter/actions'
 
+import Chart from './Chart'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
-import DataTable from './DataTable'
 import Empty from 'modules/ui/components/Empty'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -105,9 +102,6 @@ export default function Usage() {
   const dispatch = useDispatch()
 
   const [searchResults, setSearchResults] = useState([])
-  const [tableHeader, setTableHeader] = useState([])
-  const [numColumns, setNumColumns] = useState(0)
-  const [tableMaxWidth, setTableMaxWidth] = useState<any>(false)
   const [startDate, setStartDate] = useState<string>(
     format(subMonths(new Date(), 6), 'yyyy-MM-dd').toString()
   )
@@ -152,11 +146,6 @@ export default function Usage() {
     }
   }, [dispatch]) //eslint-disable-line
 
-  const handleSwitchTableMaxWidth = () => {
-    if (tableMaxWidth === 'lg') setTableMaxWidth(false)
-    else setTableMaxWidth('lg')
-  }
-
   const { searchResults: initialSearchResults = [], isSearching = false } =
     useSelector((state: any) => state.report)
 
@@ -173,18 +162,17 @@ export default function Usage() {
   ]
 
   useEffect(() => {
-    const tableData = get(initialSearchResults, 'tableData', [])
-    const tableHeader = get(initialSearchResults, 'tableHeader', [])
-    const numColumns = get(initialSearchResults, 'numColumns', 0)
-    const parsed = tableData.map((item: any, index: number) => {
-      return {
-        id: item.item1,
-        ...item,
-      }
-    })
+    const parsed = {
+      ministry: {
+        x: get(initialSearchResults, 'x1', []),
+        y: get(initialSearchResults, 'y1', []),
+      },
+      department: {
+        x: get(initialSearchResults, 'x2', []),
+        y: get(initialSearchResults, 'y2', []),
+      },
+    }
     setSearchResults(parsed)
-    setTableHeader(tableHeader)
-    setNumColumns(numColumns)
   }, [initialSearchResults])
 
   const getPersonLetterCategoryNameById = (id: number) => {
@@ -194,11 +182,11 @@ export default function Usage() {
     return get(result, 'category', '')
   }
 
-  const renderSearchResult = () => {
+  const renderMinistryChart = () => {
     if (isSearching) {
       return <Loading height={500}></Loading>
     } else {
-      if (isEmpty(searchResults)) {
+      if (isEmpty(get(searchResults, 'ministry.y', []))) {
         return <Empty height={500} />
       } else {
         return (
@@ -206,10 +194,7 @@ export default function Usage() {
             <Box mt={6} mb={4}>
               <Divider />
             </Box>
-            <Container
-              maxWidth='lg'
-              style={{ padding: tableMaxWidth === 'lg' ? 0 : '0 24px' }}
-            >
+            <Container maxWidth='lg'>
               <Grid
                 container
                 justify='space-between'
@@ -220,45 +205,69 @@ export default function Usage() {
                   variant='h6'
                   className={classes.sectionTitle}
                 >
-                  ผลการค้นหา
+                  กระทรวง
                 </Typography>
-                <Stack direction='row' spacing={2}>
-                  <Hidden mdDown>
-                    <Button
-                      variant='contained'
-                      color='secondary'
-                      onClick={handleSwitchTableMaxWidth}
-                      startIcon={
-                        tableMaxWidth === 'lg' ? (
-                          <ExpandIcon style={{ transform: 'rotate(90deg)' }} />
-                        ) : (
-                          <ShrinkIcon style={{ transform: 'rotate(90deg)' }} />
-                        )
-                      }
-                    >
-                      {tableMaxWidth === 'lg' ? 'ขยาย' : 'ย่อ'}ตาราง
-                    </Button>
-                  </Hidden>
-                </Stack>
               </Grid>
             </Container>
             <Paper
               elevation={0}
               style={{
                 borderRadius: 16,
-                padding: 24,
+                padding: '36px 24px',
                 boxShadow: '0 0 20px 0 rgba(204,242,251,0.3)',
                 border: '1px solid rgb(204 242 251)',
                 minHeight: 300,
               }}
             >
-              <DataTable
-                data={searchResults}
-                tableHeader={tableHeader}
-                loading={isSearching}
-                startDate={startDate}
-                endDate={endDate}
-                numColumns={numColumns}
+              <Chart
+                title='กระทรวง'
+                dataset={get(searchResults, 'ministry', {})}
+              />
+            </Paper>
+          </Box>
+        )
+      }
+    }
+  }
+
+  const renderDepartmentChart = () => {
+    if (isSearching) {
+      return <Loading height={500}></Loading>
+    } else {
+      if (isEmpty(get(searchResults, 'department.y', []))) {
+        return <Empty height={500} />
+      } else {
+        return (
+          <Box mb={4}>
+            <Box mt={6} mb={4}></Box>
+            <Container maxWidth='lg'>
+              <Grid
+                container
+                justify='space-between'
+                style={{ margin: '24px 0' }}
+              >
+                <Typography
+                  component='h2'
+                  variant='h6'
+                  className={classes.sectionTitle}
+                >
+                  กรม
+                </Typography>
+              </Grid>
+            </Container>
+            <Paper
+              elevation={0}
+              style={{
+                borderRadius: 16,
+                padding: '36px 24px',
+                boxShadow: '0 0 20px 0 rgba(204,242,251,0.3)',
+                border: '1px solid rgb(204 242 251)',
+                minHeight: 300,
+              }}
+            >
+              <Chart
+                title='กรม'
+                dataset={get(searchResults, 'department', {})}
               />
             </Paper>
           </Box>
@@ -408,8 +417,9 @@ export default function Usage() {
           </Box>
         </form>
       </Container>
-      <Container maxWidth={tableMaxWidth} style={{ marginBottom: 36 }}>
-        {renderSearchResult()}
+      <Container maxWidth='lg' style={{ marginBottom: 36 }}>
+        {renderMinistryChart()}
+        {renderDepartmentChart()}
       </Container>
       <ScrollTop>
         <Fab color='primary' size='medium'>
