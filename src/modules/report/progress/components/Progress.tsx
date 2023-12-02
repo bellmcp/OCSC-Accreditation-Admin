@@ -27,6 +27,9 @@ import {
   Toolbar,
   Hidden,
   Chip,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
 } from '@material-ui/core'
 import Stack from '@mui/material/Stack'
 import {
@@ -40,6 +43,7 @@ import * as reportActions from 'modules/report/actions'
 import Loading from 'modules/ui/components/Loading'
 import DatePicker from './DatePicker'
 import DataTable from './DataTable'
+import Empty from 'modules/ui/components/Empty'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -116,12 +120,14 @@ export default function Progress() {
     initialValues: {
       startDate: '',
       endDate: '',
+      status: '1',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const searchQuery = {
         startDate,
         endDate,
+        status: get(values, 'status', null),
       }
       dispatch(reportActions.getProgressReport(searchQuery))
     },
@@ -131,6 +137,7 @@ export default function Progress() {
     const searchQuery = {
       startDate,
       endDate,
+      status: 1,
     }
     dispatch(reportActions.getProgressReport(searchQuery))
   }
@@ -167,10 +174,10 @@ export default function Progress() {
 
   const renderSearchResult = () => {
     if (isSearching) {
-      return <Loading height={300}></Loading>
+      return <Loading height={500}></Loading>
     } else {
       if (isEmpty(searchResults)) {
-        return <></>
+        return <Empty height={500} />
       } else {
         return (
           <Box mb={4}>
@@ -230,6 +237,7 @@ export default function Progress() {
                 startDate={startDate}
                 endDate={endDate}
                 numColumns={numColumns}
+                status={formik.values.status}
               />
             </Paper>
           </Box>
@@ -308,6 +316,44 @@ export default function Progress() {
                   </Grid>
                   <Grid xs={12} md={3}>
                     <DatePicker date={endDate} setDate={setEndDate} />
+                  </Grid>
+                </Grid>
+                <Grid container item direction='row' alignItems='center'>
+                  <Grid xs={12} md={3}>
+                    <Typography
+                      variant='body1'
+                      color='textPrimary'
+                      style={{ fontWeight: 600 }}
+                    >
+                      ประเภทหลักสูตร
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} md={9}>
+                    <RadioGroup
+                      row
+                      id='status'
+                      name='status'
+                      value={formik.values.status}
+                      onChange={formik.handleChange}
+                    >
+                      <FormControlLabel
+                        value='1'
+                        control={<Radio size='small' />}
+                        label='เรื่องเข้าที่ยังไม่ดำเนินการ'
+                        style={{ marginRight: 54 }}
+                      />
+                      <FormControlLabel
+                        value='2'
+                        control={<Radio size='small' />}
+                        label='เรื่องเข้าที่อยู่ระหว่างดำเนินการ'
+                        style={{ marginRight: 54 }}
+                      />
+                      <FormControlLabel
+                        value='3'
+                        control={<Radio size='small' />}
+                        label='เรื่องเข้าที่เสร็จสิ้นแล้ว'
+                      />
+                    </RadioGroup>
                   </Grid>
                 </Grid>
               </Grid>

@@ -27,14 +27,11 @@ interface DataTableProps {
   setCurrentEditData: any
   startDate: any
   endDate: any
+  status: any
   numColumns: number
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
-  [`& .${gridClasses.row}.bold`]: {
-    fontWeight: 600,
-    color: theme.palette.primary.main,
-  },
   [`& .${gridClasses.row}.even`]: {
     backgroundColor: 'transparent',
     '&:hover, &.Mui-hovered': {
@@ -73,6 +70,7 @@ export default function DataTable({
   loading,
   startDate,
   endDate,
+  status,
   numColumns,
 }: DataTableProps) {
   const dataMaps = data.slice(0, numColumns).map((elem: any, index: number) => {
@@ -86,6 +84,19 @@ export default function DataTable({
   })
 
   const columns: GridColDef[] = dataMaps
+
+  const getStatusName = (id: string) => {
+    switch (id) {
+      case '1':
+        return 'เรื่องเข้าที่ยังไม่ดำเนินการ'
+      case '2':
+        return 'เรื่องเข้าที่อยู่ระหว่างดำเนินการ'
+      case '3':
+        return 'เรื่องเข้าที่เสร็จสิ้นแล้ว'
+      default:
+        return ''
+    }
+  }
 
   function CustomToolbar() {
     return (
@@ -102,7 +113,9 @@ export default function DataTable({
             csvOptions={{
               delimiter: ',',
               utf8WithBom: true,
-              fileName: `สรุปผลการปฏิบัติงาน_${startDate}_${endDate}`,
+              fileName: `สรุปเรื่องเข้า/ออก/อยู่ระหว่างดำเนินการ_${startDate}_${endDate}_${getStatusName(
+                status
+              )}`,
             }}
             sx={{ lineHeight: '1.2' }}
           />
@@ -124,7 +137,6 @@ export default function DataTable({
           }}
           loading={loading}
           getRowClassName={(params) => {
-            if (params.isLastVisible) return 'bold'
             return 'even'
           }}
           rows={data}

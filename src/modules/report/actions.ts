@@ -65,14 +65,14 @@ function getSummaryReport({ startDate, endDate }: any) {
   }
 }
 
-function getProgressReport({ startDate, endDate }: any) {
+function getProgressReport({ startDate, endDate, status }: any) {
   return async (dispatch: any) => {
     const token = getCookie('token')
 
     dispatch({ type: GET_PROGRESS_REPORT_REQUEST })
     try {
       var { data } = await axios.get(
-        `/reports/2?start=${startDate}&end=${endDate}&status=2`,
+        `/reports/2?start=${startDate}&end=${endDate}&status=${status}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
