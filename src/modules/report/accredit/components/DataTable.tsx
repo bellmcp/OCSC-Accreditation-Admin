@@ -102,7 +102,7 @@ export default function DataTable({
             csvOptions={{
               delimiter: ',',
               utf8WithBom: true,
-              fileName: `สรุปผลการปฏิบัติงาน_${startDate}_${endDate}`,
+              fileName: `สรุปผลการรับรองรายบุคคล_${startDate}_${endDate}`,
             }}
             sx={{ lineHeight: '1.2' }}
           />
