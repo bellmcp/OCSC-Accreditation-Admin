@@ -25,6 +25,8 @@ interface DataTableProps {
   loading: boolean
   handleOpenEditModal: () => void
   setCurrentEditData: any
+  startDate: any
+  endDate: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -68,6 +70,8 @@ export default function DataTable({
   data,
   tableHeader,
   loading,
+  startDate,
+  endDate,
 }: DataTableProps) {
   const dataMaps = data.map((elem: any, index: number) => {
     if (index === data.length - 1) {
@@ -102,7 +106,7 @@ export default function DataTable({
             csvOptions={{
               delimiter: ',',
               utf8WithBom: true,
-              fileName: 'test',
+              fileName: `สรุปผลการปฏิบัติงาน_${startDate}_${endDate}`,
             }}
             sx={{ lineHeight: '1.2' }}
           />

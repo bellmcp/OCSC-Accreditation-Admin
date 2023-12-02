@@ -224,6 +224,8 @@ export default function Summary() {
                 data={searchResults}
                 tableHeader={tableHeader}
                 loading={isSearching}
+                startDate={startDate}
+                endDate={endDate}
               />
             </Paper>
           </Box>
