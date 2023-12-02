@@ -314,6 +314,14 @@ export default function NavBar({
     window.location.reload()
   }
 
+  const filteredMenuItems = menuItems.filter((menu: any) => {
+    if (!isAdmin) {
+      return menu.url.includes('report') ? false : true
+    } else {
+      return true
+    }
+  })
+
   return (
     <div className={classes.grow}>
       <AppBar position='fixed' className={classes.appBar} elevation={0}>
@@ -372,7 +380,9 @@ export default function NavBar({
                     title='หนังสือเวียน'
                     popUpState={curriculumPopUpState}
                   />
-                  <PopUpMenu title='รายงาน' popUpState={reportPopUpState} />
+                  {isAdmin && (
+                    <PopUpMenu title='รายงาน' popUpState={reportPopUpState} />
+                  )}
                   <PopUpMenu
                     title='ข้อมูลพื้นฐาน'
                     popUpState={infoPopUpState}
@@ -448,7 +458,7 @@ export default function NavBar({
       <Hidden lgUp implementation='css'>
         <PopUpMenuDropdown
           popUpState={menuPopUpState}
-          menuItems={menuItems}
+          menuItems={filteredMenuItems}
           activePage={activePage}
           setActivePage={setActivePage}
         />

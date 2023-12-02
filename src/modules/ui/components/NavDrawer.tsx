@@ -22,6 +22,7 @@ import {
 } from '@material-ui/core'
 import { CloseRounded as CloseIcon } from '@material-ui/icons'
 import { navigationItems } from '../navigation'
+import { isLoginAsAdmin } from 'utils/isLogin'
 
 const DRAWER_WIDTH = '80%'
 
@@ -106,8 +107,17 @@ export default function NavDrawer({
   const classes = useStyles()
   const theme = useTheme()
   const history = useHistory()
+  const isAdmin = isLoginAsAdmin()
   const container =
     window !== undefined ? () => window().document.body : undefined
+
+  const filteredNavigationItems = navigationItems.filter((menu: any) => {
+    if (!isAdmin) {
+      return menu.url.includes('report') ? false : true
+    } else {
+      return true
+    }
+  })
 
   function MobileDrawer() {
     return (
@@ -126,7 +136,7 @@ export default function NavDrawer({
           สำนักงาน ก.พ.
         </p>
         <List>
-          {navigationItems.map((navigationItem, index) => (
+          {filteredNavigationItems.map((navigationItem, index) => (
             <React.Fragment>
               {navigationItem.sectionTitle && (
                 <Typography
