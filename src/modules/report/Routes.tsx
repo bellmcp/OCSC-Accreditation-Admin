@@ -1,23 +1,27 @@
 import React from 'react'
-import { Route, Switch, useRouteMatch } from 'react-router-dom'
+import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import { isLoginAsAdmin } from 'utils/isLogin'
 
 import Summary from './summary/components/Summary'
 import Progress from './progress/components/Progress'
 import Accredit from './accredit/components/Accredit'
 
+const PATH = process.env.REACT_APP_BASE_PATH
+
 export default function Routes() {
   const { path } = useRouteMatch()
+  const isAdmin = isLoginAsAdmin()
 
   return (
     <Switch>
       <Route path={`${path}/summary`}>
-        <Summary />
+        {isAdmin ? <Summary /> : <Redirect to={`${PATH}`} />}
       </Route>
       <Route path={`${path}/progress`}>
-        <Progress />
+        {isAdmin ? <Progress /> : <Redirect to={`${PATH}`} />}
       </Route>
       <Route path={`${path}/accredit`}>
-        <Accredit />
+        {isAdmin ? <Accredit /> : <Redirect to={`${PATH}`} />}
       </Route>
       <Route path={`${path}/usage`}>Usage</Route>
     </Switch>
