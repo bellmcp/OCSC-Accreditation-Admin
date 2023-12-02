@@ -20,7 +20,6 @@ import {
   Box,
   Button,
   Paper,
-  Divider,
   Fab,
   Zoom,
   useScrollTrigger,
@@ -191,24 +190,6 @@ export default function Usage() {
       } else {
         return (
           <Box mb={4}>
-            <Box mt={6} mb={4}>
-              <Divider />
-            </Box>
-            <Container maxWidth='lg'>
-              <Grid
-                container
-                justify='space-between'
-                style={{ margin: '24px 0' }}
-              >
-                <Typography
-                  component='h2'
-                  variant='h6'
-                  className={classes.sectionTitle}
-                >
-                  กระทรวง
-                </Typography>
-              </Grid>
-            </Container>
             <Paper
               elevation={0}
               style={{
@@ -222,6 +203,8 @@ export default function Usage() {
               <Chart
                 title='กระทรวง'
                 dataset={get(searchResults, 'ministry', {})}
+                startDate={startDate}
+                endDate={endDate}
               />
             </Paper>
           </Box>
@@ -239,22 +222,6 @@ export default function Usage() {
       } else {
         return (
           <Box mb={4}>
-            <Box mt={6} mb={4}></Box>
-            <Container maxWidth='lg'>
-              <Grid
-                container
-                justify='space-between'
-                style={{ margin: '24px 0' }}
-              >
-                <Typography
-                  component='h2'
-                  variant='h6'
-                  className={classes.sectionTitle}
-                >
-                  กรม
-                </Typography>
-              </Grid>
-            </Container>
             <Paper
               elevation={0}
               style={{
@@ -268,6 +235,8 @@ export default function Usage() {
               <Chart
                 title='กรม'
                 dataset={get(searchResults, 'department', {})}
+                startDate={startDate}
+                endDate={endDate}
               />
             </Paper>
           </Box>

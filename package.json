@@ -44,6 +44,8 @@
     "customize-cra": "^1.0.0",
     "date-fns": "2.29.1",
     "formik": "2.2.8",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "lodash": "^4.17.21",
     "material-ui-popup-state": "^1.9.3",
     "query-string": "^6.13.8",

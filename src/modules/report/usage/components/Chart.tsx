@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react'
 import { get } from 'lodash'
 import {
@@ -9,10 +10,18 @@ import {
   Tooltip,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+
+import { Stack } from '@mui/material'
+import { Button, Typography } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
+import { GetApp as DownloadIcon } from '@material-ui/icons'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip)
 
-const Chart = ({ title, dataset }: any) => {
+const Chart = ({ title, dataset, startDate, endDate }: any) => {
+  const theme = useTheme()
   const labels = get(dataset, 'x', [])
   const data = get(dataset, 'y', [])
 
@@ -104,7 +113,67 @@ const Chart = ({ title, dataset }: any) => {
     ],
   }
 
-  return <Bar data={chartData} options={options} />
+  const div2PDF = (e: any) => {
+    const input = window.document.getElementsByClassName(title)[0]
+    const paddingX = 20
+
+    html2canvas(input).then((canvas) => {
+      const img = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('l', 'pt')
+
+      // Calculate the position and size with padding
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = pdf.internal.pageSize.getHeight()
+      const imgWidth = pdfWidth - 2 * paddingX
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+      // Calculate the centered position with padding
+      const xPos = (pdfWidth - imgWidth) / 2
+      const yPos = (pdfHeight - imgHeight) / 2
+
+      pdf.addImage(img, 'png', xPos, yPos, imgWidth, imgHeight)
+      pdf.save(
+        `สถิติผู้ใช้งานของส่วนราชการ_${title}_${startDate}_${endDate}.pdf`
+      )
+    })
+  }
+
+  return (
+    <div>
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+        spacing={2}
+        style={{ marginBottom: 48, paddingLeft: 24, paddingRight: 24 }}
+      >
+        <Typography
+          component='h2'
+          variant='h6'
+          style={{
+            fontSize: '1.7rem',
+            fontWeight: 600,
+            lineHeight: '1.3',
+            zIndex: 3,
+            color: theme.palette.secondary.main,
+          }}
+        >
+          {title}
+        </Typography>
+        <Button
+          variant='contained'
+          color='secondary'
+          startIcon={<DownloadIcon />}
+          onClick={(e) => div2PDF(e)}
+        >
+          นำออกเป็นไฟล์ PDF
+        </Button>
+      </Stack>
+      <div className={title}>
+        <Bar data={chartData} options={options} />
+      </div>
+    </div>
+  )
 }
 
 export default Chart
