@@ -5,6 +5,9 @@ import {
   GET_PROGRESS_REPORT_REQUEST,
   GET_PROGRESS_REPORT_SUCCESS,
   GET_PROGRESS_REPORT_FAILURE,
+  GET_ACCREDIT_REPORT_REQUEST,
+  GET_ACCREDIT_REPORT_SUCCESS,
+  GET_ACCREDIT_REPORT_FAILURE,
   CLEAR_SEARCH_RESULT,
 } from './actions'
 
@@ -34,6 +37,16 @@ export default function (state = initialState, action: any) {
         searchResults: action.payload.searchResults,
       }
     case GET_PROGRESS_REPORT_FAILURE:
+      return { ...state, isSearching: false }
+    case GET_ACCREDIT_REPORT_REQUEST:
+      return { ...state, isSearching: true, searchResults: [] }
+    case GET_ACCREDIT_REPORT_SUCCESS:
+      return {
+        ...state,
+        isSearching: false,
+        searchResults: action.payload.searchResults,
+      }
+    case GET_ACCREDIT_REPORT_FAILURE:
       return { ...state, isSearching: false }
     case CLEAR_SEARCH_RESULT:
       return { ...state, searchResults: [] }

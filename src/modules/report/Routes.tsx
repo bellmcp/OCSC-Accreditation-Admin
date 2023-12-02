@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom'
 
 import Summary from './summary/components/Summary'
 import Progress from './progress/components/Progress'
+import Accredit from './accredit/components/Accredit'
 
 export default function Routes() {
   const { path } = useRouteMatch()
@@ -15,7 +16,9 @@ export default function Routes() {
       <Route path={`${path}/progress`}>
         <Progress />
       </Route>
-      <Route path={`${path}/accredit`}>Accredit</Route>
+      <Route path={`${path}/accredit`}>
+        <Accredit />
+      </Route>
       <Route path={`${path}/usage`}>Usage</Route>
     </Switch>
   )
