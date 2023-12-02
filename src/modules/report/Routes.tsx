@@ -5,6 +5,7 @@ import { isLoginAsAdmin } from 'utils/isLogin'
 import Summary from './summary/components/Summary'
 import Progress from './progress/components/Progress'
 import Accredit from './accredit/components/Accredit'
+import Usage from './usage/components/Usage'
 
 const PATH = process.env.REACT_APP_BASE_PATH
 
@@ -23,7 +24,9 @@ export default function Routes() {
       <Route path={`${path}/accredit`}>
         {isAdmin ? <Accredit /> : <Redirect to={`${PATH}`} />}
       </Route>
-      <Route path={`${path}/usage`}>Usage</Route>
+      <Route path={`${path}/usage`}>
+        {isAdmin ? <Usage /> : <Redirect to={`${PATH}`} />}
+      </Route>
     </Switch>
   )
 }
