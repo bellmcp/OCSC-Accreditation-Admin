@@ -61,6 +61,10 @@ export default function EditModal({
   const theme = useTheme()
   const dispatch = useDispatch()
 
+  const circularLettersWithNull = [
+    { id: null, no: null, year: null },
+    ...circularLetters,
+  ]
   const getCountryById = (id: any) => {
     const result = countries.find((country: any) => country.id === id)
     return get(result, 'thainame', '')
@@ -85,6 +89,17 @@ export default function EditModal({
       (circularLetter: any) => circularLetter.id === id
     )
     return `${get(result, 'no', '')} (${get(result, 'year', '')})`
+  }
+
+  const getCircularLetterLabel = (circularLetter: any) => {
+    if (get(circularLetter, 'id', null) === null) {
+      return 'ไม่ระบุ (วุฒิต่างประเทศ)'
+    }
+    return `${get(circularLetter, 'no', '')} (${get(
+      circularLetter,
+      'year',
+      ''
+    )})`
   }
 
   const validationSchema = yup.object({})
@@ -616,19 +631,14 @@ export default function EditModal({
                     }}
                     renderValue={(selected) => {
                       if (selected === null) {
-                        return (
-                          <span style={{ color: theme.palette.text.secondary }}>
-                            เลือกหนังสือเวียน
-                          </span>
-                        )
+                        return <span>ไม่ระบุ (วุฒิต่างประเทศ)</span>
                       }
                       return getCircularLetterById(selected)
                     }}
                   >
-                    {circularLetters.map((circularLetter: any) => (
+                    {circularLettersWithNull.map((circularLetter: any) => (
                       <MenuItem value={get(circularLetter, 'id', '')}>
-                        {get(circularLetter, 'no', '')} (
-                        {get(circularLetter, 'year', '')})
+                        {getCircularLetterLabel(circularLetter)}
                       </MenuItem>
                     ))}
                   </Select>
