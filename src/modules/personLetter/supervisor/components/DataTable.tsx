@@ -233,9 +233,10 @@ export default function DataTable({
       renderCell: renderCellExpand,
     },
     {
-      field: 'letterNo',
-      headerName: 'เลขที่',
+      field: 'attachedFiles',
+      headerName: 'ไฟล์แนบ',
       width: 150,
+      align: 'center',
       headerAlign: 'center',
       renderCell: (params) => {
         const value = get(params, 'value', '')
@@ -247,6 +248,13 @@ export default function DataTable({
           ></div>
         )
       },
+    },
+    {
+      field: 'letterNo',
+      headerName: 'เลขที่',
+      width: 150,
+      headerAlign: 'center',
+      renderCell: renderCellExpand,
     },
     {
       field: 'letterDatePrint',
