@@ -166,7 +166,7 @@ const Chart = ({ title, dataset, startDate, endDate }: any) => {
           startIcon={<DownloadIcon />}
           onClick={(e) => div2PDF(e)}
         >
-          นำออกเป็นไฟล์ PDF
+          ส่งออกเป็นไฟล์ PDF
         </Button>
       </Stack>
       <div className={title}>
