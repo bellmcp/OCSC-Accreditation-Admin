@@ -73,12 +73,18 @@ export default function DataTable({
   status,
   numColumns,
 }: DataTableProps) {
+  const getCellAlign = (field: string) => {
+    if (['เลขที่หนังสือเข้า', 'หน่วยงาน', 'ผู้ปฏิบัติงาน'].includes(field))
+      return 'left'
+    return 'center'
+  }
+
   const dataMaps = data.slice(0, numColumns).map((elem: any, index: number) => {
     return {
       field: `item${index + 1}`,
       headerName: tableHeader[index],
       width: 250,
-      align: 'center',
+      align: getCellAlign(tableHeader[index]),
       headerAlign: 'center',
     }
   })
