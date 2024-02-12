@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { get } from 'lodash'
 
 import {
@@ -25,6 +25,7 @@ import {
   WatchLater as PendingIcon,
   PlayCircleFilled as InProgressIcon,
   Launch as LaunchIcon,
+  FastRewind as RewindIcon,
 } from '@material-ui/icons'
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 import { green, red, amber, indigo } from '@material-ui/core/colors'
@@ -203,6 +204,7 @@ export default function DataTable({
   openModal,
   setCurrentRowData,
 }: DataTableProps) {
+  const dataGridRef = useRef(null)
   const [open, setOpen] = useState(false)
   const [currentFilePath, setCurrentFilePath] = useState('')
 
@@ -526,6 +528,43 @@ export default function DataTable({
   ]
 
   function CustomToolbar() {
+    const handleScrollRight = () => {
+      if (dataGridRef.current) {
+        const gridApi = dataGridRef.current as any
+        if (gridApi) {
+          const contentElement = gridApi
+          const virtualScroll = contentElement.querySelector(
+            '.MuiDataGrid-virtualScroller'
+          )
+          if (virtualScroll) {
+            virtualScroll.scrollLeft += 9999999999
+          } else {
+            console.warn('virtualScroll element not found')
+          }
+        } else {
+          console.warn('virtualScroll element not found')
+        }
+      }
+    }
+
+    const handleScrollLeft = () => {
+      if (dataGridRef.current) {
+        const gridApi = dataGridRef.current as any
+        if (gridApi) {
+          const contentElement = gridApi
+          const virtualScroll = contentElement.querySelector(
+            '.MuiDataGrid-virtualScroller'
+          )
+          if (virtualScroll) {
+            virtualScroll.scrollLeft = 0
+          } else {
+            console.warn('virtualScroll element not found')
+          }
+        } else {
+          console.warn('virtualScroll element not found')
+        }
+      }
+    }
     return (
       <GridToolbarContainer
         sx={{
@@ -534,22 +573,42 @@ export default function DataTable({
           // borderBottom: '1px solid rgba(224, 224, 224, 1)',
         }}
       >
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
-          {/* <Divider orientation='vertical' light flexItem />
-          <GridToolbarExport
-            printOptions={{ disableToolbarButton: true }}
-            csvOptions={{
-              delimiter: ',',
-              utf8WithBom: true,
-              fileName: 'test',
-            }}
-            sx={{ lineHeight: '1.2' }}
-          /> */}
+        <Stack
+          direction='row'
+          spacing={2}
+          alignItems='center'
+          justifyContent='space-between'
+          sx={{ width: '100%' }}
+        >
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
+            <Divider orientation='vertical' light flexItem />
+            <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
+            <Divider orientation='vertical' light flexItem />
+            <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
+          </Stack>
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <Button
+              variant='text'
+              color='secondary'
+              size='small'
+              startIcon={<RewindIcon />}
+              onClick={handleScrollLeft}
+            >
+              เลื่อนไปซ้ายสุด
+            </Button>
+            <Divider orientation='vertical' light flexItem />
+            <Button
+              variant='text'
+              color='secondary'
+              size='small'
+              style={{ marginRight: 8 }}
+              startIcon={<RewindIcon style={{ transform: 'rotate(180deg)' }} />}
+              onClick={handleScrollRight}
+            >
+              เลื่อนไปขวาสุด
+            </Button>
+          </Stack>
         </Stack>
       </GridToolbarContainer>
     )
@@ -559,6 +618,7 @@ export default function DataTable({
     <ThemeProvider theme={theme}>
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
+          ref={dataGridRef}
           autoHeight
           experimentalFeatures={{ columnGrouping: true }}
           columnGroupingModel={[
