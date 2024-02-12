@@ -618,6 +618,28 @@ export default function DataTable({
     <ThemeProvider theme={theme}>
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
+          sx={{
+            '& .MuiDataGrid-virtualScroller': {
+              transform: 'rotateX(180deg)',
+            },
+            '& .MuiDataGrid-virtualScrollerContent': {
+              transform: 'rotateX(180deg)',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '0.4em',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track': {
+              background: '#f1f1f1',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#888',
+              borderRadius: 8,
+              border: '3px solid #f1f1f1',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover': {
+              background: '#555',
+            },
+          }}
           ref={dataGridRef}
           autoHeight
           experimentalFeatures={{ columnGrouping: true }}
