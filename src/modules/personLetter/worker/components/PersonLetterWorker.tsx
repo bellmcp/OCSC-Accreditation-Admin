@@ -38,6 +38,7 @@ import {
   UnfoldLess as ShrinkIcon,
   UnfoldMore as ExpandIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
+  FastRewind as RewindIcon,
 } from '@material-ui/icons'
 
 import * as personLetterActions from 'modules/personLetter/actions'
@@ -79,19 +80,9 @@ function ScrollTop(props: any) {
     threshold: 100,
   })
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const anchor = (
-      (event.target as HTMLDivElement).ownerDocument || document
-    ).querySelector('#back-to-top-anchor')
-
-    if (anchor) {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-  }
-
   return (
     <Zoom in={trigger}>
-      <div onClick={handleClick} role='presentation' className={classes.root}>
+      <div role='presentation' className={classes.root}>
         {children}
       </div>
     </Zoom>
@@ -319,6 +310,16 @@ export default function PersonLetterWorker() {
     }
   }
 
+  const scrollToTop = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (
+      (event.target as HTMLDivElement).ownerDocument || document
+    ).querySelector('#back-to-top-anchor')
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
   return (
     <>
       <Toolbar id='back-to-top-anchor' />
@@ -489,9 +490,32 @@ export default function PersonLetterWorker() {
         {renderSearchResult()}
       </Container>
       <ScrollTop>
-        <Fab color='primary' size='medium'>
-          <KeyboardArrowUpIcon style={{ color: 'white' }} />
-        </Fab>
+        <Stack direction='row' spacing={2} alignItems='center'>
+          <Stack direction='row' spacing={1} alignItems='center'>
+            <Fab
+              color='default'
+              size='small'
+              style={{ backgroundColor: 'white' }}
+            >
+              <RewindIcon style={{ color: theme.palette.secondary.main }} />
+            </Fab>
+            <Fab
+              color='default'
+              size='small'
+              style={{ backgroundColor: 'white' }}
+            >
+              <RewindIcon
+                style={{
+                  color: theme.palette.secondary.main,
+                  transform: 'rotate(180deg)',
+                }}
+              />
+            </Fab>
+          </Stack>
+          <Fab onClick={scrollToTop} color='primary' size='medium'>
+            <KeyboardArrowUpIcon style={{ color: 'white' }} />
+          </Fab>
+        </Stack>
       </ScrollTop>
       <DetailModal
         isOpen={isOpenDetailModal}
