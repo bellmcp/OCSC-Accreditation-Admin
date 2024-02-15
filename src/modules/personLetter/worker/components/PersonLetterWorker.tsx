@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { get, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
@@ -90,6 +90,7 @@ function ScrollTop(props: any) {
 }
 
 export default function PersonLetterWorker() {
+  const dataGridRef = useRef(null)
   const classes = useStyles()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
@@ -297,11 +298,14 @@ export default function PersonLetterWorker() {
               }}
             >
               <DataTable
+                dataGridRef={dataGridRef}
                 data={searchResults}
                 loading={isSearching}
                 currentSearchQuery={currentSearchQuery}
                 openModal={openModal}
                 setCurrentRowData={setCurrentRowData}
+                tableScrollLeft={tableScrollLeft}
+                tableScrollRight={tableScrollRight}
               />
             </Paper>
           </Box>
@@ -317,6 +321,44 @@ export default function PersonLetterWorker() {
 
     if (anchor) {
       anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
+  const tableScrollRight = () => {
+    if (dataGridRef.current) {
+      const gridApi = dataGridRef.current as any
+      if (gridApi) {
+        const contentElement = gridApi
+        const virtualScroll = contentElement.querySelector(
+          '.MuiDataGrid-virtualScroller'
+        )
+        if (virtualScroll) {
+          virtualScroll.scrollLeft += 9999999999
+        } else {
+          console.warn('virtualScroll element not found')
+        }
+      } else {
+        console.warn('virtualScroll element not found')
+      }
+    }
+  }
+
+  const tableScrollLeft = () => {
+    if (dataGridRef.current) {
+      const gridApi = dataGridRef.current as any
+      if (gridApi) {
+        const contentElement = gridApi
+        const virtualScroll = contentElement.querySelector(
+          '.MuiDataGrid-virtualScroller'
+        )
+        if (virtualScroll) {
+          virtualScroll.scrollLeft = 0
+        } else {
+          console.warn('virtualScroll element not found')
+        }
+      } else {
+        console.warn('virtualScroll element not found')
+      }
     }
   }
 
@@ -496,6 +538,7 @@ export default function PersonLetterWorker() {
               color='default'
               size='small'
               style={{ backgroundColor: 'white' }}
+              onClick={tableScrollLeft}
             >
               <RewindIcon style={{ color: theme.palette.secondary.main }} />
             </Fab>
@@ -503,6 +546,7 @@ export default function PersonLetterWorker() {
               color='default'
               size='small'
               style={{ backgroundColor: 'white' }}
+              onClick={tableScrollRight}
             >
               <RewindIcon
                 style={{

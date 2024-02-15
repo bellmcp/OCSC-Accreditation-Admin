@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { get } from 'lodash'
 
 import {
@@ -42,6 +42,9 @@ interface DataTableProps {
   currentSearchQuery: any
   openModal: any
   setCurrentRowData: any
+  dataGridRef: any
+  tableScrollLeft: any
+  tableScrollRight: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -203,8 +206,10 @@ export default function DataTable({
   currentSearchQuery,
   openModal,
   setCurrentRowData,
+  dataGridRef,
+  tableScrollLeft,
+  tableScrollRight,
 }: DataTableProps) {
-  const dataGridRef = useRef(null)
   const [open, setOpen] = useState(false)
   const [currentFilePath, setCurrentFilePath] = useState('')
 
@@ -528,43 +533,6 @@ export default function DataTable({
   ]
 
   function CustomToolbar() {
-    const handleScrollRight = () => {
-      if (dataGridRef.current) {
-        const gridApi = dataGridRef.current as any
-        if (gridApi) {
-          const contentElement = gridApi
-          const virtualScroll = contentElement.querySelector(
-            '.MuiDataGrid-virtualScroller'
-          )
-          if (virtualScroll) {
-            virtualScroll.scrollLeft += 9999999999
-          } else {
-            console.warn('virtualScroll element not found')
-          }
-        } else {
-          console.warn('virtualScroll element not found')
-        }
-      }
-    }
-
-    const handleScrollLeft = () => {
-      if (dataGridRef.current) {
-        const gridApi = dataGridRef.current as any
-        if (gridApi) {
-          const contentElement = gridApi
-          const virtualScroll = contentElement.querySelector(
-            '.MuiDataGrid-virtualScroller'
-          )
-          if (virtualScroll) {
-            virtualScroll.scrollLeft = 0
-          } else {
-            console.warn('virtualScroll element not found')
-          }
-        } else {
-          console.warn('virtualScroll element not found')
-        }
-      }
-    }
     return (
       <GridToolbarContainer
         sx={{
@@ -593,7 +561,7 @@ export default function DataTable({
               color='secondary'
               size='small'
               startIcon={<RewindIcon />}
-              onClick={handleScrollLeft}
+              onClick={tableScrollLeft}
             >
               เลื่อนไปซ้ายสุด
             </Button>
@@ -604,7 +572,7 @@ export default function DataTable({
               size='small'
               style={{ marginRight: 8 }}
               startIcon={<RewindIcon style={{ transform: 'rotate(180deg)' }} />}
-              onClick={handleScrollRight}
+              onClick={tableScrollRight}
             >
               เลื่อนไปขวาสุด
             </Button>
