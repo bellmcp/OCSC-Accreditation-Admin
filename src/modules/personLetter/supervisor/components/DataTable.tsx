@@ -25,6 +25,7 @@ import {
   WatchLater as PendingIcon,
   PlayCircleFilled as InProgressIcon,
   Launch as LaunchIcon,
+  FastRewind as RewindIcon,
 } from '@material-ui/icons'
 import { createTheme, ThemeProvider, alpha, styled } from '@mui/material/styles'
 import { green, red, amber, indigo } from '@material-ui/core/colors'
@@ -39,6 +40,9 @@ interface DataTableProps {
   loading: boolean
   handleOpenEditModal: () => void
   setCurrentEditData: any
+  dataGridRef: any
+  tableScrollLeft: any
+  tableScrollRight: any
 }
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -199,6 +203,9 @@ export default function DataTable({
   loading,
   handleOpenEditModal,
   setCurrentEditData,
+  dataGridRef,
+  tableScrollLeft,
+  tableScrollRight,
 }: DataTableProps) {
   const [open, setOpen] = useState(false)
   const [currentFilePath, setCurrentFilePath] = useState('')
@@ -513,22 +520,42 @@ export default function DataTable({
           // borderBottom: '1px solid rgba(224, 224, 224, 1)',
         }}
       >
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
-          <Divider orientation='vertical' light flexItem />
-          <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
-          {/* <Divider orientation='vertical' light flexItem />
-          <GridToolbarExport
-            printOptions={{ disableToolbarButton: true }}
-            csvOptions={{
-              delimiter: ',',
-              utf8WithBom: true,
-              fileName: 'test',
-            }}
-            sx={{ lineHeight: '1.2' }}
-          /> */}
+        <Stack
+          direction='row'
+          spacing={2}
+          alignItems='center'
+          justifyContent='space-between'
+          sx={{ width: '100%' }}
+        >
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <GridToolbarColumnsButton sx={{ lineHeight: '1.2' }} />
+            <Divider orientation='vertical' light flexItem />
+            <GridToolbarFilterButton sx={{ lineHeight: '1.2' }} />
+            <Divider orientation='vertical' light flexItem />
+            <GridToolbarDensitySelector sx={{ lineHeight: '1.2' }} />
+          </Stack>
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <Button
+              variant='text'
+              color='secondary'
+              size='small'
+              startIcon={<RewindIcon />}
+              onClick={tableScrollLeft}
+            >
+              เลื่อนไปซ้ายสุด
+            </Button>
+            <Divider orientation='vertical' light flexItem />
+            <Button
+              variant='text'
+              color='secondary'
+              size='small'
+              style={{ marginRight: 8 }}
+              startIcon={<RewindIcon style={{ transform: 'rotate(180deg)' }} />}
+              onClick={tableScrollRight}
+            >
+              เลื่อนไปขวาสุด
+            </Button>
+          </Stack>
         </Stack>
       </GridToolbarContainer>
     )
@@ -538,6 +565,29 @@ export default function DataTable({
     <ThemeProvider theme={theme}>
       <div style={{ minHeight: 500 }}>
         <StripedDataGrid
+          ref={dataGridRef}
+          sx={{
+            '& .MuiDataGrid-virtualScroller': {
+              transform: 'rotateX(180deg)',
+            },
+            '& .MuiDataGrid-virtualScrollerContent': {
+              transform: 'rotateX(180deg)',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+              width: '0.4em',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track': {
+              background: '#f1f1f1',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb': {
+              backgroundColor: '#888',
+              borderRadius: 8,
+              border: '3px solid #f1f1f1',
+            },
+            '& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover': {
+              background: '#555',
+            },
+          }}
           autoHeight
           experimentalFeatures={{ columnGrouping: true }}
           columnGroupingModel={[

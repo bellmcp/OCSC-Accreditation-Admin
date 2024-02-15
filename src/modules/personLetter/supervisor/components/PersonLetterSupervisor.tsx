@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { get, isEmpty } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
@@ -39,6 +39,7 @@ import {
   UnfoldMore as ExpandIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
   Add as AddIcon,
+  FastRewind as RewindIcon,
 } from '@material-ui/icons'
 
 import * as personLetterActions from 'modules/personLetter/actions'
@@ -81,19 +82,9 @@ function ScrollTop(props: any) {
     threshold: 100,
   })
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const anchor = (
-      (event.target as HTMLDivElement).ownerDocument || document
-    ).querySelector('#back-to-top-anchor')
-
-    if (anchor) {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-  }
-
   return (
     <Zoom in={trigger}>
-      <div onClick={handleClick} role='presentation' className={classes.root}>
+      <div role='presentation' className={classes.root}>
         {children}
       </div>
     </Zoom>
@@ -101,6 +92,7 @@ function ScrollTop(props: any) {
 }
 
 export default function PersonLetterSupervisor() {
+  const dataGridRef = useRef(null)
   const classes = useStyles()
   const theme = useTheme()
   const matches = useMediaQuery(theme.breakpoints.up('sm'))
@@ -236,6 +228,54 @@ export default function PersonLetterSupervisor() {
     setSearchResults(parsed)
   }, [initialSearchResults])
 
+  const scrollToTop = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (
+      (event.target as HTMLDivElement).ownerDocument || document
+    ).querySelector('#back-to-top-anchor')
+
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }
+
+  const tableScrollRight = () => {
+    if (dataGridRef.current) {
+      const gridApi = dataGridRef.current as any
+      if (gridApi) {
+        const contentElement = gridApi
+        const virtualScroll = contentElement.querySelector(
+          '.MuiDataGrid-virtualScroller'
+        )
+        if (virtualScroll) {
+          virtualScroll.scrollLeft += 9999999999
+        } else {
+          console.warn('virtualScroll element not found')
+        }
+      } else {
+        console.warn('virtualScroll element not found')
+      }
+    }
+  }
+
+  const tableScrollLeft = () => {
+    if (dataGridRef.current) {
+      const gridApi = dataGridRef.current as any
+      if (gridApi) {
+        const contentElement = gridApi
+        const virtualScroll = contentElement.querySelector(
+          '.MuiDataGrid-virtualScroller'
+        )
+        if (virtualScroll) {
+          virtualScroll.scrollLeft = 0
+        } else {
+          console.warn('virtualScroll element not found')
+        }
+      } else {
+        console.warn('virtualScroll element not found')
+      }
+    }
+  }
+
   const renderSearchResult = () => {
     if (isSearching) {
       return <Loading height={300}></Loading>
@@ -295,10 +335,13 @@ export default function PersonLetterSupervisor() {
               }}
             >
               <DataTable
+                dataGridRef={dataGridRef}
                 data={searchResults}
                 loading={isSearching}
                 handleOpenEditModal={handleClickOpenEditModal}
                 setCurrentEditData={setCurrentEditData}
+                tableScrollLeft={tableScrollLeft}
+                tableScrollRight={tableScrollRight}
               />
             </Paper>
           </Box>
@@ -486,9 +529,34 @@ export default function PersonLetterSupervisor() {
         {renderSearchResult()}
       </Container>
       <ScrollTop>
-        <Fab color='primary' size='medium'>
-          <KeyboardArrowUpIcon style={{ color: 'white' }} />
-        </Fab>
+        <Stack direction='row' spacing={2} alignItems='center'>
+          <Stack direction='row' spacing={1} alignItems='center'>
+            <Fab
+              color='default'
+              size='small'
+              style={{ backgroundColor: 'white' }}
+              onClick={tableScrollLeft}
+            >
+              <RewindIcon style={{ color: theme.palette.secondary.main }} />
+            </Fab>
+            <Fab
+              color='default'
+              size='small'
+              style={{ backgroundColor: 'white' }}
+              onClick={tableScrollRight}
+            >
+              <RewindIcon
+                style={{
+                  color: theme.palette.secondary.main,
+                  transform: 'rotate(180deg)',
+                }}
+              />
+            </Fab>
+          </Stack>
+          <Fab onClick={scrollToTop} color='primary' size='medium'>
+            <KeyboardArrowUpIcon style={{ color: 'white' }} />
+          </Fab>
+        </Stack>
       </ScrollTop>
       <AddPersonLetterModal
         open={open}
