@@ -308,6 +308,9 @@ function loadRecommendation(
 }
 
 function loadRecommendation2(
+  id: string = '',
+  firstname: string = '',
+  lastname: string = '',
   university: string = '',
   faculty: string = '',
   degree: string = '',
@@ -318,7 +321,13 @@ function loadRecommendation2(
     dispatch({ type: LOAD_RECOMMENDATION_2_REQUEST })
     try {
       var { data } = await axios.get(
-        `/recommendation2?university=${encodeURIComponent(
+        `/recommendation2?id=${encodeURIComponent(
+          id
+        )}&firstname=${encodeURIComponent(
+          firstname
+        )}&lastname=${encodeURIComponent(
+          lastname
+        )}&university=${encodeURIComponent(
           university
         )}&faculty=${encodeURIComponent(faculty)}&degree=${encodeURIComponent(
           degree
