@@ -259,7 +259,7 @@ export default function DataTable({
     {
       field: 'letterNo',
       headerName: 'เลขที่',
-      width: 150,
+      minWidth: 250,
       headerAlign: 'center',
       renderCell: renderCellExpand,
     },
@@ -429,7 +429,7 @@ export default function DataTable({
     {
       field: 'replyNo',
       headerName: 'เลขที่',
-      width: 150,
+      minWidth: 250,
       align: 'center',
       headerAlign: 'center',
       renderCell: renderCellExpand,
