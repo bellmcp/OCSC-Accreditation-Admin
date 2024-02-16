@@ -108,6 +108,7 @@ export default function PersonLetterWorker() {
   const [status2, setStatus2] = useState<boolean>(true)
   const [status3, setStatus3] = useState<boolean>(true)
   const [status4, setStatus4] = useState<boolean>(true)
+  const [status5, setStatus5] = useState<boolean>(true)
 
   const [currentSearchQuery, setCurrentSearchQuery] = useState<any>({})
 
@@ -123,6 +124,7 @@ export default function PersonLetterWorker() {
       status2: true,
       status3: true,
       status4: true,
+      status5: true,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -134,6 +136,7 @@ export default function PersonLetterWorker() {
         status2,
         status3,
         status4,
+        status5,
       }
       setCurrentSearchQuery(searchQuery)
       dispatch(personLetterActions.getPersonLetter(searchQuery))
@@ -174,6 +177,10 @@ export default function PersonLetterWorker() {
 
   const handleChangeStatus4 = (event: any) => {
     setStatus4(event.target.checked)
+  }
+
+  const handleChangeStatus5 = (event: any) => {
+    setStatus5(event.target.checked)
   }
 
   const handleSwitchTableMaxWidth = () => {
@@ -509,6 +516,17 @@ export default function PersonLetterWorker() {
                           />
                         }
                         label='ยกเลิก'
+                        style={{ marginRight: 46 }}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={status5}
+                            onChange={handleChangeStatus5}
+                            name='resubmit'
+                          />
+                        }
+                        label='ให้ยื่นคำร้องใหม่'
                       />
                     </FormGroup>
                   </Grid>

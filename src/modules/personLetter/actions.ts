@@ -71,6 +71,7 @@ function getPersonLetter({
   status2,
   status3,
   status4,
+  status5,
 }: any) {
   return async (dispatch: any) => {
     const token = getCookie('token')
@@ -79,7 +80,7 @@ function getPersonLetter({
     dispatch({ type: GET_PERSON_LETTER_REQUEST })
     try {
       var { data } = await axios.get(
-        `/PersonLetters?WorkerId=${workerId}&letterNo=${letterNo}&startDate=${letterDate}&endDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
+        `/PersonLetters?WorkerId=${workerId}&letterNo=${letterNo}&startDate=${letterDate}&endDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}&status5=${status5}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -131,6 +132,7 @@ function getPersonLetterAdmin({
   status2,
   status3,
   status4,
+  status5,
 }: any) {
   return async (dispatch: any) => {
     const token = getCookie('token')
@@ -138,7 +140,7 @@ function getPersonLetterAdmin({
     dispatch({ type: GET_PERSON_LETTER_REQUEST })
     try {
       var { data } = await axios.get(
-        `/PersonLetters?letterNo=${letterNo}&startDate=${letterDate}&endDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}`,
+        `/PersonLetters?letterNo=${letterNo}&startDate=${letterDate}&endDate=${replyDate}&status1=${status1}&status2=${status2}&status3=${status3}&status4=${status4}&status5=${status5}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
