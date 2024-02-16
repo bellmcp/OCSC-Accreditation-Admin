@@ -27,8 +27,9 @@ import {
   WatchLater as PendingIcon,
   PlayCircleFilled as InProgressIcon,
   Launch as LaunchIcon,
+  Error as ErrorIcon,
 } from '@material-ui/icons'
-import { green, red, amber, indigo } from '@material-ui/core/colors'
+import { green, red, amber, indigo, purple } from '@material-ui/core/colors'
 
 import * as personLetterActions from 'modules/personLetter/actions'
 import DatePicker from './DatePicker'
@@ -630,6 +631,26 @@ export default function EditPersonLetterModal({
                               </Typography>
                             </Stack>
                           )
+                        case 'ให้ยื่นคำร้องใหม่':
+                          return (
+                            <Stack
+                              direction='row'
+                              alignItems='center'
+                              spacing={1}
+                            >
+                              <ErrorIcon
+                                style={{
+                                  color: purple[800],
+                                }}
+                              />
+                              <Typography
+                                variant='body1'
+                                style={{ color: purple[800], fontWeight: 600 }}
+                              >
+                                ให้ยื่นคำร้องใหม่
+                              </Typography>
+                            </Stack>
+                          )
                         default:
                           return <></>
                       }
@@ -726,6 +747,31 @@ export default function EditPersonLetterModal({
                                   style={{ color: red[800], fontWeight: 600 }}
                                 >
                                   ยกเลิก
+                                </Typography>
+                              </Stack>
+                            </MenuItem>
+                          )
+                        case 'ให้ยื่นคำร้องใหม่':
+                          return (
+                            <MenuItem value={get(status, 'id', '')}>
+                              <Stack
+                                direction='row'
+                                alignItems='center'
+                                spacing={1}
+                              >
+                                <ErrorIcon
+                                  style={{
+                                    color: purple[800],
+                                  }}
+                                />
+                                <Typography
+                                  variant='body1'
+                                  style={{
+                                    color: purple[800],
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  ให้ยื่นคำร้องใหม่
                                 </Typography>
                               </Stack>
                             </MenuItem>
