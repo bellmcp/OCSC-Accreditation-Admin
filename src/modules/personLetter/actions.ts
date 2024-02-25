@@ -307,6 +307,7 @@ function addPersonLetter({
           status2: get(currentSearchQuery, 'status2', true),
           status3: get(currentSearchQuery, 'status3', true),
           status4: get(currentSearchQuery, 'status4', true),
+          status5: get(currentSearchQuery, 'status5', true),
         })
       )
     } catch (err) {
@@ -383,6 +384,7 @@ function editPersonLetter({
           status2: get(currentSearchQuery, 'status2', true),
           status3: get(currentSearchQuery, 'status3', true),
           status4: get(currentSearchQuery, 'status4', true),
+          status5: get(currentSearchQuery, 'status5', true),
         })
       )
     } catch (err) {
@@ -431,6 +433,7 @@ function uploadFile(letterid: any, file: any, currentSearchQuery: any) {
             status2: get(currentSearchQuery, 'status2', true),
             status3: get(currentSearchQuery, 'status3', true),
             status4: get(currentSearchQuery, 'status4', true),
+            status5: get(currentSearchQuery, 'status5', true),
           })
         )
       })

@@ -152,6 +152,7 @@ export default function PersonLetterWorker() {
       status2: true,
       status3: true,
       status4: true,
+      status5: true,
     }
     dispatch(personLetterActions.getPersonLetter(searchQuery))
   }
