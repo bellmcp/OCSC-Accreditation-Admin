@@ -167,9 +167,9 @@ export default function EditModal({
   const onOpenRecommendation2Modal = () => {
     dispatch(
       curriculumActions.loadRecommendation2(
-        get(data, 'id', ''),
-        get(data, 'firstname', ''),
-        get(data, 'lastname', ''),
+        get(data, 'nationalId', ''),
+        get(data, 'firstName', ''),
+        get(data, 'lastName', ''),
         get(data, 'university', ''),
         get(data, 'faculty', ''),
         get(data, 'degree', ''),
